@@ -1,6 +1,6 @@
 // ============================================================
 // scrape_text_metrics.js - Cattle Market Weekly Averages Scraper
-// IMPROVED WITH BETTER IFRAME DETECTION
+// PRODUCTION VERSION
 // ============================================================
 
 const fs = require('fs');
@@ -55,126 +55,165 @@ const puppeteer = require('puppeteer');
         console.log("✓ Page loaded");
 
         // --------------------------------------------------------
-        // DEBUG: CHECK PAGE CONTENT
-        // --------------------------------------------------------
-
-        console.log("→ Checking page content...");
-        
-        const pageHTML = await page.content();
-        console.log("→ Page HTML length:", pageHTML.length);
-        
-        // Check for iframes
-        const iframeCount = await page.evaluate(() => {
-            return document.querySelectorAll('iframe').length;
-        });
-        console.log(`→ Found ${iframeCount} iframe(s) on page`);
-
-        if (iframeCount === 0) {
-            console.error("❌ No iframes found on page!");
-            console.log("→ Page title:", await page.title());
-            console.log("→ Checking for Power BI elements...");
-            
-            const hasPowerBI = await page.evaluate(() => {
-                const bodyText = document.body.innerText;
-                return bodyText.includes('Power BI') || bodyText.includes('powerbi');
-            });
-            
-            console.log("→ Has Power BI references:", hasPowerBI);
-            
-            await browser.close();
-            process.exit(1);
-        }
-
-        // --------------------------------------------------------
         // WAIT FOR IFRAME
         // --------------------------------------------------------
 
-        console.log("→ Waiting for iframe to load...");
+        console.log("→ Waiting for iframe...");
         await page.waitForSelector("iframe", { timeout: 30000 });
         console.log("✓ Iframe found");
 
-        // Wait a bit for iframe to fully load
         await new Promise(r => setTimeout(r, 5000));
 
         // --------------------------------------------------------
-        // GET ALL FRAMES
+        // GET POWER BI FRAME
         // --------------------------------------------------------
 
         const frames = await page.frames();
-        console.log(`→ Found ${frames.length} frames total`);
+        console.log(`→ Found ${frames.length} frames`);
 
-        // Try to find Power BI frame
-        let powerBIFrame = null;
-        
-        for (let i = 0; i < frames.length; i++) {
-            const frameUrl = frames[i].url();
-            console.log(`  Frame ${i}: ${frameUrl.substring(0, 100)}...`);
-            
-            if (frameUrl.includes('powerbi.com') || frameUrl.includes('pbix')) {
-                powerBIFrame = frames[i];
-                console.log(`✓ Found Power BI frame at index ${i}`);
-                break;
-            }
-        }
-
+        let powerBIFrame = frames.find(f => f.url().includes('powerbi.com'));
         if (!powerBIFrame && frames.length > 1) {
-            powerBIFrame = frames[1]; // Fallback to second frame
-            console.log("→ Using second frame as fallback");
+            powerBIFrame = frames[1];
         }
 
         if (!powerBIFrame) {
-            console.error("❌ Could not find Power BI frame");
-            await browser.close();
-            process.exit(1);
+            throw new Error("Could not find Power BI frame");
         }
 
         // --------------------------------------------------------
         // WAIT FOR POWER BI TO RENDER
         // --------------------------------------------------------
 
-        console.log("→ Waiting 20 seconds for Power BI to fully render...");
+        console.log("→ Waiting 20 seconds for Power BI to render...");
         await new Promise(r => setTimeout(r, 20000));
 
         // --------------------------------------------------------
-        // EXTRACT TEXT FROM FRAME
+        // EXTRACT TEXT
         // --------------------------------------------------------
 
-        console.log("→ Extracting text from Power BI frame...");
+        console.log("→ Extracting text...");
         const allText = await powerBIFrame.evaluate(() => document.body.innerText);
 
-        console.log("\n" + "=".repeat(80));
-        console.log("RAW POWER BI OUTPUT:");
-        console.log("=".repeat(80));
-        console.log(allText);
-        console.log("=".repeat(80));
-
-        // --------------------------------------------------------
-        // PARSE THE DATA
-        // --------------------------------------------------------
-
         const lines = allText.split("\n").map(l => l.trim()).filter(Boolean);
-        console.log(`\n→ Found ${lines.length} non-empty lines`);
+        console.log(`→ Found ${lines.length} non-empty lines`);
 
-        console.log("\nFirst 100 lines:");
-        lines.slice(0, 100).forEach((line, i) => {
-            console.log(`${i.toString().padStart(3, '0')}: ${line}`);
-        });
+        // --------------------------------------------------------
+        // FIND DATE
+        // --------------------------------------------------------
 
-        // Create a simple metrics file for now
+        const dateLine = lines.find(l => l.includes("January 2026") || l.includes("2026"));
+        console.log("→ Report date:", dateLine || "Not found");
+
+        // --------------------------------------------------------
+        // PARSE CATTLE CATEGORIES
+        // --------------------------------------------------------
+
+        const categories = [];
+        const categoryPattern = /^(Steers|Heifers)\s+[\d\.]+-?[\d\.]*k?g?\+?$/i;
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            
+            if (categoryPattern.test(line)) {
+                console.log(`\n→ Found category: ${line}`);
+                
+                // The next several lines should contain the data
+                // Based on the structure: Offered, Weight Range, Avg Weight, $/Head Range, Avg, Change, c/kg Range, Avg, Change, Clearance
+                
+                const category = {
+                    category: line,
+                    offered: null,
+                    weight_range: null,
+                    avg_weight: null,
+                    dollar_head_range: null,
+                    avg_dollar_head: null,
+                    dollar_change: null,
+                    c_kg_range: null,
+                    avg_c_kg: null,
+                    c_kg_change: null,
+                    clearance: null
+                };
+                
+                // Look ahead for numeric values
+                let dataIndex = 0;
+                for (let j = i + 1; j < Math.min(i + 20, lines.length); j++) {
+                    const value = lines[j];
+                    
+                    // Skip non-data lines
+                    if (value.includes("Additional Conditional Formatting") ||
+                        value.includes("Scroll") ||
+                        value.includes("Range") ||
+                        value === "Change" ||
+                        value === "Avg" ||
+                        value === "Offered" ||
+                        value === "Clearance") {
+                        continue;
+                    }
+                    
+                    // Stop if we hit another category
+                    if (categoryPattern.test(value)) {
+                        break;
+                    }
+                    
+                    // Assign values in order
+                    if (dataIndex === 0) category.offered = value;
+                    else if (dataIndex === 1) category.weight_range = value;
+                    else if (dataIndex === 2) category.avg_weight = value;
+                    else if (dataIndex === 3) category.dollar_head_range = value;
+                    else if (dataIndex === 4) category.avg_dollar_head = value;
+                    else if (dataIndex === 5) category.dollar_change = value;
+                    else if (dataIndex === 6) category.c_kg_range = value;
+                    else if (dataIndex === 7) category.avg_c_kg = value;
+                    else if (dataIndex === 8) category.c_kg_change = value;
+                    else if (dataIndex === 9) {
+                        category.clearance = value;
+                        break; // We have all the data
+                    }
+                    
+                    dataIndex++;
+                }
+                
+                console.log("  Data:", JSON.stringify(category, null, 2));
+                categories.push(category);
+            }
+        }
+
+        console.log(`\n→ Parsed ${categories.length} categories`);
+
+        // --------------------------------------------------------
+        // BUILD METRICS OBJECT
+        // --------------------------------------------------------
+
         const metrics = {
             updated_at: new Date().toISOString(),
-            raw_line_count: lines.length,
-            first_50_lines: lines.slice(0, 50),
-            note: "Debug version - will parse properly once we see the structure"
+            report_date: dateLine || "Unknown",
+            categories: categories,
+            summary: {
+                total_categories: categories.length,
+                steers_count: categories.filter(c => c.category.toLowerCase().includes('steers')).length,
+                heifers_count: categories.filter(c => c.category.toLowerCase().includes('heifers')).length
+            }
         };
 
-        console.log("\n✓ Extracted data, writing debug output...");
+        console.log("\n✓ FINAL METRICS:");
+        console.log(JSON.stringify(metrics, null, 2));
 
-        fs.writeFileSync(
-            outputFile,
-            JSON.stringify(metrics, null, 2)
-        );
+        // --------------------------------------------------------
+        // CHANGE DETECTION
+        // --------------------------------------------------------
 
+        if (previousMetrics && 
+            JSON.stringify(previousMetrics.categories) === JSON.stringify(metrics.categories)) {
+            console.log("\n→ No changes detected");
+        } else {
+            console.log("\n→ Changes detected, writing file");
+        }
+
+        // --------------------------------------------------------
+        // WRITE OUTPUT
+        // --------------------------------------------------------
+
+        fs.writeFileSync(outputFile, JSON.stringify(metrics, null, 2));
         console.log(`✓ Written to ${outputFile}`);
 
         await browser.close();

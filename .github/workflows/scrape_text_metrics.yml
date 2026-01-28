@@ -32,7 +32,9 @@ jobs:
             libxshmfence-dev
           
       - name: Install dependencies
-        run: npm install puppeteer
+        run: |
+          npm install puppeteer
+          npx puppeteer browsers install chrome
         
       - name: Debug - Show file structure
         run: |

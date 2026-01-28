@@ -2,35 +2,38 @@ name: Scrape Cattle Text Metrics
 
 on:
   schedule:
-    - cron: "*/30 * * * *"   # every 30 minutes
-  workflow_dispatch:
+    # Run every day at 9:30 PM AEDT (10:30 AM UTC)
+    - cron: '30 10 * * *'
+  workflow_dispatch: # Allows manual triggering
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
-
+        uses: actions/checkout@v3
+        
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
-          node-version: 20
-
+          node-version: '20'
+          
       - name: Install dependencies
-        run: |
-          npm init -y
-          npm install puppeteer
-
+        run: npm install puppeteer
+        
       - name: Run scraper
-        working-directory: .
         run: node script/scrape_text_metrics.js
-
+        
       - name: Commit updated metrics
         run: |
-          git config user.name "actions-user"
-          git config user.email "actions@github.com"
-          git add text-metrics.json
-          git commit -m "Update cattle text metrics" || echo "No changes"
-          git push
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add -A
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update cattle text metrics [automated]"
+          
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}

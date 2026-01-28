@@ -1,11 +1,10 @@
 {
-  "updated_at": "2026-01-28T06:58:20.009Z",
-  "report_date": "Friday Cattle State Averages - 23 January 2026",
+  "updated_at": "2026-01-28T09:48:14.056Z",
   "national": [],
-  "states": [],
-  "summary": {
-    "national_categories": 0,
-    "states_count": 0,
-    "total_state_categories": 0
-  }
+  "states": [
+    {
+      "state": "NSW",
+      "categories": []
+    }
+  ]
 }

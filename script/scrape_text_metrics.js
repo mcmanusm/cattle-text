@@ -1,17 +1,41 @@
 // ============================================================
-// DEBUG SCRAPER - Shows raw Power BI output
+// scrape_text_metrics.js - Cattle Market Weekly Averages Scraper
+// IMPROVED WITH BETTER IFRAME DETECTION
 // ============================================================
 
+const fs = require('fs');
 const puppeteer = require('puppeteer');
 
-console.log("Starting scraper...");
-console.log("Node version:", process.version);
-console.log("Working directory:", process.cwd());
-
 (async () => {
+
+    // --------------------------------------------------------
+    // CONFIGURATION
+    // --------------------------------------------------------
+
     const url = "https://mcmanusm.github.io/Cattle_Comments/texttable";
 
-    console.log("Launching browser...");
+    // --------------------------------------------------------
+    // LOAD PREVIOUS METRICS
+    // --------------------------------------------------------
+
+    let previousMetrics = null;
+    const outputFile = "text-metrics.json";
+
+    if (fs.existsSync(outputFile)) {
+        try {
+            previousMetrics = JSON.parse(fs.readFileSync(outputFile, "utf8"));
+            console.log("✓ Loaded previous metrics for comparison");
+        } catch (e) {
+            console.log("⚠️  Previous metrics file exists but couldn't be parsed");
+        }
+    } else {
+        console.log("ℹ No previous metrics file found");
+    }
+
+    // --------------------------------------------------------
+    // LAUNCH HEADLESS BROWSER
+    // --------------------------------------------------------
+
     const browser = await puppeteer.launch({
         headless: "new",
         args: [
@@ -30,30 +54,93 @@ console.log("Working directory:", process.cwd());
         await page.goto(url, { waitUntil: "networkidle2" });
         console.log("✓ Page loaded");
 
-        console.log("→ Waiting for iframe...");
-        await page.waitForSelector("iframe", { timeout: 30000 });
-        console.log("✓ Iframe found");
+        // --------------------------------------------------------
+        // DEBUG: CHECK PAGE CONTENT
+        // --------------------------------------------------------
 
-        const frames = await page.frames();
-        console.log(`→ Found ${frames.length} frames`);
+        console.log("→ Checking page content...");
+        
+        const pageHTML = await page.content();
+        console.log("→ Page HTML length:", pageHTML.length);
+        
+        // Check for iframes
+        const iframeCount = await page.evaluate(() => {
+            return document.querySelectorAll('iframe').length;
+        });
+        console.log(`→ Found ${iframeCount} iframe(s) on page`);
 
-        let frame = frames.find(f => f.url().includes('powerbi.com'));
-        if (!frame && frames.length > 1) {
-            frame = frames[1];
-        }
-
-        if (!frame) {
-            console.error("❌ Could not find Power BI iframe");
+        if (iframeCount === 0) {
+            console.error("❌ No iframes found on page!");
+            console.log("→ Page title:", await page.title());
+            console.log("→ Checking for Power BI elements...");
+            
+            const hasPowerBI = await page.evaluate(() => {
+                const bodyText = document.body.innerText;
+                return bodyText.includes('Power BI') || bodyText.includes('powerbi');
+            });
+            
+            console.log("→ Has Power BI references:", hasPowerBI);
+            
             await browser.close();
             process.exit(1);
         }
 
-        console.log("✓ Found Power BI frame");
-        console.log("→ Waiting 20 seconds for Power BI to load...");
+        // --------------------------------------------------------
+        // WAIT FOR IFRAME
+        // --------------------------------------------------------
+
+        console.log("→ Waiting for iframe to load...");
+        await page.waitForSelector("iframe", { timeout: 30000 });
+        console.log("✓ Iframe found");
+
+        // Wait a bit for iframe to fully load
+        await new Promise(r => setTimeout(r, 5000));
+
+        // --------------------------------------------------------
+        // GET ALL FRAMES
+        // --------------------------------------------------------
+
+        const frames = await page.frames();
+        console.log(`→ Found ${frames.length} frames total`);
+
+        // Try to find Power BI frame
+        let powerBIFrame = null;
+        
+        for (let i = 0; i < frames.length; i++) {
+            const frameUrl = frames[i].url();
+            console.log(`  Frame ${i}: ${frameUrl.substring(0, 100)}...`);
+            
+            if (frameUrl.includes('powerbi.com') || frameUrl.includes('pbix')) {
+                powerBIFrame = frames[i];
+                console.log(`✓ Found Power BI frame at index ${i}`);
+                break;
+            }
+        }
+
+        if (!powerBIFrame && frames.length > 1) {
+            powerBIFrame = frames[1]; // Fallback to second frame
+            console.log("→ Using second frame as fallback");
+        }
+
+        if (!powerBIFrame) {
+            console.error("❌ Could not find Power BI frame");
+            await browser.close();
+            process.exit(1);
+        }
+
+        // --------------------------------------------------------
+        // WAIT FOR POWER BI TO RENDER
+        // --------------------------------------------------------
+
+        console.log("→ Waiting 20 seconds for Power BI to fully render...");
         await new Promise(r => setTimeout(r, 20000));
 
-        console.log("→ Extracting text from frame...");
-        const allText = await frame.evaluate(() => document.body.innerText);
+        // --------------------------------------------------------
+        // EXTRACT TEXT FROM FRAME
+        // --------------------------------------------------------
+
+        console.log("→ Extracting text from Power BI frame...");
+        const allText = await powerBIFrame.evaluate(() => document.body.innerText);
 
         console.log("\n" + "=".repeat(80));
         console.log("RAW POWER BI OUTPUT:");
@@ -61,21 +148,45 @@ console.log("Working directory:", process.cwd());
         console.log(allText);
         console.log("=".repeat(80));
 
-        // Also split by lines to see structure
+        // --------------------------------------------------------
+        // PARSE THE DATA
+        // --------------------------------------------------------
+
         const lines = allText.split("\n").map(l => l.trim()).filter(Boolean);
-        console.log(`\nTotal non-empty lines: ${lines.length}`);
-        console.log("\nFirst 50 lines:");
-        lines.slice(0, 50).forEach((line, i) => {
+        console.log(`\n→ Found ${lines.length} non-empty lines`);
+
+        console.log("\nFirst 100 lines:");
+        lines.slice(0, 100).forEach((line, i) => {
             console.log(`${i.toString().padStart(3, '0')}: ${line}`);
         });
 
-        console.log("\n✓ Scrape completed successfully");
+        // Create a simple metrics file for now
+        const metrics = {
+            updated_at: new Date().toISOString(),
+            raw_line_count: lines.length,
+            first_50_lines: lines.slice(0, 50),
+            note: "Debug version - will parse properly once we see the structure"
+        };
+
+        console.log("\n✓ Extracted data, writing debug output...");
+
+        fs.writeFileSync(
+            outputFile,
+            JSON.stringify(metrics, null, 2)
+        );
+
+        console.log(`✓ Written to ${outputFile}`);
+
         await browser.close();
-        
+        console.log("✓ Scrape completed successfully");
+
     } catch (error) {
-        console.error("\n❌ ERROR:", error.message);
+        console.error("\n❌ ERROR:");
+        console.error(error.message);
         console.error(error.stack);
+        
         await browser.close();
         process.exit(1);
     }
+
 })();

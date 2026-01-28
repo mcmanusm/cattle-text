@@ -24,6 +24,7 @@ jobs:
           npm install puppeteer
 
       - name: Run scraper
+        working-directory: .
         run: node script/scrape_text_metrics.js
 
       - name: Commit updated metrics

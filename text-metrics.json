@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-01-28T05:19:48.604Z",
+  "updated_at": "2026-01-28T06:47:51.760Z",
   "report_date": "Friday Cattle State Averages - 23 January 2026",
-  "categories": [
+  "national": [
     {
       "category": "Steers 0-200kg",
       "offered": "122",
@@ -105,115 +105,122 @@
       "avg_c_kg": "438c",
       "c_kg_change": "-19",
       "clearance": "54%"
-    },
+    }
+  ],
+  "states": [
     {
-      "category": "Steers 0-200kg",
-      "offered": "122",
-      "weight_range": "106 - 239kg",
-      "avg_weight": "170kg",
-      "dollar_head_range": "$950 - $1,070",
-      "avg_dollar_head": "$962",
-      "dollar_change": "-142",
-      "c_kg_range": "588 - 600c",
-      "avg_c_kg": "599c",
-      "c_kg_change": "25",
-      "clearance": "100%"
-    },
-    {
-      "category": "Steers 200.1-280kg",
-      "offered": "834",
-      "weight_range": "143 - 351kg",
-      "avg_weight": "239kg",
-      "dollar_head_range": "$990 - $1,545",
-      "avg_dollar_head": "$1,266",
-      "dollar_change": "-83",
-      "c_kg_range": "397 - 589c",
-      "avg_c_kg": "539c",
-      "c_kg_change": "1",
-      "clearance": "94%"
-    },
-    {
-      "category": "Steers 280.1-330kg",
-      "offered": "512",
-      "weight_range": "228 - 416kg",
-      "avg_weight": "308kg",
-      "dollar_head_range": "$1,380 - $1,720",
-      "avg_dollar_head": "$1,563",
-      "dollar_change": "-45",
-      "c_kg_range": "458 - 536c",
-      "avg_c_kg": "505c",
-      "c_kg_change": "-27",
-      "clearance": "96%"
-    },
-    {
-      "category": "Steers 330.1-400kg",
-      "offered": "910",
-      "weight_range": "108 - 511kg",
-      "avg_weight": "364kg",
-      "dollar_head_range": "$1,540 - $1,970",
-      "avg_dollar_head": "$1,801",
-      "dollar_change": "-34",
-      "c_kg_range": "430 - 596c",
-      "avg_c_kg": "511c",
-      "c_kg_change": "-3",
-      "clearance": "58%"
-    },
-    {
-      "category": "Heifers 0-200kg",
-      "offered": "297",
-      "weight_range": "100 - 272kg",
-      "avg_weight": "183kg",
-      "dollar_head_range": "$510 - $920",
-      "avg_dollar_head": "$858",
-      "dollar_change": "228",
-      "c_kg_range": "297 - 461c",
-      "avg_c_kg": "447c",
-      "c_kg_change": "85",
-      "clearance": "58%"
-    },
-    {
-      "category": "Heifers 200.1-280kg",
-      "offered": "349",
-      "weight_range": "149 - 339kg",
-      "avg_weight": "237kg",
-      "dollar_head_range": "$795 - $1,100",
-      "avg_dollar_head": "$1,037",
-      "dollar_change": "-96",
-      "c_kg_range": "368 - 519c",
-      "avg_c_kg": "466c",
-      "c_kg_change": "15",
-      "clearance": "78%"
-    },
-    {
-      "category": "Heifers 280.1-330kg",
-      "offered": "506",
-      "weight_range": "238 - 403kg",
-      "avg_weight": "310kg",
-      "dollar_head_range": "$1,210 - $1,460",
-      "avg_dollar_head": "$1,326",
-      "dollar_change": "-9",
-      "c_kg_range": "391 - 456c",
-      "avg_c_kg": "421c",
-      "c_kg_change": "-14",
-      "clearance": "60%"
-    },
-    {
-      "category": "Heifers 330.1-400kg",
-      "offered": "813",
-      "weight_range": "289 - 503kg",
-      "avg_weight": "368kg",
-      "dollar_head_range": "$1,530 - $1,770",
-      "avg_dollar_head": "$1,648",
-      "dollar_change": "-56",
-      "c_kg_range": "413 - 471c",
-      "avg_c_kg": "435c",
-      "c_kg_change": "-22",
-      "clearance": "47%"
+      "state": "NSW",
+      "categories": [
+        {
+          "category": "Steers 0-200kg",
+          "offered": "122",
+          "weight_range": "106 - 239kg",
+          "avg_weight": "170kg",
+          "dollar_head_range": "$950 - $1,070",
+          "avg_dollar_head": "$962",
+          "dollar_change": "-142",
+          "c_kg_range": "588 - 600c",
+          "avg_c_kg": "599c",
+          "c_kg_change": "25",
+          "clearance": "100%"
+        },
+        {
+          "category": "Steers 200.1-280kg",
+          "offered": "834",
+          "weight_range": "143 - 351kg",
+          "avg_weight": "239kg",
+          "dollar_head_range": "$990 - $1,545",
+          "avg_dollar_head": "$1,266",
+          "dollar_change": "-83",
+          "c_kg_range": "397 - 589c",
+          "avg_c_kg": "539c",
+          "c_kg_change": "1",
+          "clearance": "94%"
+        },
+        {
+          "category": "Steers 280.1-330kg",
+          "offered": "512",
+          "weight_range": "228 - 416kg",
+          "avg_weight": "308kg",
+          "dollar_head_range": "$1,380 - $1,720",
+          "avg_dollar_head": "$1,563",
+          "dollar_change": "-45",
+          "c_kg_range": "458 - 536c",
+          "avg_c_kg": "505c",
+          "c_kg_change": "-27",
+          "clearance": "96%"
+        },
+        {
+          "category": "Steers 330.1-400kg",
+          "offered": "910",
+          "weight_range": "108 - 511kg",
+          "avg_weight": "364kg",
+          "dollar_head_range": "$1,540 - $1,970",
+          "avg_dollar_head": "$1,801",
+          "dollar_change": "-34",
+          "c_kg_range": "430 - 596c",
+          "avg_c_kg": "511c",
+          "c_kg_change": "-3",
+          "clearance": "58%"
+        },
+        {
+          "category": "Heifers 0-200kg",
+          "offered": "297",
+          "weight_range": "100 - 272kg",
+          "avg_weight": "183kg",
+          "dollar_head_range": "$510 - $920",
+          "avg_dollar_head": "$858",
+          "dollar_change": "228",
+          "c_kg_range": "297 - 461c",
+          "avg_c_kg": "447c",
+          "c_kg_change": "85",
+          "clearance": "58%"
+        },
+        {
+          "category": "Heifers 200.1-280kg",
+          "offered": "349",
+          "weight_range": "149 - 339kg",
+          "avg_weight": "237kg",
+          "dollar_head_range": "$795 - $1,100",
+          "avg_dollar_head": "$1,037",
+          "dollar_change": "-96",
+          "c_kg_range": "368 - 519c",
+          "avg_c_kg": "466c",
+          "c_kg_change": "15",
+          "clearance": "78%"
+        },
+        {
+          "category": "Heifers 280.1-330kg",
+          "offered": "506",
+          "weight_range": "238 - 403kg",
+          "avg_weight": "310kg",
+          "dollar_head_range": "$1,210 - $1,460",
+          "avg_dollar_head": "$1,326",
+          "dollar_change": "-9",
+          "c_kg_range": "391 - 456c",
+          "avg_c_kg": "421c",
+          "c_kg_change": "-14",
+          "clearance": "60%"
+        },
+        {
+          "category": "Heifers 330.1-400kg",
+          "offered": "813",
+          "weight_range": "289 - 503kg",
+          "avg_weight": "368kg",
+          "dollar_head_range": "$1,530 - $1,770",
+          "avg_dollar_head": "$1,648",
+          "dollar_change": "-56",
+          "c_kg_range": "413 - 471c",
+          "avg_c_kg": "435c",
+          "c_kg_change": "-22",
+          "clearance": "47%"
+        }
+      ]
     }
   ],
   "summary": {
-    "total_categories": 16,
-    "steers_count": 8,
-    "heifers_count": 8
+    "total_sections": 2,
+    "national_categories": 8,
+    "states_count": 1
   }
 }

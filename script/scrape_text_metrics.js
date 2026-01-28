@@ -1,7 +1,7 @@
 // ============================================================
 // scrape_text_metrics.js
 // Power BI Cattle Market Weekly Averages
-// National + State → Category → Metrics (FINAL, ROBUST)
+// National + State → Category → Metrics
 // ============================================================
 
 const fs = require("fs");
@@ -29,6 +29,15 @@ const puppeteer = require("puppeteer");
     return line.replace(/\s+\d+$/, "").trim();
   }
 
+  // Power BI accessibility / formatting junk
+  function isJunkLine(line) {
+    return (
+      line === "Additional Conditional Formatting" ||
+      line.includes("Press Enter") ||
+      line.includes("Scroll")
+    );
+  }
+
   // ----------------------------------------------------------
   // Launch browser
   // ----------------------------------------------------------
@@ -42,7 +51,7 @@ const puppeteer = require("puppeteer");
     const page = await browser.newPage();
     page.setDefaultTimeout(90000);
 
-    console.log("→ Navigating to Power BI page...");
+    console.log("→ Navigating...");
     await page.goto(url, { waitUntil: "networkidle2" });
 
     await page.waitForSelector("iframe");
@@ -126,6 +135,10 @@ const puppeteer = require("puppeteer");
       return stateKeys.includes(label) || categories.includes(label);
     }
 
+    // ----------------------------------------------------------
+    // METRIC PARSER (FIXED)
+    // ----------------------------------------------------------
+
     function parseMetrics(startIndex) {
       const metrics = {};
       let cursor = 0;
@@ -134,6 +147,7 @@ const puppeteer = require("puppeteer");
         const value = lines[i];
 
         if (isStopLine(value)) break;
+        if (isJunkLine(value)) continue;
         if (cursor >= metricKeys.length) break;
 
         metrics[metricKeys[cursor]] = value;
@@ -197,7 +211,7 @@ const puppeteer = require("puppeteer");
       }
     }
 
-    // Push final state
+    // Push final state bucket
     if (stateBucket && currentState !== "National") {
       output.states.push(stateBucket);
     }

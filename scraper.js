@@ -1,6 +1,7 @@
 // ============================================================
 // scrape_text_metrics.js
-// National + State → Category → Metrics (ROBUST VERSION)
+// Power BI Cattle Market Weekly Averages
+// National + State → Category → Metrics (FINAL, ROBUST)
 // ============================================================
 
 const fs = require("fs");
@@ -11,6 +12,27 @@ const puppeteer = require("puppeteer");
   const url = "https://mcmanusm.github.io/cattle-text/cattle-text-table.html";
   const outputFile = "text-metrics.json";
 
+  // ----------------------------------------------------------
+  // Helpers
+  // ----------------------------------------------------------
+
+  function clean(text) {
+    return text
+      .normalize("NFKD")
+      .replace(/[–—]/g, "-")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  // Removes Power BI row counts e.g. "National 50" → "National"
+  function extractLabel(line) {
+    return line.replace(/\s+\d+$/, "").trim();
+  }
+
+  // ----------------------------------------------------------
+  // Launch browser
+  // ----------------------------------------------------------
+
   const browser = await puppeteer.launch({
     headless: "new",
     args: ["--no-sandbox", "--disable-setuid-sandbox"]
@@ -18,24 +40,49 @@ const puppeteer = require("puppeteer");
 
   try {
     const page = await browser.newPage();
+    page.setDefaultTimeout(90000);
+
+    console.log("→ Navigating to Power BI page...");
     await page.goto(url, { waitUntil: "networkidle2" });
 
     await page.waitForSelector("iframe");
     await new Promise(r => setTimeout(r, 15000));
 
     const frame = page.frames().find(f => f.url().includes("powerbi.com"));
+    if (!frame) throw new Error("Power BI iframe not found");
+
     const rawText = await frame.evaluate(() => document.body.innerText);
 
     const lines = rawText
       .split("\n")
-      .map(l => l.trim())
+      .map(l => clean(l))
       .filter(Boolean);
+
+    console.log(`→ Lines extracted: ${lines.length}`);
 
     // ----------------------------------------------------------
     // Definitions
     // ----------------------------------------------------------
 
-    const states = ["National", "NSW", "QLD", "SA", "Tas", "Vic", "WA", "NT"];
+    const stateMap = {
+      "National": "National",
+      "NSW": "NSW",
+      "QLD": "QLD",
+      "SA": "SA",
+      "Tas": "Tas",
+      "Vic": "Vic",
+      "WA": "WA",
+      "NT": "NT",
+      "New South Wales": "NSW",
+      "Queensland": "QLD",
+      "South Australia": "SA",
+      "Tasmania": "Tas",
+      "Victoria": "Vic",
+      "Western Australia": "WA",
+      "Northern Territory": "NT"
+    };
+
+    const stateKeys = Object.keys(stateMap);
 
     const categories = [
       "Steers 0-200kg",
@@ -74,26 +121,23 @@ const puppeteer = require("puppeteer");
       "clearance"
     ];
 
-    // ----------------------------------------------------------
-    // Helpers
-    // ----------------------------------------------------------
-
     function isStopLine(line) {
-      return states.includes(line) || categories.includes(line);
+      const label = extractLabel(line);
+      return stateKeys.includes(label) || categories.includes(label);
     }
 
     function parseMetrics(startIndex) {
       const metrics = {};
-      let metricCursor = 0;
+      let cursor = 0;
 
       for (let i = startIndex + 1; i < lines.length; i++) {
-        const line = lines[i];
+        const value = lines[i];
 
-        if (isStopLine(line)) break;
-        if (metricCursor >= metricKeys.length) break;
+        if (isStopLine(value)) break;
+        if (cursor >= metricKeys.length) break;
 
-        metrics[metricKeys[metricCursor]] = line;
-        metricCursor++;
+        metrics[metricKeys[cursor]] = value;
+        cursor++;
       }
 
       return metrics;
@@ -113,34 +157,35 @@ const puppeteer = require("puppeteer");
     let stateBucket = null;
 
     for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
+      const rawLine = lines[i];
+      const label = extractLabel(rawLine);
 
       // ---------- STATE ----------
-      if (states.includes(line)) {
+      if (stateKeys.includes(label)) {
         if (stateBucket && currentState !== "National") {
           output.states.push(stateBucket);
         }
 
-        currentState = line;
+        currentState = stateMap[label];
+        console.log(`→ Found state: ${currentState}`);
 
-        if (line === "National") {
+        if (currentState === "National") {
           stateBucket = null;
         } else {
           stateBucket = {
-            state: line,
+            state: currentState,
             categories: []
           };
         }
-
         continue;
       }
 
       // ---------- CATEGORY ----------
-      if (categories.includes(line)) {
+      if (categories.includes(label)) {
         const metrics = parseMetrics(i);
 
         const categoryPayload = {
-          category: line,
+          category: label,
           ...metrics
         };
 
@@ -152,12 +197,17 @@ const puppeteer = require("puppeteer");
       }
     }
 
-    // push last state
+    // Push final state
     if (stateBucket && currentState !== "National") {
       output.states.push(stateBucket);
     }
 
+    // ----------------------------------------------------------
+    // Write Output
+    // ----------------------------------------------------------
+
     fs.writeFileSync(outputFile, JSON.stringify(output, null, 2));
+
     console.log("✓ Metrics captured successfully");
     console.log(`  National categories: ${output.national.length}`);
     console.log(
@@ -167,7 +217,7 @@ const puppeteer = require("puppeteer");
     await browser.close();
 
   } catch (err) {
-    console.error("❌ Error:", err);
+    console.error("❌ ERROR:", err.message);
     await browser.close();
     process.exit(1);
   }

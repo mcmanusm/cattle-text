@@ -1,6 +1,6 @@
 // ============================================================
 // scrape_text_metrics.js - Cattle Market Weekly Averages Scraper
-// PRODUCTION VERSION
+// COMPREHENSIVE VERSION - National + State Data
 // ============================================================
 
 const fs = require('fs');
@@ -105,20 +105,41 @@ const puppeteer = require('puppeteer');
         console.log("→ Report date:", dateLine || "Not found");
 
         // --------------------------------------------------------
-        // PARSE CATTLE CATEGORIES
+        // PARSE TABLES
         // --------------------------------------------------------
 
-        const categories = [];
-        const categoryPattern = /^(Steers|Heifers)\s+[\d\.]+-?[\d\.]*k?g?\+?$/i;
+        // Pattern to match category names
+        const categoryPattern = /^(Steers|Heifers|PTIC Heifers|PTIC Cows|Cows)\s+[\d\.]+-?[\d\.]*k?g?\+?$/i;
+        
+        // Pattern to match state/section headers
+        const sectionPattern = /^(National|NSW|QLD|VIC|SA|WA|TAS|NT)$/i;
+
+        const tables = [];
+        let currentSection = null;
+        let currentCategories = [];
 
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
             
-            if (categoryPattern.test(line)) {
-                console.log(`\n→ Found category: ${line}`);
+            // Check if this is a section header
+            if (sectionPattern.test(line)) {
+                // Save previous section if it exists
+                if (currentSection && currentCategories.length > 0) {
+                    tables.push({
+                        section: currentSection,
+                        categories: currentCategories
+                    });
+                }
                 
-                // The next several lines should contain the data
-                // Based on the structure: Offered, Weight Range, Avg Weight, $/Head Range, Avg, Change, c/kg Range, Avg, Change, Clearance
+                currentSection = line;
+                currentCategories = [];
+                console.log(`\n→ Found section: ${line}`);
+                continue;
+            }
+            
+            // Check if this is a category
+            if (categoryPattern.test(line)) {
+                console.log(`  → Found category: ${line}`);
                 
                 const category = {
                     category: line,
@@ -134,7 +155,7 @@ const puppeteer = require('puppeteer');
                     clearance: null
                 };
                 
-                // Look ahead for numeric values
+                // Look ahead for data values
                 let dataIndex = 0;
                 for (let j = i + 1; j < Math.min(i + 20, lines.length); j++) {
                     const value = lines[j];
@@ -146,12 +167,16 @@ const puppeteer = require('puppeteer');
                         value === "Change" ||
                         value === "Avg" ||
                         value === "Offered" ||
-                        value === "Clearance") {
+                        value === "Clearance" ||
+                        value === "Weight Range" ||
+                        value === "Avg Weight" ||
+                        value === "$/Head Range" ||
+                        value === "c/kg Range") {
                         continue;
                     }
                     
-                    // Stop if we hit another category
-                    if (categoryPattern.test(value)) {
+                    // Stop if we hit another category or section
+                    if (categoryPattern.test(value) || sectionPattern.test(value)) {
                         break;
                     }
                     
@@ -167,31 +192,48 @@ const puppeteer = require('puppeteer');
                     else if (dataIndex === 8) category.c_kg_change = value;
                     else if (dataIndex === 9) {
                         category.clearance = value;
-                        break; // We have all the data
+                        break;
                     }
                     
                     dataIndex++;
                 }
                 
-                console.log("  Data:", JSON.stringify(category, null, 2));
-                categories.push(category);
+                currentCategories.push(category);
             }
         }
 
-        console.log(`\n→ Parsed ${categories.length} categories`);
+        // Save last section
+        if (currentSection && currentCategories.length > 0) {
+            tables.push({
+                section: currentSection,
+                categories: currentCategories
+            });
+        }
+
+        console.log(`\n→ Parsed ${tables.length} sections`);
+        tables.forEach(table => {
+            console.log(`  ${table.section}: ${table.categories.length} categories`);
+        });
 
         // --------------------------------------------------------
-        // BUILD METRICS OBJECT
+        // ORGANIZE DATA
         // --------------------------------------------------------
+
+        const national = tables.find(t => t.section === "National");
+        const states = tables.filter(t => t.section !== "National");
 
         const metrics = {
             updated_at: new Date().toISOString(),
             report_date: dateLine || "Unknown",
-            categories: categories,
+            national: national ? national.categories : [],
+            states: states.map(state => ({
+                state: state.section,
+                categories: state.categories
+            })),
             summary: {
-                total_categories: categories.length,
-                steers_count: categories.filter(c => c.category.toLowerCase().includes('steers')).length,
-                heifers_count: categories.filter(c => c.category.toLowerCase().includes('heifers')).length
+                total_sections: tables.length,
+                national_categories: national ? national.categories.length : 0,
+                states_count: states.length
             }
         };
 
@@ -203,7 +245,8 @@ const puppeteer = require('puppeteer');
         // --------------------------------------------------------
 
         if (previousMetrics && 
-            JSON.stringify(previousMetrics.categories) === JSON.stringify(metrics.categories)) {
+            JSON.stringify(previousMetrics.national) === JSON.stringify(metrics.national) &&
+            JSON.stringify(previousMetrics.states) === JSON.stringify(metrics.states)) {
             console.log("\n→ No changes detected");
         } else {
             console.log("\n→ Changes detected, writing file");

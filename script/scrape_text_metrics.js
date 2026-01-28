@@ -12,7 +12,7 @@ const puppeteer = require('puppeteer');
     // CONFIGURATION
     // --------------------------------------------------------
 
-    const url = "https://mcmanusm.github.io/Cattle_Comments/texttable";
+    const url = "https://mcmanusm.github.io/cattle-text/cattle-text-table.html";
 
     // --------------------------------------------------------
     // LOAD PREVIOUS METRICS

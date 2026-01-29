@@ -20,7 +20,7 @@ jobs:
         run: npm install puppeteer
 
       - name: Run text message template scraper
-        run: node script/scrape_text_message_template.js
+        run: node script/scrape_text_message_templates.js
 
       - name: Commit updated template JSON
         run: |

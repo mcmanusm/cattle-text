@@ -1,6 +1,6 @@
 // ============================================================
 // scrape_text_metrics.js
-// FIXED: Proper state grouping + stock_category field
+// FIXED: Handles repeating state headers (state appears before EACH category)
 // ============================================================
 
 const fs = require("fs");
@@ -154,7 +154,7 @@ const puppeteer = require("puppeteer");
     }
 
     // ----------------------------------------------------------
-    // Parse - FIXED STATE GROUPING
+    // Parse - FIXED: Don't reinitialize state bucket
     // ----------------------------------------------------------
     const output = {
       updated_at: new Date().toISOString(),
@@ -173,15 +173,16 @@ const puppeteer = require("puppeteer");
       if (stateKeys.includes(label)) {
         currentState = stateMap[label];
         
-        // Initialize state bucket if it doesn't exist
+        // ✅ FIXED: Only initialize if doesn't exist yet
         if (currentState !== "National" && !stateMap_Data.has(currentState)) {
           stateMap_Data.set(currentState, {
             state: currentState,
             categories: []
           });
+          console.log(`Initialized state: ${currentState}`);
         }
         
-        console.log(`Found state: ${currentState}`);
+        // Don't log every time, just set current state
         continue;
       }
 
@@ -196,11 +197,11 @@ const puppeteer = require("puppeteer");
 
         if (currentState === "National") {
           output.national.push(payload);
+          console.log(`  National: ${label}`);
         } else if (stateMap_Data.has(currentState)) {
           stateMap_Data.get(currentState).categories.push(payload);
+          console.log(`  ${currentState}: ${label}`);
         }
-        
-        console.log(`  ${currentState}: ${label}`);
       }
     }
 

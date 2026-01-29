@@ -1,39 +1,14 @@
 // ============================================================
-// scrape_text_metrics_diagnostic.js
-// PATCHED OG VERSION – National default + junk skip
+// scrape_text_metrics.js
+// Power BI TABLE (ARIA grid) scraper – FINAL VERSION
 // ============================================================
 
 const fs = require("fs");
 const puppeteer = require("puppeteer");
 
 (async () => {
-
   const url = "https://mcmanusm.github.io/cattle-text/cattle-text-table.html";
   const outputFile = "text-metrics.json";
-
-  // ----------------------------------------------------------
-  // Helpers
-  // ----------------------------------------------------------
-
-  function clean(text) {
-    return text
-      .normalize("NFKD")
-      .replace(/[–—]/g, "-")
-      .replace(/\s+/g, " ")
-      .trim();
-  }
-
-  function extractLabel(line) {
-    return line.replace(/\s+\d+$/, "").trim();
-  }
-
-  function isJunkLine(line) {
-    return (
-      line === "Additional Conditional Formatting" ||
-      line.includes("Press Enter") ||
-      line.includes("Scroll")
-    );
-  }
 
   const browser = await puppeteer.launch({
     headless: "new",
@@ -46,98 +21,40 @@ const puppeteer = require("puppeteer");
 
     await page.goto(url, { waitUntil: "networkidle2" });
     await page.waitForSelector("iframe");
-    await new Promise(r => setTimeout(r, 15000));
+    await new Promise(r => setTimeout(r, 8000));
 
     const frame = page.frames().find(f => f.url().includes("powerbi.com"));
     if (!frame) throw new Error("Power BI iframe not found");
 
-    const rawText = await frame.evaluate(() => document.body.innerText);
+    // ----------------------------------------------------------
+    // Extract rows via ARIA grid
+    // ----------------------------------------------------------
 
-    const lines = rawText
-      .split("\n")
-      .map(l => clean(l))
-      .filter(Boolean);
+    const rows = await frame.evaluate(() => {
+      const result = [];
 
-    const stateMap = {
-      "National": "National",
-      "NSW": "NSW",
-      "QLD": "QLD",
-      "SA": "SA",
-      "Tas": "Tas",
-      "Vic": "Vic",
-      "WA": "WA",
-      "NT": "NT",
-      "New South Wales": "NSW",
-      "Queensland": "QLD",
-      "South Australia": "SA",
-      "Tasmania": "Tas",
-      "Victoria": "Vic",
-      "Western Australia": "WA",
-      "Northern Territory": "NT"
-    };
+      document.querySelectorAll('div[role="row"]').forEach(row => {
+        const cells = Array.from(
+          row.querySelectorAll('div[role="gridcell"]')
+        ).map(cell => {
+          // Remove hidden conditional formatting text
+          const hidden = cell.querySelector(".visually-hidden");
+          if (hidden) return null;
 
-    const stateKeys = Object.keys(stateMap);
+          return cell.innerText.replace(/\s+/g, " ").trim();
+        });
 
-    const categories = [
-      "Steers 0-200kg",
-      "Steers 200.1-280kg",
-      "Steers 280.1-330kg",
-      "Steers 330.1-400kg",
-      "Steers 400kg +",
-      "Heifers 0-200kg",
-      "Heifers 200.1-280kg",
-      "Heifers 280.1-330kg",
-      "Heifers 330.1-400kg",
-      "Heifers 400kg +",
-      "NSM Cows",
-      "SM Heifers",
-      "SM Cows",
-      "PTIC Heifers",
-      "PTIC Cows",
-      "NSM Heifers & Calves",
-      "NSM Cows & Calves",
-      "SM Heifers & Calves",
-      "SM Cows & Calves",
-      "PTIC Heifers & Calves",
-      "PTIC Cows & Calves",
-      "Mixed Sexes"
-    ];
+        if (cells.filter(Boolean).length > 0) {
+          result.push(cells);
+        }
+      });
 
-    const metricKeys = [
-      "offered",
-      "weight_range",
-      "avg_weight",
-      "dollar_head_range",
-      "avg_dollar_head",
-      "dollar_change",
-      "c_kg_range",
-      "avg_c_kg",
-      "c_kg_change",
-      "clearance"
-    ];
+      return result;
+    });
 
-    function isStopLine(line) {
-      const label = extractLabel(line);
-      return stateKeys.includes(label) || categories.includes(label);
-    }
-
-    function parseMetrics(startIndex) {
-      const metrics = {};
-      let cursor = 0;
-
-      for (let i = startIndex + 1; i < lines.length; i++) {
-        const value = lines[i];
-
-        if (isStopLine(value)) break;
-        if (isJunkLine(value)) continue;
-        if (cursor >= metricKeys.length) break;
-
-        metrics[metricKeys[cursor]] = value;
-        cursor++;
-      }
-
-      return metrics;
-    }
+    // ----------------------------------------------------------
+    // Output structure
+    // ----------------------------------------------------------
 
     const output = {
       updated_at: new Date().toISOString(),
@@ -145,43 +62,83 @@ const puppeteer = require("puppeteer");
       states: []
     };
 
-    // ✅ DEFAULT TO NATIONAL
-    let currentState = "National";
-    let stateBucket = null;
+    const stateBuckets = {};
 
-    for (let i = 0; i < lines.length; i++) {
-      const label = extractLabel(lines[i]);
+    const STATES = ["NSW", "QLD", "VIC", "SA", "Tas", "WA", "NT"];
 
-      if (stateKeys.includes(label)) {
-        if (stateBucket && currentState !== "National") {
-          output.states.push(stateBucket);
-        }
+    // ----------------------------------------------------------
+    // Parse rows
+    // ----------------------------------------------------------
 
-        currentState = stateMap[label];
-        stateBucket = currentState === "National"
-          ? null
-          : { state: currentState, categories: [] };
+    rows.forEach(cells => {
+      // NATIONAL TABLE (no state column)
+      if (!STATES.includes(cells[0])) {
+        // Expected layout:
+        // [CategoryGroup, Category, Offered, WeightRange, AvgWeight, $Range, Avg$, Change$, ckgRange, AvgCkg, Change, Clearance]
 
-        continue;
+        if (cells.length < 10) return;
+
+        output.national.push({
+          category: cells[1],
+          offered: cells[2],
+          weight_range: cells[3],
+          avg_weight: cells[4],
+          dollar_head_range: cells[5],
+          avg_dollar_head: cells[6],
+          dollar_change: cells[7],
+          c_kg_range: cells[8],
+          avg_c_kg: cells[9],
+          c_kg_change: cells[10] || null,
+          clearance: cells[11] || null
+        });
+
+        return;
       }
 
-      if (categories.includes(label)) {
-        const metrics = parseMetrics(i);
-        const payload = { category: label, ...metrics };
+      // STATE TABLE
+      const state = cells[0];
 
-        if (currentState === "National") {
-          output.national.push(payload);
-        } else if (stateBucket) {
-          stateBucket.categories.push(payload);
-        }
+      if (!stateBuckets[state]) {
+        stateBuckets[state] = {
+          state,
+          categories: []
+        };
       }
-    }
 
-    if (stateBucket && currentState !== "National") {
-      output.states.push(stateBucket);
-    }
+      // Expected layout:
+      // [State, CategoryGroup, Category, Offered, WeightRange, AvgWeight, $Range, Avg$, Change$, ckgRange, AvgCkg, Change, Clearance]
+
+      if (cells.length < 11) return;
+
+      stateBuckets[state].categories.push({
+        category: cells[2],
+        offered: cells[3],
+        weight_range: cells[4],
+        avg_weight: cells[5],
+        dollar_head_range: cells[6],
+        avg_dollar_head: cells[7],
+        dollar_change: cells[8],
+        c_kg_range: cells[9],
+        avg_c_kg: cells[10],
+        c_kg_change: cells[11] || null,
+        clearance: cells[12] || null
+      });
+    });
+
+    // Push populated states
+    Object.values(stateBuckets).forEach(bucket => {
+      if (bucket.categories.length > 0) {
+        output.states.push(bucket);
+      }
+    });
 
     fs.writeFileSync(outputFile, JSON.stringify(output, null, 2));
+
+    console.log("✓ Scrape complete");
+    console.log(`  National rows: ${output.national.length}`);
+    output.states.forEach(s =>
+      console.log(`  ${s.state}: ${s.categories.length}`)
+    );
 
     await browser.close();
 
@@ -190,5 +147,4 @@ const puppeteer = require("puppeteer");
     await browser.close();
     process.exit(1);
   }
-
 })();

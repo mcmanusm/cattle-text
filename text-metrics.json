@@ -1,627 +1,526 @@
 {
-  "updated_at": "2026-01-29T02:53:18.970Z",
+  "updated_at": "2026-01-29T03:27:58.952Z",
   "national": [
     {
-      "category": "Steers 0-200kg",
-      "offered": "122",
-      "weight_range": "106 - 239kg",
-      "avg_weight": "170kg",
-      "dollar_head_range": "$950 - $1,070",
-      "avg_dollar_head": "$962",
-      "dollar_change": "-142",
-      "c_kg_range": "588 - 600c",
-      "avg_c_kg": "599c",
-      "c_kg_change": "25",
-      "clearance": "100%"
+      "category": "Steers",
+      "offered": "Steers 0-200kg",
+      "weight_range": "122",
+      "avg_weight": "106 - 239kg",
+      "dollar_head_range": "170kg",
+      "avg_dollar_head": "$950 - $1,070",
+      "dollar_change": "$962",
+      "c_kg_range": null,
+      "avg_c_kg": "588 - 600c",
+      "c_kg_change": "599c",
+      "clearance": null
     },
     {
-      "category": "Steers 200.1-280kg",
-      "offered": "1,192",
-      "weight_range": "143 - 351kg",
-      "avg_weight": "244kg",
-      "dollar_head_range": "$990 - $1,545",
-      "avg_dollar_head": "$1,266",
-      "dollar_change": "-70",
-      "c_kg_range": "397 - 589c",
-      "avg_c_kg": "529c",
-      "c_kg_change": "-9",
-      "clearance": "92%"
+      "category": "Steers",
+      "offered": "Steers 200.1-280kg",
+      "weight_range": "1,192",
+      "avg_weight": "143 - 351kg",
+      "dollar_head_range": "244kg",
+      "avg_dollar_head": "$990 - $1,545",
+      "dollar_change": "$1,266",
+      "c_kg_range": null,
+      "avg_c_kg": "397 - 589c",
+      "c_kg_change": "529c",
+      "clearance": null
     },
     {
-      "category": "Steers 280.1-330kg",
-      "offered": "1,008",
-      "weight_range": "212 - 2,855kg",
-      "avg_weight": "307kg",
-      "dollar_head_range": "$1,250 - $1,790",
-      "avg_dollar_head": "$1,557",
-      "dollar_change": "-69",
-      "c_kg_range": "407 - 628c",
-      "avg_c_kg": "507c",
-      "c_kg_change": "-33",
-      "clearance": "69%"
+      "category": "Steers",
+      "offered": "Steers 280.1-330kg",
+      "weight_range": "1,008",
+      "avg_weight": "212 - 2,855kg",
+      "dollar_head_range": "307kg",
+      "avg_dollar_head": "$1,250 - $1,790",
+      "dollar_change": "$1,557",
+      "c_kg_range": null,
+      "avg_c_kg": "407 - 628c",
+      "c_kg_change": "507c",
+      "clearance": null
     },
     {
-      "category": "Steers 330.1-400kg",
-      "offered": "2,270",
-      "weight_range": "108 - 511kg",
-      "avg_weight": "359kg",
-      "dollar_head_range": "$1,510 - $2,030",
-      "avg_dollar_head": "$1,820",
-      "dollar_change": "-24",
-      "c_kg_range": "430 - 596c",
-      "avg_c_kg": "514c",
-      "c_kg_change": "4",
-      "clearance": "56%"
+      "category": "Steers",
+      "offered": "Steers 330.1-400kg",
+      "weight_range": "2,270",
+      "avg_weight": "108 - 511kg",
+      "dollar_head_range": "359kg",
+      "avg_dollar_head": "$1,510 - $2,030",
+      "dollar_change": "$1,820",
+      "c_kg_range": null,
+      "avg_c_kg": "430 - 596c",
+      "c_kg_change": "514c",
+      "clearance": null
     },
     {
-      "category": "Steers 400kg +",
-      "offered": "1,521",
-      "weight_range": "326 - 561kg",
-      "avg_weight": "438kg",
-      "dollar_head_range": "$2,020 - $2,360",
-      "avg_dollar_head": "$2,177",
-      "dollar_change": "-89",
-      "c_kg_range": "430 - 551c",
-      "avg_c_kg": "505c",
-      "c_kg_change": "-1",
-      "clearance": "44%"
+      "category": "Steers",
+      "offered": "Steers 400kg +",
+      "weight_range": "1,521",
+      "avg_weight": "326 - 561kg",
+      "dollar_head_range": "438kg",
+      "avg_dollar_head": "$2,020 - $2,360",
+      "dollar_change": "$2,177",
+      "c_kg_range": null,
+      "avg_c_kg": "430 - 551c",
+      "c_kg_change": "505c",
+      "clearance": null
     },
     {
-      "category": "Heifers 0-200kg",
-      "offered": "297",
-      "weight_range": "100 - 272kg",
-      "avg_weight": "183kg",
-      "dollar_head_range": "$510 - $920",
-      "avg_dollar_head": "$858",
-      "dollar_change": "40",
-      "c_kg_range": "297 - 461c",
-      "avg_c_kg": "447c",
-      "c_kg_change": "13",
-      "clearance": "58%"
+      "category": "Heifers",
+      "offered": "Heifers 0-200kg",
+      "weight_range": "297",
+      "avg_weight": "100 - 272kg",
+      "dollar_head_range": "183kg",
+      "avg_dollar_head": "$510 - $920",
+      "dollar_change": "$858",
+      "c_kg_range": null,
+      "avg_c_kg": "297 - 461c",
+      "c_kg_change": "447c",
+      "clearance": null
     },
     {
-      "category": "Heifers 200.1-280kg",
-      "offered": "1,145",
-      "weight_range": "149 - 348kg",
-      "avg_weight": "253kg",
-      "dollar_head_range": "$795 - $1,240",
-      "avg_dollar_head": "$1,104",
-      "dollar_change": "-125",
-      "c_kg_range": "368 - 519c",
-      "avg_c_kg": "442c",
-      "c_kg_change": "-33",
-      "clearance": "72%"
+      "category": "Heifers",
+      "offered": "Heifers 200.1-280kg",
+      "weight_range": "1,145",
+      "avg_weight": "149 - 348kg",
+      "dollar_head_range": "253kg",
+      "avg_dollar_head": "$795 - $1,240",
+      "dollar_change": "$1,104",
+      "c_kg_range": null,
+      "avg_c_kg": "368 - 519c",
+      "c_kg_change": "442c",
+      "clearance": null
     },
     {
-      "category": "Heifers 280.1-330kg",
-      "offered": "1,039",
-      "weight_range": "238 - 403kg",
-      "avg_weight": "311kg",
-      "dollar_head_range": "$1,210 - $1,640",
-      "avg_dollar_head": "$1,334",
-      "dollar_change": "-6",
-      "c_kg_range": "391 - 543c",
-      "avg_c_kg": "429c",
-      "c_kg_change": "-10",
-      "clearance": "74%"
+      "category": "Heifers",
+      "offered": "Heifers 280.1-330kg",
+      "weight_range": "1,039",
+      "avg_weight": "238 - 403kg",
+      "dollar_head_range": "311kg",
+      "avg_dollar_head": "$1,210 - $1,640",
+      "dollar_change": "$1,334",
+      "c_kg_range": null,
+      "avg_c_kg": "391 - 543c",
+      "c_kg_change": "429c",
+      "clearance": null
     },
     {
-      "category": "Heifers 330.1-400kg",
-      "offered": "1,053",
-      "weight_range": "276 - 503kg",
-      "avg_weight": "366kg",
-      "dollar_head_range": "$1,350 - $1,890",
-      "avg_dollar_head": "$1,618",
-      "dollar_change": "-66",
-      "c_kg_range": "403 - 507c",
-      "avg_c_kg": "438c",
-      "c_kg_change": "-19",
-      "clearance": "54%"
+      "category": "Heifers",
+      "offered": "Heifers 330.1-400kg",
+      "weight_range": "1,053",
+      "avg_weight": "276 - 503kg",
+      "dollar_head_range": "366kg",
+      "avg_dollar_head": "$1,350 - $1,890",
+      "dollar_change": "$1,618",
+      "c_kg_range": null,
+      "avg_c_kg": "403 - 507c",
+      "c_kg_change": "438c",
+      "clearance": null
     },
     {
-      "category": "Heifers 400kg +",
-      "offered": "512",
-      "weight_range": "309 - 536kg",
-      "avg_weight": "433kg",
-      "dollar_head_range": "$1,800 - $2,180",
-      "avg_dollar_head": "$1,902",
-      "dollar_change": "-14",
-      "c_kg_range": "425 - 451c",
-      "avg_c_kg": "441c",
-      "c_kg_change": "-5",
-      "clearance": "94%"
+      "category": "Heifers",
+      "offered": "Heifers 400kg +",
+      "weight_range": "512",
+      "avg_weight": "309 - 536kg",
+      "dollar_head_range": "433kg",
+      "avg_dollar_head": "$1,800 - $2,180",
+      "dollar_change": "$1,902",
+      "c_kg_range": null,
+      "avg_c_kg": "425 - 451c",
+      "c_kg_change": "441c",
+      "clearance": null
     },
     {
-      "category": "NSM Cows",
-      "offered": "1",
-      "weight_range": "264 - 264kg",
-      "avg_weight": "264kg",
-      "dollar_head_range": "$640 - $640",
-      "avg_dollar_head": "$640",
-      "dollar_change": "-",
-      "c_kg_range": "242 - 242c",
-      "avg_c_kg": "242c",
-      "c_kg_change": "-",
-      "clearance": "100%"
+      "category": "Breeding Stock",
+      "offered": "NSM Cows",
+      "weight_range": "1",
+      "avg_weight": "264 - 264kg",
+      "dollar_head_range": "264kg",
+      "avg_dollar_head": "$640 - $640",
+      "dollar_change": "$640",
+      "c_kg_range": "-",
+      "avg_c_kg": "242 - 242c",
+      "c_kg_change": "242c",
+      "clearance": "-"
     },
     {
-      "category": "SM Heifers",
-      "offered": "243",
-      "weight_range": "224 - 713kg",
-      "avg_weight": "515kg",
-      "dollar_head_range": "$2,100 - $3,020",
-      "avg_dollar_head": "$2,481",
-      "dollar_change": "-162",
-      "c_kg_range": "408 - 564c",
-      "avg_c_kg": "471c",
-      "c_kg_change": "3",
-      "clearance": "70%"
+      "category": "Breeding Stock",
+      "offered": "SM Heifers",
+      "weight_range": "243",
+      "avg_weight": "224 - 713kg",
+      "dollar_head_range": "515kg",
+      "avg_dollar_head": "$2,100 - $3,020",
+      "dollar_change": "$2,481",
+      "c_kg_range": null,
+      "avg_c_kg": "408 - 564c",
+      "c_kg_change": "471c",
+      "clearance": null
     },
     {
-      "category": "SM Cows",
-      "offered": "254",
-      "weight_range": "378 - 908kg",
-      "avg_weight": "566kg",
-      "dollar_head_range": "$1,650 - $3,240",
-      "avg_dollar_head": "$2,180",
-      "dollar_change": "-596",
-      "c_kg_range": "352 - 489c",
-      "avg_c_kg": "397c",
-      "c_kg_change": "-51",
-      "clearance": "59%"
+      "category": "Breeding Stock",
+      "offered": "SM Cows",
+      "weight_range": "254",
+      "avg_weight": "378 - 908kg",
+      "dollar_head_range": "566kg",
+      "avg_dollar_head": "$1,650 - $3,240",
+      "dollar_change": "$2,180",
+      "c_kg_range": null,
+      "avg_c_kg": "352 - 489c",
+      "c_kg_change": "397c",
+      "clearance": null
     },
     {
-      "category": "PTIC Heifers",
-      "offered": "1,736",
-      "weight_range": "281 - 728kg",
-      "avg_weight": "467kg",
-      "dollar_head_range": "$1,880 - $3,210",
-      "avg_dollar_head": "$2,270",
-      "dollar_change": "-284",
-      "c_kg_range": "324 - 559c",
-      "avg_c_kg": "464c",
-      "c_kg_change": "-28",
-      "clearance": "30%"
+      "category": "Breeding Stock",
+      "offered": "PTIC Heifers",
+      "weight_range": "1,736",
+      "avg_weight": "281 - 728kg",
+      "dollar_head_range": "467kg",
+      "avg_dollar_head": "$1,880 - $3,210",
+      "dollar_change": "$2,270",
+      "c_kg_range": null,
+      "avg_c_kg": "324 - 559c",
+      "c_kg_change": "464c",
+      "clearance": null
     },
     {
-      "category": "PTIC Cows",
-      "offered": "887",
-      "weight_range": "367 - 860kg",
-      "avg_weight": "608kg",
-      "dollar_head_range": "$1,800 - $3,360",
-      "avg_dollar_head": "$2,248",
-      "dollar_change": "-162",
-      "c_kg_range": "319 - 526c",
-      "avg_c_kg": "399c",
-      "c_kg_change": "-8",
-      "clearance": "57%"
+      "category": "Breeding Stock",
+      "offered": "PTIC Cows",
+      "weight_range": "887",
+      "avg_weight": "367 - 860kg",
+      "dollar_head_range": "608kg",
+      "avg_dollar_head": "$1,800 - $3,360",
+      "dollar_change": "$2,248",
+      "c_kg_range": null,
+      "avg_c_kg": "319 - 526c",
+      "c_kg_change": "399c",
+      "clearance": null
     },
     {
-      "category": "NSM Heifers & Calves",
-      "offered": "202",
-      "weight_range": "247 - 679kg",
-      "avg_weight": "413kg",
-      "dollar_head_range": "$1,300 - $3,400",
-      "avg_dollar_head": "$2,575",
-      "dollar_change": "-25",
-      "c_kg_range": "526 - 613c",
-      "avg_c_kg": "598c",
-      "c_kg_change": "35",
-      "clearance": "60%"
+      "category": "Breeding Stock",
+      "offered": "NSM Heifers & Calves",
+      "weight_range": "202",
+      "avg_weight": "247 - 679kg",
+      "dollar_head_range": "413kg",
+      "avg_dollar_head": "$1,300 - $3,400",
+      "dollar_change": "$2,575",
+      "c_kg_range": null,
+      "avg_c_kg": "526 - 613c",
+      "c_kg_change": "598c",
+      "clearance": null
     },
     {
-      "category": "NSM Cows & Calves",
-      "offered": "223",
-      "weight_range": "297 - 705kg",
-      "avg_weight": "469kg",
-      "dollar_head_range": "$2,200 - $3,320",
-      "avg_dollar_head": "$2,513",
-      "dollar_change": "7",
-      "c_kg_range": "458 - 623c",
-      "avg_c_kg": "540c",
-      "c_kg_change": "79",
-      "clearance": "85%"
+      "category": "Breeding Stock",
+      "offered": "NSM Cows & Calves",
+      "weight_range": "223",
+      "avg_weight": "297 - 705kg",
+      "dollar_head_range": "469kg",
+      "avg_dollar_head": "$2,200 - $3,320",
+      "dollar_change": "$2,513",
+      "c_kg_range": null,
+      "avg_c_kg": "458 - 623c",
+      "c_kg_change": "540c",
+      "clearance": null
     },
     {
-      "category": "SM Heifers & Calves",
-      "offered": "35",
-      "weight_range": "319 - 619kg",
-      "avg_weight": "496kg",
-      "dollar_head_range": "$1,800 - $3,200",
-      "avg_dollar_head": "$2,785",
-      "dollar_change": "-133",
-      "c_kg_range": "464 - 616c",
-      "avg_c_kg": "557c",
-      "c_kg_change": "-104",
-      "clearance": "100%"
+      "category": "Breeding Stock",
+      "offered": "SM Heifers & Calves",
+      "weight_range": "35",
+      "avg_weight": "319 - 619kg",
+      "dollar_head_range": "496kg",
+      "avg_dollar_head": "$1,800 - $3,200",
+      "dollar_change": "$2,785",
+      "c_kg_range": null,
+      "avg_c_kg": "464 - 616c",
+      "c_kg_change": "557c",
+      "clearance": null
     },
     {
-      "category": "SM Cows & Calves",
-      "offered": "709",
-      "weight_range": "298 - 760kg",
-      "avg_weight": "484kg",
-      "dollar_head_range": "$1,900 - $3,060",
-      "avg_dollar_head": "$2,393",
-      "dollar_change": "-199",
-      "c_kg_range": "443 - 587c",
-      "avg_c_kg": "512c",
-      "c_kg_change": "11",
-      "clearance": "70%"
+      "category": "Breeding Stock",
+      "offered": "SM Cows & Calves",
+      "weight_range": "709",
+      "avg_weight": "298 - 760kg",
+      "dollar_head_range": "484kg",
+      "avg_dollar_head": "$1,900 - $3,060",
+      "dollar_change": "$2,393",
+      "c_kg_range": null,
+      "avg_c_kg": "443 - 587c",
+      "c_kg_change": "512c",
+      "clearance": null
     },
     {
-      "category": "PTIC Cows & Calves",
-      "offered": "20",
-      "weight_range": "440 - 634kg",
-      "avg_weight": "503kg",
-      "dollar_head_range": "$3,500 - $3,500",
-      "avg_dollar_head": "$3,500",
-      "dollar_change": "-",
-      "c_kg_range": "672 - 672c",
-      "avg_c_kg": "672c",
-      "c_kg_change": "-",
-      "clearance": "15%"
+      "category": "Breeding Stock",
+      "offered": "PTIC Cows & Calves",
+      "weight_range": "20",
+      "avg_weight": "440 - 634kg",
+      "dollar_head_range": "503kg",
+      "avg_dollar_head": "$3,500 - $3,500",
+      "dollar_change": "$3,500",
+      "c_kg_range": "-",
+      "avg_c_kg": "672 - 672c",
+      "c_kg_change": "672c",
+      "clearance": "-"
+    },
+    {
+      "category": "NSW",
+      "offered": "Steers",
+      "weight_range": "Steers 0-200kg",
+      "avg_weight": "122",
+      "dollar_head_range": "106 - 239kg",
+      "avg_dollar_head": "170kg",
+      "dollar_change": "$950 - $1,070",
+      "c_kg_range": "$962",
+      "avg_c_kg": null,
+      "c_kg_change": "588 - 600c",
+      "clearance": "599c"
+    },
+    {
+      "category": "NSW",
+      "offered": "Steers",
+      "weight_range": "Steers 200.1-280kg",
+      "avg_weight": "834",
+      "dollar_head_range": "143 - 351kg",
+      "avg_dollar_head": "239kg",
+      "dollar_change": "$990 - $1,545",
+      "c_kg_range": "$1,266",
+      "avg_c_kg": null,
+      "c_kg_change": "397 - 589c",
+      "clearance": "539c"
+    },
+    {
+      "category": "NSW",
+      "offered": "Steers",
+      "weight_range": "Steers 280.1-330kg",
+      "avg_weight": "512",
+      "dollar_head_range": "228 - 416kg",
+      "avg_dollar_head": "308kg",
+      "dollar_change": "$1,380 - $1,720",
+      "c_kg_range": "$1,563",
+      "avg_c_kg": null,
+      "c_kg_change": "458 - 536c",
+      "clearance": "505c"
+    },
+    {
+      "category": "NSW",
+      "offered": "Steers",
+      "weight_range": "Steers 330.1-400kg",
+      "avg_weight": "910",
+      "dollar_head_range": "108 - 511kg",
+      "avg_dollar_head": "364kg",
+      "dollar_change": "$1,540 - $1,970",
+      "c_kg_range": "$1,801",
+      "avg_c_kg": null,
+      "c_kg_change": "430 - 596c",
+      "clearance": "511c"
+    },
+    {
+      "category": "NSW",
+      "offered": "Steers",
+      "weight_range": "Steers 400kg +",
+      "avg_weight": "696",
+      "dollar_head_range": "326 - 561kg",
+      "avg_dollar_head": "430kg",
+      "dollar_change": "$2,050 - $2,200",
+      "c_kg_range": "$2,081",
+      "avg_c_kg": null,
+      "c_kg_change": "430 - 500c",
+      "clearance": "493c"
+    },
+    {
+      "category": "NSW",
+      "offered": "Heifers",
+      "weight_range": "Heifers 0-200kg",
+      "avg_weight": "297",
+      "dollar_head_range": "100 - 272kg",
+      "avg_dollar_head": "183kg",
+      "dollar_change": "$510 - $920",
+      "c_kg_range": "$858",
+      "avg_c_kg": null,
+      "c_kg_change": "297 - 461c",
+      "clearance": "447c"
+    },
+    {
+      "category": "NSW",
+      "offered": "Heifers",
+      "weight_range": "Heifers 200.1-280kg",
+      "avg_weight": "349",
+      "dollar_head_range": "149 - 339kg",
+      "avg_dollar_head": "237kg",
+      "dollar_change": "$795 - $1,100",
+      "c_kg_range": "$1,037",
+      "avg_c_kg": null,
+      "c_kg_change": "368 - 519c",
+      "clearance": "466c"
+    },
+    {
+      "category": "NSW",
+      "offered": "Heifers",
+      "weight_range": "Heifers 280.1-330kg",
+      "avg_weight": "506",
+      "dollar_head_range": "238 - 403kg",
+      "avg_dollar_head": "310kg",
+      "dollar_change": "$1,210 - $1,460",
+      "c_kg_range": "$1,326",
+      "avg_c_kg": null,
+      "c_kg_change": "391 - 456c",
+      "clearance": "421c"
+    },
+    {
+      "category": "NSW",
+      "offered": "Heifers",
+      "weight_range": "Heifers 330.1-400kg",
+      "avg_weight": "813",
+      "dollar_head_range": "289 - 503kg",
+      "avg_dollar_head": "368kg",
+      "dollar_change": "$1,530 - $1,770",
+      "c_kg_range": "$1,648",
+      "avg_c_kg": null,
+      "c_kg_change": "413 - 471c",
+      "clearance": "435c"
+    },
+    {
+      "category": "NSW",
+      "offered": "Heifers",
+      "weight_range": "Heifers 400kg +",
+      "avg_weight": "382",
+      "dollar_head_range": "309 - 516kg",
+      "avg_dollar_head": "419kg",
+      "dollar_change": "$1,800 - $1,900",
+      "c_kg_range": "$1,866",
+      "avg_c_kg": null,
+      "c_kg_change": "425 - 451c",
+      "clearance": "441c"
+    },
+    {
+      "category": "NSW",
+      "offered": "Breeding Stock",
+      "weight_range": "NSM Cows",
+      "avg_weight": "1",
+      "dollar_head_range": "264 - 264kg",
+      "avg_dollar_head": "264kg",
+      "dollar_change": "$640 - $640",
+      "c_kg_range": "$640",
+      "avg_c_kg": "-",
+      "c_kg_change": "242 - 242c",
+      "clearance": "242c"
+    },
+    {
+      "category": "NSW",
+      "offered": "Breeding Stock",
+      "weight_range": "SM Heifers",
+      "avg_weight": "100",
+      "dollar_head_range": "224 - 544kg",
+      "avg_dollar_head": "409kg",
+      "dollar_change": "$2,100 - $2,240",
+      "c_kg_range": "$2,135",
+      "avg_c_kg": null,
+      "c_kg_change": "432 - 485c",
+      "clearance": "445c"
+    },
+    {
+      "category": "NSW",
+      "offered": "Breeding Stock",
+      "weight_range": "SM Cows",
+      "avg_weight": "177",
+      "dollar_head_range": "378 - 908kg",
+      "avg_dollar_head": "547kg",
+      "dollar_change": "$1,650 - $1,650",
+      "c_kg_range": "$1,650",
+      "avg_c_kg": null,
+      "c_kg_change": "352 - 352c",
+      "clearance": "352c"
+    },
+    {
+      "category": "NSW",
+      "offered": "Breeding Stock",
+      "weight_range": "PTIC Heifers",
+      "avg_weight": "1,189",
+      "dollar_head_range": "281 - 693kg",
+      "avg_dollar_head": "420kg",
+      "dollar_change": "$1,950 - $2,360",
+      "c_kg_range": "$2,037",
+      "avg_c_kg": null,
+      "c_kg_change": "445 - 477c",
+      "clearance": "460c"
+    },
+    {
+      "category": "NSW",
+      "offered": "Breeding Stock",
+      "weight_range": "PTIC Cows",
+      "avg_weight": "617",
+      "dollar_head_range": "367 - 856kg",
+      "avg_dollar_head": "558kg",
+      "dollar_change": "$1,800 - $2,000",
+      "c_kg_range": "$1,882",
+      "avg_c_kg": null,
+      "c_kg_change": "319 - 394c",
+      "clearance": "370c"
+    },
+    {
+      "category": "NSW",
+      "offered": "Breeding Stock",
+      "weight_range": "NSM Heifers & Calves",
+      "avg_weight": "135",
+      "dollar_head_range": "247 - 532kg",
+      "avg_dollar_head": "371kg",
+      "dollar_change": "$1,300 - $2,450",
+      "c_kg_range": "$2,422",
+      "avg_c_kg": null,
+      "c_kg_change": "526 - 613c",
+      "clearance": "604c"
+    },
+    {
+      "category": "NSW",
+      "offered": "Breeding Stock",
+      "weight_range": "NSM Cows & Calves",
+      "avg_weight": "95",
+      "dollar_head_range": "338 - 705kg",
+      "avg_dollar_head": "471kg",
+      "dollar_change": "$2,300 - $2,620",
+      "c_kg_range": "$2,367",
+      "avg_c_kg": null,
+      "c_kg_change": "458 - 562c",
+      "clearance": "460c"
+    },
+    {
+      "category": "NSW",
+      "offered": "Breeding Stock",
+      "weight_range": "SM Cows & Calves",
+      "avg_weight": "532",
+      "dollar_head_range": "332 - 760kg",
+      "avg_dollar_head": "505kg",
+      "dollar_change": "$2,100 - $3,060",
+      "c_kg_range": "$2,400",
+      "avg_c_kg": null,
+      "c_kg_change": "450 - 552c",
+      "clearance": "515c"
+    },
+    {
+      "category": "NSW",
+      "offered": "Breeding Stock",
+      "weight_range": "PTIC Cows & Calves",
+      "avg_weight": "6",
+      "dollar_head_range": "466 - 541kg",
+      "avg_dollar_head": "506kg",
+      "dollar_change": "$3,500 - $3,500",
+      "c_kg_range": "$3,500",
+      "avg_c_kg": "-",
+      "c_kg_change": "672 - 672c",
+      "clearance": "672c"
+    },
+    {
+      "category": "QLD",
+      "offered": "Steers",
+      "weight_range": "Steers 200.1-280kg",
+      "avg_weight": "344",
+      "dollar_head_range": "163 - 346kg",
+      "avg_dollar_head": "256kg",
+      "dollar_change": "$1,200 - $1,380",
+      "c_kg_range": "$1,268",
+      "avg_c_kg": null,
+      "c_kg_change": "487 - 566c",
+      "clearance": "503c"
     }
   ],
-  "states": [
-    {
-      "state": "NSW",
-      "categories": [
-        {
-          "category": "Steers 0-200kg",
-          "offered": "122",
-          "weight_range": "106 - 239kg",
-          "avg_weight": "170kg",
-          "dollar_head_range": "$950 - $1,070",
-          "avg_dollar_head": "$962",
-          "dollar_change": "-142",
-          "c_kg_range": "588 - 600c",
-          "avg_c_kg": "599c",
-          "c_kg_change": "25",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
-        {
-          "category": "Steers 200.1-280kg",
-          "offered": "834",
-          "weight_range": "143 - 351kg",
-          "avg_weight": "239kg",
-          "dollar_head_range": "$990 - $1,545",
-          "avg_dollar_head": "$1,266",
-          "dollar_change": "-83",
-          "c_kg_range": "397 - 589c",
-          "avg_c_kg": "539c",
-          "c_kg_change": "1",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
-        {
-          "category": "Steers 280.1-330kg",
-          "offered": "512",
-          "weight_range": "228 - 416kg",
-          "avg_weight": "308kg",
-          "dollar_head_range": "$1,380 - $1,720",
-          "avg_dollar_head": "$1,563",
-          "dollar_change": "-45",
-          "c_kg_range": "458 - 536c",
-          "avg_c_kg": "505c",
-          "c_kg_change": "-27",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
-        {
-          "category": "Steers 330.1-400kg",
-          "offered": "910",
-          "weight_range": "108 - 511kg",
-          "avg_weight": "364kg",
-          "dollar_head_range": "$1,540 - $1,970",
-          "avg_dollar_head": "$1,801",
-          "dollar_change": "-34",
-          "c_kg_range": "430 - 596c",
-          "avg_c_kg": "511c",
-          "c_kg_change": "-3",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
-        {
-          "category": "Steers 400kg +",
-          "offered": "696",
-          "weight_range": "326 - 561kg",
-          "avg_weight": "430kg",
-          "dollar_head_range": "$2,050 - $2,200",
-          "avg_dollar_head": "$2,081",
-          "dollar_change": "-134",
-          "c_kg_range": "430 - 500c",
-          "avg_c_kg": "493c",
-          "c_kg_change": "-12",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
-        {
-          "category": "Heifers 0-200kg",
-          "offered": "297",
-          "weight_range": "100 - 272kg",
-          "avg_weight": "183kg",
-          "dollar_head_range": "$510 - $920",
-          "avg_dollar_head": "$858",
-          "dollar_change": "228",
-          "c_kg_range": "297 - 461c",
-          "avg_c_kg": "447c",
-          "c_kg_change": "85",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
-        {
-          "category": "Heifers 200.1-280kg",
-          "offered": "349",
-          "weight_range": "149 - 339kg",
-          "avg_weight": "237kg",
-          "dollar_head_range": "$795 - $1,100",
-          "avg_dollar_head": "$1,037",
-          "dollar_change": "-96",
-          "c_kg_range": "368 - 519c",
-          "avg_c_kg": "466c",
-          "c_kg_change": "15",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
-        {
-          "category": "Heifers 280.1-330kg",
-          "offered": "506",
-          "weight_range": "238 - 403kg",
-          "avg_weight": "310kg",
-          "dollar_head_range": "$1,210 - $1,460",
-          "avg_dollar_head": "$1,326",
-          "dollar_change": "-9",
-          "c_kg_range": "391 - 456c",
-          "avg_c_kg": "421c",
-          "c_kg_change": "-14",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
-        {
-          "category": "Heifers 330.1-400kg",
-          "offered": "813",
-          "weight_range": "289 - 503kg",
-          "avg_weight": "368kg",
-          "dollar_head_range": "$1,530 - $1,770",
-          "avg_dollar_head": "$1,648",
-          "dollar_change": "-56",
-          "c_kg_range": "413 - 471c",
-          "avg_c_kg": "435c",
-          "c_kg_change": "-22",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
-        {
-          "category": "Heifers 400kg +",
-          "offered": "382",
-          "weight_range": "309 - 516kg",
-          "avg_weight": "419kg",
-          "dollar_head_range": "$1,800 - $1,900",
-          "avg_dollar_head": "$1,866",
-          "dollar_change": "-26",
-          "c_kg_range": "425 - 451c",
-          "avg_c_kg": "441c",
-          "c_kg_change": "-10",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
-        {
-          "category": "NSM Cows",
-          "offered": "1",
-          "weight_range": "264 - 264kg",
-          "avg_weight": "264kg",
-          "dollar_head_range": "$640 - $640",
-          "avg_dollar_head": "$640",
-          "dollar_change": "-",
-          "c_kg_range": "242 - 242c",
-          "avg_c_kg": "242c",
-          "c_kg_change": "-",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
-        {
-          "category": "SM Heifers",
-          "offered": "100",
-          "weight_range": "224 - 544kg",
-          "avg_weight": "409kg",
-          "dollar_head_range": "$2,100 - $2,240",
-          "avg_dollar_head": "$2,135",
-          "dollar_change": "-",
-          "c_kg_range": "432 - 485c",
-          "avg_c_kg": "445c",
-          "c_kg_change": "-",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
-        {
-          "category": "SM Cows",
-          "offered": "177",
-          "weight_range": "378 - 908kg",
-          "avg_weight": "547kg",
-          "dollar_head_range": "$1,650 - $1,650",
-          "avg_dollar_head": "$1,650",
-          "dollar_change": "-",
-          "c_kg_range": "352 - 352c",
-          "avg_c_kg": "352c",
-          "c_kg_change": "-",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
-        {
-          "category": "PTIC Heifers",
-          "offered": "1,189",
-          "weight_range": "281 - 693kg",
-          "avg_weight": "420kg",
-          "dollar_head_range": "$1,950 - $2,360",
-          "avg_dollar_head": "$2,037",
-          "dollar_change": "53",
-          "c_kg_range": "445 - 477c",
-          "avg_c_kg": "460c",
-          "c_kg_change": "5",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
-        {
-          "category": "PTIC Cows",
-          "offered": "617",
-          "weight_range": "367 - 856kg",
-          "avg_weight": "558kg",
-          "dollar_head_range": "$1,800 - $2,000",
-          "avg_dollar_head": "$1,882",
-          "dollar_change": "-102",
-          "c_kg_range": "319 - 394c",
-          "avg_c_kg": "370c",
-          "c_kg_change": "-4",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
-        {
-          "category": "NSM Heifers & Calves",
-          "offered": "135",
-          "weight_range": "247 - 532kg",
-          "avg_weight": "371kg",
-          "dollar_head_range": "$1,300 - $2,450",
-          "avg_dollar_head": "$2,422",
-          "dollar_change": "-178",
-          "c_kg_range": "526 - 613c",
-          "avg_c_kg": "604c",
-          "c_kg_change": "41",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
-        {
-          "category": "NSM Cows & Calves",
-          "offered": "95",
-          "weight_range": "338 - 705kg",
-          "avg_weight": "471kg",
-          "dollar_head_range": "$2,300 - $2,620",
-          "avg_dollar_head": "$2,367",
-          "dollar_change": "-143",
-          "c_kg_range": "458 - 562c",
-          "avg_c_kg": "460c",
-          "c_kg_change": "-1",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
-        {
-          "category": "SM Cows & Calves",
-          "offered": "532",
-          "weight_range": "332 - 760kg",
-          "avg_weight": "505kg",
-          "dollar_head_range": "$2,100 - $3,060",
-          "avg_dollar_head": "$2,400",
-          "dollar_change": "-238",
-          "c_kg_range": "450 - 552c",
-          "avg_c_kg": "515c",
-          "c_kg_change": "33",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
-        {
-          "category": "PTIC Cows & Calves",
-          "offered": "6",
-          "weight_range": "466 - 541kg",
-          "avg_weight": "506kg",
-          "dollar_head_range": "$3,500 - $3,500",
-          "avg_dollar_head": "$3,500",
-          "dollar_change": "-",
-          "c_kg_range": "672 - 672c",
-          "avg_c_kg": "672c",
-          "c_kg_change": "-",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "QLD",
-      "categories": [
-        {
-          "category": "Steers 200.1-280kg",
-          "offered": "344",
-          "weight_range": "163 - 346kg",
-          "avg_weight": "256kg",
-          "dollar_head_range": "$1,200 - $1,380",
-          "avg_dollar_head": "$1,268",
-          "dollar_change": "9",
-          "c_kg_range": "487 - 566c",
-          "avg_c_kg": "503c",
-          "c_kg_change": "-74",
-          "clearance": "-"
-        }
-      ]
-    }
-  ]
+  "states": []
 }

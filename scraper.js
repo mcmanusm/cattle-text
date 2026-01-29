@@ -1,6 +1,6 @@
 // ============================================================
 // scrape_text_metrics.js
-// Power BI TABLE-based scraper (National + All States)
+// Power BI TABLE scraper – row-based (CORRECT VERSION)
 // ============================================================
 
 const fs = require("fs");
@@ -10,17 +10,6 @@ const puppeteer = require("puppeteer");
   const url = "https://mcmanusm.github.io/cattle-text/cattle-text-table.html";
   const outputFile = "text-metrics.json";
 
-  function clean(text) {
-    return text
-      .normalize("NFKD")
-      .replace(/[–—]/g, "-")
-      .replace(/\s+/g, " ")
-      .trim();
-  }
-
-  const STATES = ["NSW", "QLD", "VIC", "SA", "Tas", "WA", "NT"];
-  const CATEGORY_GROUPS = ["Steers", "Heifers", "Breeding Stock"];
-
   const browser = await puppeteer.launch({
     headless: "new",
     args: ["--no-sandbox", "--disable-setuid-sandbox"]
@@ -28,27 +17,34 @@ const puppeteer = require("puppeteer");
 
   try {
     const page = await browser.newPage();
-    page.setDefaultTimeout(90000);
-
-    console.log("→ Navigating...");
     await page.goto(url, { waitUntil: "networkidle2" });
     await page.waitForSelector("iframe");
-    await new Promise(r => setTimeout(r, 10000));
+    await new Promise(r => setTimeout(r, 8000));
 
     const frame = page.frames().find(f => f.url().includes("powerbi.com"));
     if (!frame) throw new Error("Power BI iframe not found");
 
-    const rawText = await frame.evaluate(() => document.body.innerText);
-
-    const lines = rawText
+    const lines = (await frame.evaluate(() => document.body.innerText))
       .split("\n")
-      .map(clean)
+      .map(l => l.trim())
       .filter(Boolean);
 
-    console.log(`→ Extracted ${lines.length} lines`);
+    // ----------------------------------------------------------
+    // Helpers
+    // ----------------------------------------------------------
+
+    const STATES = ["NSW", "QLD", "VIC", "SA", "Tas", "WA", "NT"];
+
+    function isHeader(line) {
+      return (
+        line === "Category" ||
+        line === "State" ||
+        line === "Category (CC)"
+      );
+    }
 
     // ----------------------------------------------------------
-    // Output structure
+    // Output
     // ----------------------------------------------------------
 
     const output = {
@@ -59,70 +55,80 @@ const puppeteer = require("puppeteer");
 
     const stateBuckets = {};
 
-    STATES.forEach(s => {
-      stateBuckets[s] = {
-        state: s,
-        categories: []
-      };
-    });
-
     // ----------------------------------------------------------
-    // Row parser (TABLE ROWS)
+    // Parse stream into rows
     // ----------------------------------------------------------
 
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
+    let i = 0;
 
-      // Split by double-space heuristic
-      const cols = line.split(" ").filter(Boolean);
+    while (i < lines.length) {
 
-      // NATIONAL ROW
-      if (CATEGORY_GROUPS.includes(cols[0])) {
-        // Expected layout:
-        // [CategoryGroup, Category(CC), Offered, WeightRange, AvgWeight, $Range, Avg$, Change$, c/kgRange, Avg c/kg, Change, Clearance]
+      // ----------------------------
+      // NATIONAL ROW (11 columns)
+      // ----------------------------
+      if (
+        ["Steers", "Heifers", "Breeding Stock"].includes(lines[i])
+      ) {
+        const row = lines.slice(i, i + 11);
 
-        if (cols.length < 10) continue;
+        if (row.length === 11 && !isHeader(row[0])) {
+          output.national.push({
+            category: row[1],
+            offered: row[2],
+            weight_range: row[3],
+            avg_weight: row[4],
+            dollar_head_range: row[5],
+            avg_dollar_head: row[6],
+            dollar_change: row[7],
+            c_kg_range: row[8],
+            avg_c_kg: row[9],
+            c_kg_change: row[10],
+            clearance: row[11] || null
+          });
+        }
 
-        output.national.push({
-          category: cols[1],
-          offered: cols[2],
-          weight_range: cols[3] + " " + cols[4],
-          avg_weight: cols[5],
-          dollar_head_range: cols[6] + " " + cols[7],
-          avg_dollar_head: cols[8],
-          dollar_change: cols[9],
-          c_kg_range: cols[10] + " " + cols[11],
-          avg_c_kg: cols[12],
-          c_kg_change: cols[13],
-          clearance: cols[14]
-        });
-
+        i += 11;
         continue;
       }
 
-      // STATE ROW
-      if (STATES.includes(cols[0])) {
-        const state = cols[0];
+      // ----------------------------
+      // STATE ROW (12 columns)
+      // ----------------------------
+      if (STATES.includes(lines[i])) {
+        const row = lines.slice(i, i + 12);
+        const state = row[0];
 
-        if (cols.length < 11) continue;
+        if (!stateBuckets[state]) {
+          stateBuckets[state] = {
+            state,
+            categories: []
+          };
+        }
 
-        stateBuckets[state].categories.push({
-          category: cols[2],
-          offered: cols[3],
-          weight_range: cols[4] + " " + cols[5],
-          avg_weight: cols[6],
-          dollar_head_range: cols[7] + " " + cols[8],
-          avg_dollar_head: cols[9],
-          dollar_change: cols[10],
-          c_kg_range: cols[11] + " " + cols[12],
-          avg_c_kg: cols[13],
-          c_kg_change: cols[14],
-          clearance: cols[15]
-        });
+        if (row.length === 12 && !isHeader(row[1])) {
+          stateBuckets[state].categories.push({
+            category: row[2],
+            offered: row[3],
+            weight_range: row[4],
+            avg_weight: row[5],
+            dollar_head_range: row[6],
+            avg_dollar_head: row[7],
+            dollar_change: row[8],
+            c_kg_range: row[9],
+            avg_c_kg: row[10],
+            c_kg_change: row[11],
+            clearance: row[12] || null
+          });
+        }
+
+        i += 12;
+        continue;
       }
+
+      i++;
     }
 
-    // Push populated states only
+    // Push states with data
     Object.values(stateBuckets).forEach(s => {
       if (s.categories.length > 0) {
         output.states.push(s);
@@ -132,15 +138,15 @@ const puppeteer = require("puppeteer");
     fs.writeFileSync(outputFile, JSON.stringify(output, null, 2));
 
     console.log("✓ Scrape complete");
-    console.log(`  National categories: ${output.national.length}`);
+    console.log(`  National rows: ${output.national.length}`);
     output.states.forEach(s =>
-      console.log(`  ${s.state}: ${s.categories.length} rows`)
+      console.log(`  ${s.state}: ${s.categories.length}`)
     );
 
     await browser.close();
 
   } catch (err) {
-    console.error("❌ ERROR:", err.message);
+    console.error("❌ ERROR:", err);
     await browser.close();
     process.exit(1);
   }

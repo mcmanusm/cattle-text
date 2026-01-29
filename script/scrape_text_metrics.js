@@ -2,7 +2,7 @@
 // scrape_text_metrics.js
 // Power BI Cattle Market Weekly Averages
 // National + State → Category → Metrics
-// UPDATED: All categories and all states
+// UPDATED: Advanced scrolling + interaction to load all states
 // ============================================================
 
 const fs = require("fs");
@@ -61,6 +61,103 @@ const puppeteer = require("puppeteer");
     const frame = page.frames().find(f => f.url().includes("powerbi.com"));
     if (!frame) throw new Error("Power BI iframe not found");
 
+    console.log("→ Attempting to load all state data...");
+    
+    // STRATEGY 1: Look for and click "State" filter to ensure "All" is selected
+    try {
+      console.log("  → Checking for State filter...");
+      const stateFilter = await frame.$('div[aria-label*="State"]');
+      if (stateFilter) {
+        console.log("  → Found State filter, clicking...");
+        await stateFilter.click();
+        await new Promise(r => setTimeout(r, 1000));
+        
+        // Look for "All" option and click it
+        const allOption = await frame.$('div[title="All"], div[aria-label="All"]');
+        if (allOption) {
+          console.log("  → Clicking 'All' option...");
+          await allOption.click();
+          await new Promise(r => setTimeout(r, 2000));
+        }
+      }
+    } catch (e) {
+      console.log("  → No interactive filter found, continuing...");
+    }
+
+    // STRATEGY 2: Aggressive scrolling through the Power BI visual
+    console.log("  → Scrolling through data...");
+    
+    // Find the visual container
+    const scrollAttempts = await frame.evaluate(() => {
+      let attempts = 0;
+      
+      // Find all possible scrollable containers
+      const selectors = [
+        'div[class*="pivotTable"]',
+        'div[role="grid"]',
+        'div[class*="bodyCells"]',
+        'div[class*="scroll"]',
+        'div.visualContainer',
+        '.scrollRegion'
+      ];
+
+      let scrolled = false;
+      
+      for (const selector of selectors) {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(el => {
+          if (el.scrollHeight > el.clientHeight) {
+            attempts++;
+            // Scroll to bottom
+            el.scrollTop = el.scrollHeight;
+            scrolled = true;
+          }
+        });
+      }
+
+      return { attempts, scrolled };
+    });
+
+    console.log(`  → Found ${scrollAttempts.attempts} scrollable elements`);
+    
+    // Wait for content to load after scroll
+    await new Promise(r => setTimeout(r, 5000));
+
+    // STRATEGY 3: Multiple incremental scrolls
+    console.log("  → Performing incremental scrolls...");
+    for (let i = 0; i < 15; i++) {
+      await frame.evaluate((step) => {
+        const containers = document.querySelectorAll(
+          'div[role="grid"], div[class*="pivotTable"], div[class*="scroll"], div.visualContainer'
+        );
+        
+        containers.forEach(el => {
+          if (el.scrollHeight > el.clientHeight) {
+            el.scrollTop = (el.scrollHeight / 15) * step;
+          }
+        });
+      }, i);
+      
+      await new Promise(r => setTimeout(r, 800));
+    }
+
+    console.log("  → Final wait for rendering...");
+    await new Promise(r => setTimeout(r, 3000));
+
+    // STRATEGY 4: Scroll back to top to capture everything
+    await frame.evaluate(() => {
+      const containers = document.querySelectorAll(
+        'div[role="grid"], div[class*="pivotTable"], div[class*="scroll"], div.visualContainer'
+      );
+      containers.forEach(el => {
+        el.scrollTop = 0;
+      });
+      window.scrollTo(0, 0);
+    });
+
+    await new Promise(r => setTimeout(r, 2000));
+
+    // Extract the text
     const rawText = await frame.evaluate(() => document.body.innerText);
 
     const lines = rawText
@@ -69,6 +166,10 @@ const puppeteer = require("puppeteer");
       .filter(Boolean);
 
     console.log(`→ Lines extracted: ${lines.length}`);
+
+    // DEBUG: Save raw lines to file for inspection
+    fs.writeFileSync("debug_lines.txt", lines.join("\n"));
+    console.log("→ Debug lines saved to debug_lines.txt");
 
     // ----------------------------------------------------------
     // Definitions - UPDATED with all categories
@@ -94,7 +195,6 @@ const puppeteer = require("puppeteer");
 
     const stateKeys = Object.keys(stateMap);
 
-    // UPDATED: Added all missing categories including SM Heifers & Calves and PTIC Heifers & Calves
     const categories = [
       "Steers 0-200kg",
       "Steers 200.1-280kg",
@@ -239,6 +339,16 @@ const puppeteer = require("puppeteer");
     console.log(
       `  Total state categories: ${output.states.reduce((s, x) => s + x.categories.length, 0)}`
     );
+
+    // Show which states are missing
+    const foundStates = output.states.map(s => s.state);
+    const expectedStates = ["NSW", "QLD", "SA", "Tas", "Vic", "WA", "NT"];
+    const missingStates = expectedStates.filter(s => !foundStates.includes(s));
+    
+    if (missingStates.length > 0) {
+      console.log(`\n⚠️  Missing states: ${missingStates.join(", ")}`);
+      console.log(`  Check debug_lines.txt to see what was captured`);
+    }
 
     await browser.close();
 

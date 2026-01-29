@@ -1,0 +1,521 @@
+Show keyboard shortcuts
+Show screen reader tips
+Skip to main content
+Power BI Report
+Stock Category
+All
+State
+All
+APLUS Cattle Market Weekly Averages
+To scroll down, click on scroll bar and drag down
+Key: Change = Change on Last Week
+When opening on a mobile, place phone in landscape and zoom in on tables
+Use filters at top of page to decrease amount of categories shown
+Friday Cattle State Averages - 23 January 2026
+Scroll up
+Scroll down
+Scroll left
+Scroll right
+National
+Offered
+Weight Range
+Avg Weight
+$/Head Range
+Avg
+Change
+c/kg Range
+Avg
+Change
+Clearance
+Steers
+Steers 0-200kg
+122
+106 - 239kg
+170kg
+$950 - $1,070
+$962
+-142
+Additional Conditional Formatting
+588 - 600c
+599c
+25
+Additional Conditional Formatting
+100%
+Steers 200.1-280kg
+1,192
+143 - 351kg
+244kg
+$990 - $1,545
+$1,266
+-70
+Additional Conditional Formatting
+397 - 589c
+529c
+-9
+Additional Conditional Formatting
+92%
+Steers 280.1-330kg
+1,008
+212 - 2,855kg
+307kg
+$1,250 - $1,790
+$1,557
+-69
+Additional Conditional Formatting
+407 - 628c
+507c
+-33
+Additional Conditional Formatting
+69%
+Steers 330.1-400kg
+2,270
+108 - 511kg
+359kg
+$1,510 - $2,030
+$1,820
+-24
+Additional Conditional Formatting
+430 - 596c
+514c
+4
+Additional Conditional Formatting
+56%
+Steers 400kg +
+1,521
+326 - 561kg
+438kg
+$2,020 - $2,360
+$2,177
+-89
+Additional Conditional Formatting
+430 - 551c
+505c
+-1
+Additional Conditional Formatting
+44%
+Heifers
+Heifers 0-200kg
+297
+100 - 272kg
+183kg
+$510 - $920
+$858
+40
+Additional Conditional Formatting
+297 - 461c
+447c
+13
+Additional Conditional Formatting
+58%
+Heifers 200.1-280kg
+1,145
+149 - 348kg
+253kg
+$795 - $1,240
+$1,104
+-125
+Additional Conditional Formatting
+368 - 519c
+442c
+-33
+Additional Conditional Formatting
+72%
+Heifers 280.1-330kg
+1,039
+238 - 403kg
+311kg
+$1,210 - $1,640
+$1,334
+-6
+Additional Conditional Formatting
+391 - 543c
+429c
+-10
+Additional Conditional Formatting
+74%
+Heifers 330.1-400kg
+1,053
+276 - 503kg
+366kg
+$1,350 - $1,890
+$1,618
+-66
+Additional Conditional Formatting
+403 - 507c
+438c
+-19
+Additional Conditional Formatting
+54%
+Heifers 400kg +
+512
+309 - 536kg
+433kg
+$1,800 - $2,180
+$1,902
+-14
+Additional Conditional Formatting
+425 - 451c
+441c
+-5
+Additional Conditional Formatting
+94%
+Breeding Stock
+NSM Cows
+1
+264 - 264kg
+264kg
+$640 - $640
+$640
+-
+242 - 242c
+242c
+-
+100%
+SM Heifers
+243
+224 - 713kg
+515kg
+$2,100 - $3,020
+$2,481
+-162
+Additional Conditional Formatting
+408 - 564c
+471c
+3
+Additional Conditional Formatting
+70%
+SM Cows
+254
+378 - 908kg
+566kg
+$1,650 - $3,240
+$2,180
+-596
+Additional Conditional Formatting
+352 - 489c
+397c
+-51
+Additional Conditional Formatting
+59%
+PTIC Heifers
+1,736
+281 - 728kg
+467kg
+$1,880 - $3,210
+$2,270
+-284
+Additional Conditional Formatting
+324 - 559c
+464c
+-28
+Additional Conditional Formatting
+30%
+PTIC Cows
+887
+367 - 860kg
+608kg
+$1,800 - $3,360
+$2,248
+-162
+Additional Conditional Formatting
+319 - 526c
+399c
+-8
+Additional Conditional Formatting
+57%
+NSM Heifers & Calves
+202
+247 - 679kg
+413kg
+$1,300 - $3,400
+$2,575
+-25
+Additional Conditional Formatting
+526 - 613c
+598c
+35
+Additional Conditional Formatting
+60%
+NSM Cows & Calves
+223
+297 - 705kg
+469kg
+$2,200 - $3,320
+$2,513
+7
+Additional Conditional Formatting
+458 - 623c
+540c
+79
+Additional Conditional Formatting
+85%
+Friday Cattle National Averages - 23 January 2026
+Scroll up
+Scroll down
+Scroll left
+Scroll right
+State
+Offered
+Weight Range
+Avg Weight
+$/Head Range
+Avg
+Change
+c/kg Range
+Avg
+Change
+Clearance
+NSW
+Steers 0-200kg
+122
+106 - 239kg
+170kg
+$950 - $1,070
+$962
+-142
+Additional Conditional Formatting
+588 - 600c
+599c
+25
+Additional Conditional Formatting
+100%
+Steers 200.1-280kg
+834
+143 - 351kg
+239kg
+$990 - $1,545
+$1,266
+-83
+Additional Conditional Formatting
+397 - 589c
+539c
+1
+Additional Conditional Formatting
+94%
+Steers 280.1-330kg
+512
+228 - 416kg
+308kg
+$1,380 - $1,720
+$1,563
+-45
+Additional Conditional Formatting
+458 - 536c
+505c
+-27
+Additional Conditional Formatting
+96%
+Steers 330.1-400kg
+910
+108 - 511kg
+364kg
+$1,540 - $1,970
+$1,801
+-34
+Additional Conditional Formatting
+430 - 596c
+511c
+-3
+Additional Conditional Formatting
+58%
+Steers 400kg +
+696
+326 - 561kg
+430kg
+$2,050 - $2,200
+$2,081
+-134
+Additional Conditional Formatting
+430 - 500c
+493c
+-12
+Additional Conditional Formatting
+28%
+Heifers 0-200kg
+297
+100 - 272kg
+183kg
+$510 - $920
+$858
+228
+Additional Conditional Formatting
+297 - 461c
+447c
+85
+Additional Conditional Formatting
+58%
+Heifers 200.1-280kg
+349
+149 - 339kg
+237kg
+$795 - $1,100
+$1,037
+-96
+Additional Conditional Formatting
+368 - 519c
+466c
+15
+Additional Conditional Formatting
+78%
+Heifers 280.1-330kg
+506
+238 - 403kg
+310kg
+$1,210 - $1,460
+$1,326
+-9
+Additional Conditional Formatting
+391 - 456c
+421c
+-14
+Additional Conditional Formatting
+60%
+Heifers 330.1-400kg
+813
+289 - 503kg
+368kg
+$1,530 - $1,770
+$1,648
+-56
+Additional Conditional Formatting
+413 - 471c
+435c
+-22
+Additional Conditional Formatting
+47%
+Heifers 400kg +
+382
+309 - 516kg
+419kg
+$1,800 - $1,900
+$1,866
+-26
+Additional Conditional Formatting
+425 - 451c
+441c
+-10
+Additional Conditional Formatting
+92%
+NSM Cows
+1
+264 - 264kg
+264kg
+$640 - $640
+$640
+-
+242 - 242c
+242c
+-
+100%
+SM Heifers
+100
+224 - 544kg
+409kg
+$2,100 - $2,240
+$2,135
+-
+Additional Conditional Formatting
+432 - 485c
+445c
+-
+64%
+SM Cows
+177
+378 - 908kg
+547kg
+$1,650 - $1,650
+$1,650
+-
+Additional Conditional Formatting
+352 - 352c
+352c
+-
+56%
+PTIC Heifers
+1,189
+281 - 693kg
+420kg
+$1,950 - $2,360
+$2,037
+53
+Additional Conditional Formatting
+445 - 477c
+460c
+5
+Additional Conditional Formatting
+17%
+PTIC Cows
+617
+367 - 856kg
+558kg
+$1,800 - $2,000
+$1,882
+-102
+Additional Conditional Formatting
+319 - 394c
+370c
+-4
+Additional Conditional Formatting
+47%
+NSM Heifers & Calves
+135
+247 - 532kg
+371kg
+$1,300 - $2,450
+$2,422
+-178
+Additional Conditional Formatting
+526 - 613c
+604c
+41
+Additional Conditional Formatting
+76%
+NSM Cows & Calves
+95
+338 - 705kg
+471kg
+$2,300 - $2,620
+$2,367
+-143
+Additional Conditional Formatting
+458 - 562c
+460c
+-1
+Additional Conditional Formatting
+65%
+SM Cows & Calves
+532
+332 - 760kg
+505kg
+$2,100 - $3,060
+$2,400
+-238
+Additional Conditional Formatting
+450 - 552c
+515c
+33
+Additional Conditional Formatting
+66%
+PTIC Cows & Calves
+6
+466 - 541kg
+506kg
+$3,500 - $3,500
+$3,500
+-
+672 - 672c
+672c
+-
+50%
+-
++
+94%
+Microsoft Power BI
+1of2
+Report Zoomed To 94%
+Australian Capital Territory
+New South Wales
+Queensland
+South Australia
+Tasmania
+Victoria

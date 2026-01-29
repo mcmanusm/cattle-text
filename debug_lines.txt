@@ -5,6 +5,7 @@ Power BI Report
 Stock Category
 All
 State
+All
 APLUS Cattle Market Weekly Averages
 To scroll down, click on scroll bar and drag down
 Key: Change = Change on Last Week
@@ -21,6 +22,8 @@ $/Head Range
 Avg
 Change
 c/kg Range
+Avg
+Change
 Clearance
 Steers
 Steers 0-200kg
@@ -34,6 +37,7 @@ $962
 599c
 25
 100%
+Steers
 Steers 200.1-280kg
 1,192
 143 - 351kg
@@ -45,6 +49,7 @@ $1,266
 529c
 -9
 92%
+Steers
 Steers 280.1-330kg
 1,008
 212 - 2,855kg
@@ -56,6 +61,7 @@ $1,557
 507c
 -33
 69%
+Steers
 Steers 330.1-400kg
 2,270
 108 - 511kg
@@ -67,6 +73,7 @@ $1,820
 514c
 4
 56%
+Steers
 Steers 400kg +
 1,521
 326 - 561kg
@@ -90,6 +97,7 @@ $858
 447c
 13
 58%
+Heifers
 Heifers 200.1-280kg
 1,145
 149 - 348kg
@@ -99,7 +107,9 @@ $1,104
 -125
 368 - 519c
 442c
+-33
 72%
+Heifers
 Heifers 280.1-330kg
 1,039
 238 - 403kg
@@ -111,6 +121,7 @@ $1,334
 429c
 -10
 74%
+Heifers
 Heifers 330.1-400kg
 1,053
 276 - 503kg
@@ -122,6 +133,7 @@ $1,618
 438c
 -19
 54%
+Heifers
 Heifers 400kg +
 512
 309 - 536kg
@@ -143,6 +155,9 @@ $640
 -
 242 - 242c
 242c
+-
+100%
+Breeding Stock
 SM Heifers
 243
 224 - 713kg
@@ -154,6 +169,7 @@ $2,481
 471c
 3
 70%
+Breeding Stock
 SM Cows
 254
 378 - 908kg
@@ -165,6 +181,7 @@ $2,180
 397c
 -51
 59%
+Breeding Stock
 PTIC Heifers
 1,736
 281 - 728kg
@@ -176,16 +193,19 @@ $2,270
 464c
 -28
 30%
+Breeding Stock
 PTIC Cows
 887
 367 - 860kg
 608kg
 $1,800 - $3,360
 $2,248
+-162
 319 - 526c
 399c
 -8
 57%
+Breeding Stock
 NSM Heifers & Calves
 202
 247 - 679kg
@@ -197,6 +217,7 @@ $2,575
 598c
 35
 60%
+Breeding Stock
 NSM Cows & Calves
 223
 297 - 705kg
@@ -208,7 +229,9 @@ $2,513
 540c
 79
 85%
+Breeding Stock
 SM Heifers & Calves
+35
 319 - 619kg
 496kg
 $1,800 - $3,200
@@ -217,6 +240,8 @@ $2,785
 464 - 616c
 557c
 -104
+100%
+Breeding Stock
 SM Cows & Calves
 709
 298 - 760kg
@@ -227,36 +252,86 @@ $2,393
 443 - 587c
 512c
 11
+70%
+Breeding Stock
 PTIC Cows & Calves
 20
 440 - 634kg
 503kg
 $3,500 - $3,500
 $3,500
+-
 672 - 672c
 672c
+-
 15%
 Friday Cattle National Averages - 23 January 2026
+Row Selection
+State
+Category
+Category (CC)
+Offered
+Weight Range
+Avg Weight
+$/Head Range
+Avg
+Change
+c/kg Range
+Avg
+Change
 NSW
+Steers
+Steers 0-200kg
+122
+106 - 239kg
+170kg
+$950 - $1,070
+$962
+-142
+588 - 600c
+599c
+25
+NSW
+Steers
+Steers 200.1-280kg
 834
+143 - 351kg
 239kg
+$990 - $1,545
+$1,266
 -83
+397 - 589c
 539c
+1
+NSW
+Steers
+Steers 280.1-330kg
+512
 228 - 416kg
 308kg
 $1,380 - $1,720
 $1,563
 -45
 458 - 536c
+505c
 -27
+NSW
+Steers
+Steers 330.1-400kg
 910
+108 - 511kg
 364kg
 $1,540 - $1,970
 $1,801
 -34
+430 - 596c
 511c
 -3
+NSW
+Steers
+Steers 400kg +
 696
+326 - 561kg
 430kg
 $2,050 - $2,200
 $2,081
@@ -264,22 +339,45 @@ $2,081
 430 - 500c
 493c
 -12
+NSW
+Heifers
+Heifers 0-200kg
+297
+100 - 272kg
+183kg
+$510 - $920
+$858
 228
+297 - 461c
+447c
 85
+NSW
+Heifers
+Heifers 200.1-280kg
 349
 149 - 339kg
 237kg
 $795 - $1,100
 $1,037
 -96
+368 - 519c
 466c
 15
+NSW
+Heifers
+Heifers 280.1-330kg
 506
+238 - 403kg
 310kg
 $1,210 - $1,460
 $1,326
+-9
 391 - 456c
 421c
+-14
+NSW
+Heifers
+Heifers 330.1-400kg
 813
 289 - 503kg
 368kg
@@ -289,25 +387,57 @@ $1,648
 413 - 471c
 435c
 -22
+NSW
+Heifers
+Heifers 400kg +
 382
 309 - 516kg
 419kg
 $1,800 - $1,900
 $1,866
 -26
+425 - 451c
+441c
+-10
+NSW
+Breeding Stock
+NSM Cows
+1
+264 - 264kg
+264kg
+$640 - $640
+$640
+-
+242 - 242c
+242c
+-
+NSW
+Breeding Stock
+SM Heifers
 100
 224 - 544kg
 409kg
 $2,100 - $2,240
 $2,135
+-
 432 - 485c
 445c
+-
+NSW
+Breeding Stock
+SM Cows
 177
+378 - 908kg
 547kg
 $1,650 - $1,650
 $1,650
+-
 352 - 352c
 352c
+-
+NSW
+Breeding Stock
+PTIC Heifers
 1,189
 281 - 693kg
 420kg
@@ -317,6 +447,9 @@ $2,037
 445 - 477c
 460c
 5
+NSW
+Breeding Stock
+PTIC Cows
 617
 367 - 856kg
 558kg
@@ -326,14 +459,21 @@ $1,882
 319 - 394c
 370c
 -4
+NSW
+Breeding Stock
+NSM Heifers & Calves
 135
 247 - 532kg
 371kg
 $1,300 - $2,450
 $2,422
 -178
+526 - 613c
 604c
 41
+NSW
+Breeding Stock
+NSM Cows & Calves
 95
 338 - 705kg
 471kg
@@ -341,6 +481,11 @@ $2,300 - $2,620
 $2,367
 -143
 458 - 562c
+460c
+-1
+NSW
+Breeding Stock
+SM Cows & Calves
 532
 332 - 760kg
 505kg
@@ -350,10 +495,21 @@ $2,400
 450 - 552c
 515c
 33
+NSW
+Breeding Stock
+PTIC Cows & Calves
 6
 466 - 541kg
 506kg
+$3,500 - $3,500
+$3,500
+-
+672 - 672c
+672c
+-
 QLD
+Steers
+Steers 200.1-280kg
 344
 163 - 346kg
 256kg
@@ -363,7 +519,9 @@ $1,268
 487 - 566c
 503c
 -74
+-
 +
+94%
 Microsoft Power BI
 1of2
-Report Zoomed To 94%
+Selections cleared

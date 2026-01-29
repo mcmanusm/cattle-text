@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-01-29T01:26:38.904Z",
+  "updated_at": "2026-01-29T01:36:09.106Z",
   "national": [
     {
       "category": "Steers 0-200kg",
@@ -475,26 +475,6 @@
           "clearance": "50%"
         }
       ]
-    },
-    {
-      "state": "NSW",
-      "categories": []
-    },
-    {
-      "state": "QLD",
-      "categories": []
-    },
-    {
-      "state": "SA",
-      "categories": []
-    },
-    {
-      "state": "Tas",
-      "categories": []
-    },
-    {
-      "state": "Vic",
-      "categories": []
     }
   ]
 }

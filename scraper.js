@@ -1,8 +1,6 @@
 // ============================================================
-// scrape_text_metrics.js
-// Power BI Cattle Market Weekly Averages
-// National + State → Category → Metrics
-// UPDATED: Advanced scrolling + interaction to load all states
+// scrape_text_metrics_diagnostic.js
+// DIAGNOSTIC VERSION - Extra logging to debug parsing issues
 // ============================================================
 
 const fs = require("fs");
@@ -63,68 +61,7 @@ const puppeteer = require("puppeteer");
 
     console.log("→ Attempting to load all state data...");
     
-    // STRATEGY 1: Look for and click "State" filter to ensure "All" is selected
-    try {
-      console.log("  → Checking for State filter...");
-      const stateFilter = await frame.$('div[aria-label*="State"]');
-      if (stateFilter) {
-        console.log("  → Found State filter, clicking...");
-        await stateFilter.click();
-        await new Promise(r => setTimeout(r, 1000));
-        
-        // Look for "All" option and click it
-        const allOption = await frame.$('div[title="All"], div[aria-label="All"]');
-        if (allOption) {
-          console.log("  → Clicking 'All' option...");
-          await allOption.click();
-          await new Promise(r => setTimeout(r, 2000));
-        }
-      }
-    } catch (e) {
-      console.log("  → No interactive filter found, continuing...");
-    }
-
-    // STRATEGY 2: Aggressive scrolling through the Power BI visual
-    console.log("  → Scrolling through data...");
-    
-    // Find the visual container
-    const scrollAttempts = await frame.evaluate(() => {
-      let attempts = 0;
-      
-      // Find all possible scrollable containers
-      const selectors = [
-        'div[class*="pivotTable"]',
-        'div[role="grid"]',
-        'div[class*="bodyCells"]',
-        'div[class*="scroll"]',
-        'div.visualContainer',
-        '.scrollRegion'
-      ];
-
-      let scrolled = false;
-      
-      for (const selector of selectors) {
-        const elements = document.querySelectorAll(selector);
-        elements.forEach(el => {
-          if (el.scrollHeight > el.clientHeight) {
-            attempts++;
-            // Scroll to bottom
-            el.scrollTop = el.scrollHeight;
-            scrolled = true;
-          }
-        });
-      }
-
-      return { attempts, scrolled };
-    });
-
-    console.log(`  → Found ${scrollAttempts.attempts} scrollable elements`);
-    
-    // Wait for content to load after scroll
-    await new Promise(r => setTimeout(r, 5000));
-
-    // STRATEGY 3: Multiple incremental scrolls
-    console.log("  → Performing incremental scrolls...");
+    // Scrolling attempts
     for (let i = 0; i < 15; i++) {
       await frame.evaluate((step) => {
         const containers = document.querySelectorAll(
@@ -141,23 +78,8 @@ const puppeteer = require("puppeteer");
       await new Promise(r => setTimeout(r, 800));
     }
 
-    console.log("  → Final wait for rendering...");
     await new Promise(r => setTimeout(r, 3000));
 
-    // STRATEGY 4: Scroll back to top to capture everything
-    await frame.evaluate(() => {
-      const containers = document.querySelectorAll(
-        'div[role="grid"], div[class*="pivotTable"], div[class*="scroll"], div.visualContainer'
-      );
-      containers.forEach(el => {
-        el.scrollTop = 0;
-      });
-      window.scrollTo(0, 0);
-    });
-
-    await new Promise(r => setTimeout(r, 2000));
-
-    // Extract the text
     const rawText = await frame.evaluate(() => document.body.innerText);
 
     const lines = rawText
@@ -167,12 +89,13 @@ const puppeteer = require("puppeteer");
 
     console.log(`→ Lines extracted: ${lines.length}`);
 
-    // DEBUG: Save raw lines to file for inspection
-    fs.writeFileSync("debug_lines.txt", lines.join("\n"));
-    console.log("→ Debug lines saved to debug_lines.txt");
+    // Save raw lines with line numbers
+    const debugContent = lines.map((line, idx) => `${idx}: ${line}`).join("\n");
+    fs.writeFileSync("debug_lines_numbered.txt", debugContent);
+    console.log("→ Debug lines saved to debug_lines_numbered.txt");
 
     // ----------------------------------------------------------
-    // Definitions - UPDATED with all categories
+    // Definitions
     // ----------------------------------------------------------
 
     const stateMap = {
@@ -239,6 +162,42 @@ const puppeteer = require("puppeteer");
     }
 
     // ----------------------------------------------------------
+    // DIAGNOSTIC: Find all state occurrences
+    // ----------------------------------------------------------
+    console.log("\n→ DIAGNOSTIC: Searching for all state mentions...");
+    lines.forEach((line, idx) => {
+      const label = extractLabel(line);
+      if (stateKeys.includes(label)) {
+        console.log(`  Line ${idx}: "${line}" → Recognized as: ${stateMap[label]}`);
+        // Show next 5 lines
+        console.log(`    Next lines:`);
+        for (let j = 1; j <= 5 && idx + j < lines.length; j++) {
+          console.log(`      ${idx + j}: ${lines[idx + j]}`);
+        }
+      }
+    });
+
+    // ----------------------------------------------------------
+    // DIAGNOSTIC: Find all category occurrences
+    // ----------------------------------------------------------
+    console.log("\n→ DIAGNOSTIC: Searching for category mentions after each state...");
+    let lastState = null;
+    let lastStateIndex = -1;
+    
+    lines.forEach((line, idx) => {
+      const label = extractLabel(line);
+      
+      if (stateKeys.includes(label)) {
+        lastState = stateMap[label];
+        lastStateIndex = idx;
+      }
+      
+      if (categories.includes(label)) {
+        console.log(`  Line ${idx}: "${line}" under state: ${lastState} (state was at line ${lastStateIndex})`);
+      }
+    });
+
+    // ----------------------------------------------------------
     // METRIC PARSER
     // ----------------------------------------------------------
 
@@ -246,14 +205,28 @@ const puppeteer = require("puppeteer");
       const metrics = {};
       let cursor = 0;
 
+      console.log(`    Parsing metrics starting at line ${startIndex + 1}:`);
+
       for (let i = startIndex + 1; i < lines.length; i++) {
         const value = lines[i];
 
-        if (isStopLine(value)) break;
-        if (isJunkLine(value)) continue;
-        if (cursor >= metricKeys.length) break;
+        if (isStopLine(value)) {
+          console.log(`    Stopped at line ${i}: "${value}" (stop line detected)`);
+          break;
+        }
+        
+        if (isJunkLine(value)) {
+          console.log(`    Skipped line ${i}: "${value}" (junk)`);
+          continue;
+        }
+        
+        if (cursor >= metricKeys.length) {
+          console.log(`    Stopped at line ${i}: all metrics collected`);
+          break;
+        }
 
         metrics[metricKeys[cursor]] = value;
+        console.log(`      [${cursor}] ${metricKeys[cursor]} = "${value}"`);
         cursor++;
       }
 
@@ -261,7 +234,7 @@ const puppeteer = require("puppeteer");
     }
 
     // ----------------------------------------------------------
-    // Main Parse Loop - IMPROVED
+    // Main Parse Loop
     // ----------------------------------------------------------
 
     const output = {
@@ -273,6 +246,8 @@ const puppeteer = require("puppeteer");
     let currentState = null;
     let stateBucket = null;
 
+    console.log("\n→ Starting main parse loop...\n");
+
     for (let i = 0; i < lines.length; i++) {
       const rawLine = lines[i];
       const label = extractLabel(rawLine);
@@ -282,11 +257,11 @@ const puppeteer = require("puppeteer");
         // Save previous state bucket before starting new one
         if (stateBucket && currentState !== "National") {
           output.states.push(stateBucket);
-          console.log(`✓ Saved ${currentState}: ${stateBucket.categories.length} categories`);
+          console.log(`✓ Saved ${currentState}: ${stateBucket.categories.length} categories\n`);
         }
 
         currentState = stateMap[label];
-        console.log(`→ Found state: ${currentState}`);
+        console.log(`\n→ Line ${i}: Found state: ${currentState}`);
 
         if (currentState === "National") {
           stateBucket = null;
@@ -301,6 +276,7 @@ const puppeteer = require("puppeteer");
 
       // ---------- CATEGORY ----------
       if (categories.includes(label)) {
+        console.log(`\n→ Line ${i}: Found category: ${label} (current state: ${currentState})`);
         const metrics = parseMetrics(i);
 
         const categoryPayload = {
@@ -310,13 +286,17 @@ const puppeteer = require("puppeteer");
 
         if (currentState === "National") {
           output.national.push(categoryPayload);
+          console.log(`  Added to National`);
         } else if (stateBucket) {
           stateBucket.categories.push(categoryPayload);
+          console.log(`  Added to ${currentState}`);
+        } else {
+          console.log(`  WARNING: No state bucket! Category orphaned.`);
         }
       }
     }
 
-    // Push final state bucket (important for last state)
+    // Push final state bucket
     if (stateBucket && currentState !== "National") {
       output.states.push(stateBucket);
       console.log(`✓ Saved ${currentState}: ${stateBucket.categories.length} categories`);
@@ -335,19 +315,14 @@ const puppeteer = require("puppeteer");
     output.states.forEach(state => {
       console.log(`    - ${state.state}: ${state.categories.length} categories`);
     });
-    
-    console.log(
-      `  Total state categories: ${output.states.reduce((s, x) => s + x.categories.length, 0)}`
-    );
 
-    // Show which states are missing
-    const foundStates = output.states.map(s => s.state);
-    const expectedStates = ["NSW", "QLD", "SA", "Tas", "Vic", "WA", "NT"];
-    const missingStates = expectedStates.filter(s => !foundStates.includes(s));
+    const missingStates = ["NSW", "QLD", "SA", "Tas", "Vic", "WA", "NT"].filter(
+      s => !output.states.some(state => state.state === s && state.categories.length > 0)
+    );
     
     if (missingStates.length > 0) {
-      console.log(`\n⚠️  Missing states: ${missingStates.join(", ")}`);
-      console.log(`  Check debug_lines.txt to see what was captured`);
+      console.log(`\n⚠️  States with no categories: ${missingStates.join(", ")}`);
+      console.log(`  Check debug_lines_numbered.txt to see the raw extracted text`);
     }
 
     await browser.close();

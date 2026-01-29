@@ -25,7 +25,6 @@ c/kg Range
 Avg
 Change
 Clearance
-Select Row
 Steers
 Steers 0-200kg
 122
@@ -38,7 +37,6 @@ $962
 599c
 25
 100%
-Select Row
 Steers
 Steers 200.1-280kg
 1,192
@@ -51,7 +49,6 @@ $1,266
 529c
 -9
 92%
-Select Row
 Steers
 Steers 280.1-330kg
 1,008
@@ -64,7 +61,6 @@ $1,557
 507c
 -33
 69%
-Select Row
 Steers
 Steers 330.1-400kg
 2,270
@@ -77,7 +73,6 @@ $1,820
 514c
 4
 56%
-Select Row
 Steers
 Steers 400kg +
 1,521
@@ -90,7 +85,6 @@ $2,177
 505c
 -1
 44%
-Select Row
 Heifers
 Heifers 0-200kg
 297
@@ -103,7 +97,6 @@ $858
 447c
 13
 58%
-Select Row
 Heifers
 Heifers 200.1-280kg
 1,145
@@ -116,7 +109,6 @@ $1,104
 442c
 -33
 72%
-Select Row
 Heifers
 Heifers 280.1-330kg
 1,039
@@ -129,7 +121,6 @@ $1,334
 429c
 -10
 74%
-Select Row
 Heifers
 Heifers 330.1-400kg
 1,053
@@ -142,7 +133,6 @@ $1,618
 438c
 -19
 54%
-Select Row
 Heifers
 Heifers 400kg +
 512
@@ -155,7 +145,6 @@ $1,902
 441c
 -5
 94%
-Select Row
 Breeding Stock
 NSM Cows
 1
@@ -168,7 +157,6 @@ $640
 242c
 -
 100%
-Select Row
 Breeding Stock
 SM Heifers
 243
@@ -181,7 +169,6 @@ $2,481
 471c
 3
 70%
-Select Row
 Breeding Stock
 SM Cows
 254
@@ -194,7 +181,6 @@ $2,180
 397c
 -51
 59%
-Select Row
 Breeding Stock
 PTIC Heifers
 1,736
@@ -207,7 +193,6 @@ $2,270
 464c
 -28
 30%
-Select Row
 Breeding Stock
 PTIC Cows
 887
@@ -220,7 +205,6 @@ $2,248
 399c
 -8
 57%
-Select Row
 Breeding Stock
 NSM Heifers & Calves
 202
@@ -233,7 +217,6 @@ $2,575
 598c
 35
 60%
-Select Row
 Breeding Stock
 NSM Cows & Calves
 223
@@ -246,7 +229,6 @@ $2,513
 540c
 79
 85%
-Select Row
 Breeding Stock
 SM Heifers & Calves
 35
@@ -259,7 +241,6 @@ $2,785
 557c
 -104
 100%
-Select Row
 Breeding Stock
 SM Cows & Calves
 709
@@ -272,7 +253,6 @@ $2,393
 512c
 11
 70%
-Select Row
 Breeding Stock
 PTIC Cows & Calves
 20
@@ -299,7 +279,6 @@ Change
 c/kg Range
 Avg
 Change
-Select Row
 NSW
 Steers
 Steers 0-200kg
@@ -312,7 +291,6 @@ $962
 588 - 600c
 599c
 25
-Select Row
 NSW
 Steers
 Steers 200.1-280kg
@@ -325,7 +303,6 @@ $1,266
 397 - 589c
 539c
 1
-Select Row
 NSW
 Steers
 Steers 280.1-330kg
@@ -338,7 +315,6 @@ $1,563
 458 - 536c
 505c
 -27
-Select Row
 NSW
 Steers
 Steers 330.1-400kg
@@ -351,7 +327,6 @@ $1,801
 430 - 596c
 511c
 -3
-Select Row
 NSW
 Steers
 Steers 400kg +
@@ -364,7 +339,6 @@ $2,081
 430 - 500c
 493c
 -12
-Select Row
 NSW
 Heifers
 Heifers 0-200kg
@@ -377,7 +351,6 @@ $858
 297 - 461c
 447c
 85
-Select Row
 NSW
 Heifers
 Heifers 200.1-280kg
@@ -390,7 +363,6 @@ $1,037
 368 - 519c
 466c
 15
-Select Row
 NSW
 Heifers
 Heifers 280.1-330kg
@@ -403,7 +375,6 @@ $1,326
 391 - 456c
 421c
 -14
-Select Row
 NSW
 Heifers
 Heifers 330.1-400kg
@@ -416,7 +387,6 @@ $1,648
 413 - 471c
 435c
 -22
-Select Row
 NSW
 Heifers
 Heifers 400kg +
@@ -429,7 +399,6 @@ $1,866
 425 - 451c
 441c
 -10
-Select Row
 NSW
 Breeding Stock
 NSM Cows
@@ -442,7 +411,6 @@ $640
 242 - 242c
 242c
 -
-Select Row
 NSW
 Breeding Stock
 SM Heifers
@@ -455,7 +423,6 @@ $2,135
 432 - 485c
 445c
 -
-Select Row
 NSW
 Breeding Stock
 SM Cows
@@ -468,7 +435,6 @@ $1,650
 352 - 352c
 352c
 -
-Select Row
 NSW
 Breeding Stock
 PTIC Heifers
@@ -481,7 +447,6 @@ $2,037
 445 - 477c
 460c
 5
-Select Row
 NSW
 Breeding Stock
 PTIC Cows
@@ -494,7 +459,6 @@ $1,882
 319 - 394c
 370c
 -4
-Select Row
 NSW
 Breeding Stock
 NSM Heifers & Calves
@@ -507,7 +471,6 @@ $2,422
 526 - 613c
 604c
 41
-Select Row
 NSW
 Breeding Stock
 NSM Cows & Calves
@@ -520,7 +483,6 @@ $2,367
 458 - 562c
 460c
 -1
-Select Row
 NSW
 Breeding Stock
 SM Cows & Calves
@@ -533,7 +495,6 @@ $2,400
 450 - 552c
 515c
 33
-Select Row
 NSW
 Breeding Stock
 PTIC Cows & Calves
@@ -546,7 +507,6 @@ $3,500
 672 - 672c
 672c
 -
-Select Row
 QLD
 Steers
 Steers 200.1-280kg

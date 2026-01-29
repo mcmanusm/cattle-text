@@ -1,7 +1,8 @@
 {
-  "updated_at": "2026-01-29T03:55:57.747Z",
+  "updated_at": "2026-01-29T04:01:15.711Z",
   "national": [
     {
+      "stock_category": "Steers",
       "category": "Steers 0-200kg",
       "offered": "122",
       "weight_range": "106 - 239kg",
@@ -15,6 +16,7 @@
       "clearance": "100%"
     },
     {
+      "stock_category": "Steers",
       "category": "Steers 200.1-280kg",
       "offered": "1,192",
       "weight_range": "143 - 351kg",
@@ -28,6 +30,7 @@
       "clearance": "92%"
     },
     {
+      "stock_category": "Steers",
       "category": "Steers 280.1-330kg",
       "offered": "1,008",
       "weight_range": "212 - 2,855kg",
@@ -41,6 +44,7 @@
       "clearance": "69%"
     },
     {
+      "stock_category": "Steers",
       "category": "Steers 330.1-400kg",
       "offered": "2,270",
       "weight_range": "108 - 511kg",
@@ -54,6 +58,7 @@
       "clearance": "56%"
     },
     {
+      "stock_category": "Steers",
       "category": "Steers 400kg +",
       "offered": "1,521",
       "weight_range": "326 - 561kg",
@@ -67,6 +72,7 @@
       "clearance": "44%"
     },
     {
+      "stock_category": "Heifers",
       "category": "Heifers 0-200kg",
       "offered": "297",
       "weight_range": "100 - 272kg",
@@ -80,6 +86,7 @@
       "clearance": "58%"
     },
     {
+      "stock_category": "Heifers",
       "category": "Heifers 200.1-280kg",
       "offered": "1,145",
       "weight_range": "149 - 348kg",
@@ -93,6 +100,7 @@
       "clearance": "72%"
     },
     {
+      "stock_category": "Heifers",
       "category": "Heifers 280.1-330kg",
       "offered": "1,039",
       "weight_range": "238 - 403kg",
@@ -106,6 +114,7 @@
       "clearance": "74%"
     },
     {
+      "stock_category": "Heifers",
       "category": "Heifers 330.1-400kg",
       "offered": "1,053",
       "weight_range": "276 - 503kg",
@@ -119,6 +128,7 @@
       "clearance": "54%"
     },
     {
+      "stock_category": "Heifers",
       "category": "Heifers 400kg +",
       "offered": "512",
       "weight_range": "309 - 536kg",
@@ -132,6 +142,7 @@
       "clearance": "94%"
     },
     {
+      "stock_category": "Breeding Stock",
       "category": "NSM Cows",
       "offered": "1",
       "weight_range": "264 - 264kg",
@@ -145,6 +156,7 @@
       "clearance": "100%"
     },
     {
+      "stock_category": "Breeding Stock",
       "category": "SM Heifers",
       "offered": "243",
       "weight_range": "224 - 713kg",
@@ -158,6 +170,7 @@
       "clearance": "70%"
     },
     {
+      "stock_category": "Breeding Stock",
       "category": "SM Cows",
       "offered": "254",
       "weight_range": "378 - 908kg",
@@ -171,6 +184,7 @@
       "clearance": "59%"
     },
     {
+      "stock_category": "Breeding Stock",
       "category": "PTIC Heifers",
       "offered": "1,736",
       "weight_range": "281 - 728kg",
@@ -184,6 +198,7 @@
       "clearance": "30%"
     },
     {
+      "stock_category": "Breeding Stock",
       "category": "PTIC Cows",
       "offered": "887",
       "weight_range": "367 - 860kg",
@@ -197,6 +212,7 @@
       "clearance": "57%"
     },
     {
+      "stock_category": "Breeding Stock",
       "category": "NSM Heifers & Calves",
       "offered": "202",
       "weight_range": "247 - 679kg",
@@ -210,6 +226,7 @@
       "clearance": "60%"
     },
     {
+      "stock_category": "Breeding Stock",
       "category": "NSM Cows & Calves",
       "offered": "223",
       "weight_range": "297 - 705kg",
@@ -223,6 +240,7 @@
       "clearance": "85%"
     },
     {
+      "stock_category": "Breeding Stock",
       "category": "SM Heifers & Calves",
       "offered": "35",
       "weight_range": "319 - 619kg",
@@ -236,6 +254,7 @@
       "clearance": "100%"
     },
     {
+      "stock_category": "Breeding Stock",
       "category": "SM Cows & Calves",
       "offered": "709",
       "weight_range": "298 - 760kg",
@@ -249,6 +268,7 @@
       "clearance": "70%"
     },
     {
+      "stock_category": "Breeding Stock",
       "category": "PTIC Cows & Calves",
       "offered": "20",
       "weight_range": "440 - 634kg",
@@ -267,6 +287,7 @@
       "state": "NSW",
       "categories": [
         {
+          "stock_category": "Steers",
           "category": "Steers 0-200kg",
           "offered": "122",
           "weight_range": "106 - 239kg",
@@ -276,15 +297,10 @@
           "dollar_change": "-142",
           "c_kg_range": "588 - 600c",
           "avg_c_kg": "599c",
-          "c_kg_change": "25",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
+          "c_kg_change": "25"
+        },
         {
+          "stock_category": "Steers",
           "category": "Steers 200.1-280kg",
           "offered": "834",
           "weight_range": "143 - 351kg",
@@ -294,15 +310,10 @@
           "dollar_change": "-83",
           "c_kg_range": "397 - 589c",
           "avg_c_kg": "539c",
-          "c_kg_change": "1",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
+          "c_kg_change": "1"
+        },
         {
+          "stock_category": "Steers",
           "category": "Steers 280.1-330kg",
           "offered": "512",
           "weight_range": "228 - 416kg",
@@ -312,15 +323,10 @@
           "dollar_change": "-45",
           "c_kg_range": "458 - 536c",
           "avg_c_kg": "505c",
-          "c_kg_change": "-27",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
+          "c_kg_change": "-27"
+        },
         {
+          "stock_category": "Steers",
           "category": "Steers 330.1-400kg",
           "offered": "910",
           "weight_range": "108 - 511kg",
@@ -330,15 +336,10 @@
           "dollar_change": "-34",
           "c_kg_range": "430 - 596c",
           "avg_c_kg": "511c",
-          "c_kg_change": "-3",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
+          "c_kg_change": "-3"
+        },
         {
+          "stock_category": "Steers",
           "category": "Steers 400kg +",
           "offered": "696",
           "weight_range": "326 - 561kg",
@@ -348,15 +349,10 @@
           "dollar_change": "-134",
           "c_kg_range": "430 - 500c",
           "avg_c_kg": "493c",
-          "c_kg_change": "-12",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
+          "c_kg_change": "-12"
+        },
         {
+          "stock_category": "Heifers",
           "category": "Heifers 0-200kg",
           "offered": "297",
           "weight_range": "100 - 272kg",
@@ -366,15 +362,10 @@
           "dollar_change": "228",
           "c_kg_range": "297 - 461c",
           "avg_c_kg": "447c",
-          "c_kg_change": "85",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
+          "c_kg_change": "85"
+        },
         {
+          "stock_category": "Heifers",
           "category": "Heifers 200.1-280kg",
           "offered": "349",
           "weight_range": "149 - 339kg",
@@ -384,15 +375,10 @@
           "dollar_change": "-96",
           "c_kg_range": "368 - 519c",
           "avg_c_kg": "466c",
-          "c_kg_change": "15",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
+          "c_kg_change": "15"
+        },
         {
+          "stock_category": "Heifers",
           "category": "Heifers 280.1-330kg",
           "offered": "506",
           "weight_range": "238 - 403kg",
@@ -402,15 +388,10 @@
           "dollar_change": "-9",
           "c_kg_range": "391 - 456c",
           "avg_c_kg": "421c",
-          "c_kg_change": "-14",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
+          "c_kg_change": "-14"
+        },
         {
+          "stock_category": "Heifers",
           "category": "Heifers 330.1-400kg",
           "offered": "813",
           "weight_range": "289 - 503kg",
@@ -420,15 +401,10 @@
           "dollar_change": "-56",
           "c_kg_range": "413 - 471c",
           "avg_c_kg": "435c",
-          "c_kg_change": "-22",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
+          "c_kg_change": "-22"
+        },
         {
+          "stock_category": "Heifers",
           "category": "Heifers 400kg +",
           "offered": "382",
           "weight_range": "309 - 516kg",
@@ -438,15 +414,10 @@
           "dollar_change": "-26",
           "c_kg_range": "425 - 451c",
           "avg_c_kg": "441c",
-          "c_kg_change": "-10",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
+          "c_kg_change": "-10"
+        },
         {
+          "stock_category": "Breeding Stock",
           "category": "NSM Cows",
           "offered": "1",
           "weight_range": "264 - 264kg",
@@ -456,15 +427,10 @@
           "dollar_change": "-",
           "c_kg_range": "242 - 242c",
           "avg_c_kg": "242c",
-          "c_kg_change": "-",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
+          "c_kg_change": "-"
+        },
         {
+          "stock_category": "Breeding Stock",
           "category": "SM Heifers",
           "offered": "100",
           "weight_range": "224 - 544kg",
@@ -474,15 +440,10 @@
           "dollar_change": "-",
           "c_kg_range": "432 - 485c",
           "avg_c_kg": "445c",
-          "c_kg_change": "-",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
+          "c_kg_change": "-"
+        },
         {
+          "stock_category": "Breeding Stock",
           "category": "SM Cows",
           "offered": "177",
           "weight_range": "378 - 908kg",
@@ -492,15 +453,10 @@
           "dollar_change": "-",
           "c_kg_range": "352 - 352c",
           "avg_c_kg": "352c",
-          "c_kg_change": "-",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
+          "c_kg_change": "-"
+        },
         {
+          "stock_category": "Breeding Stock",
           "category": "PTIC Heifers",
           "offered": "1,189",
           "weight_range": "281 - 693kg",
@@ -510,15 +466,10 @@
           "dollar_change": "53",
           "c_kg_range": "445 - 477c",
           "avg_c_kg": "460c",
-          "c_kg_change": "5",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
+          "c_kg_change": "5"
+        },
         {
+          "stock_category": "Breeding Stock",
           "category": "PTIC Cows",
           "offered": "617",
           "weight_range": "367 - 856kg",
@@ -528,15 +479,10 @@
           "dollar_change": "-102",
           "c_kg_range": "319 - 394c",
           "avg_c_kg": "370c",
-          "c_kg_change": "-4",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
+          "c_kg_change": "-4"
+        },
         {
+          "stock_category": "Breeding Stock",
           "category": "NSM Heifers & Calves",
           "offered": "135",
           "weight_range": "247 - 532kg",
@@ -546,15 +492,10 @@
           "dollar_change": "-178",
           "c_kg_range": "526 - 613c",
           "avg_c_kg": "604c",
-          "c_kg_change": "41",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
+          "c_kg_change": "41"
+        },
         {
+          "stock_category": "Breeding Stock",
           "category": "NSM Cows & Calves",
           "offered": "95",
           "weight_range": "338 - 705kg",
@@ -564,15 +505,10 @@
           "dollar_change": "-143",
           "c_kg_range": "458 - 562c",
           "avg_c_kg": "460c",
-          "c_kg_change": "-1",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
+          "c_kg_change": "-1"
+        },
         {
+          "stock_category": "Breeding Stock",
           "category": "SM Cows & Calves",
           "offered": "532",
           "weight_range": "332 - 760kg",
@@ -582,15 +518,10 @@
           "dollar_change": "-238",
           "c_kg_range": "450 - 552c",
           "avg_c_kg": "515c",
-          "c_kg_change": "33",
-          "clearance": "Select Row"
-        }
-      ]
-    },
-    {
-      "state": "NSW",
-      "categories": [
+          "c_kg_change": "33"
+        },
         {
+          "stock_category": "Breeding Stock",
           "category": "PTIC Cows & Calves",
           "offered": "6",
           "weight_range": "466 - 541kg",
@@ -600,8 +531,7 @@
           "dollar_change": "-",
           "c_kg_range": "672 - 672c",
           "avg_c_kg": "672c",
-          "c_kg_change": "-",
-          "clearance": "Select Row"
+          "c_kg_change": "-"
         }
       ]
     },
@@ -609,6 +539,7 @@
       "state": "QLD",
       "categories": [
         {
+          "stock_category": "Steers",
           "category": "Steers 200.1-280kg",
           "offered": "344",
           "weight_range": "163 - 346kg",

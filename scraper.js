@@ -1,6 +1,6 @@
 // ============================================================
 // scrape_text_metrics.js
-// Power BI TABLE scraper - Fixed for CI/CD + All States
+// FIXED: Proper state grouping + stock_category field
 // ============================================================
 
 const fs = require("fs");
@@ -34,12 +34,20 @@ const puppeteer = require("puppeteer");
       line.includes("Species is Cattle") ||
       line.includes("Average $/Head") ||
       line.includes("Date ") ||
-      line.includes("AuctionClassification")
+      line.includes("AuctionClassification") ||
+      line === "Select Row"
     );
   }
 
+  // Determine stock category from category name
+  function getStockCategory(categoryName) {
+    if (categoryName.startsWith("Steers")) return "Steers";
+    if (categoryName.startsWith("Heifers")) return "Heifers";
+    return "Breeding Stock";
+  }
+
   const browser = await puppeteer.launch({
-    headless: "new",  // ✅ Works in CI/CD
+    headless: "new",
     args: ["--no-sandbox", "--disable-setuid-sandbox"]
   });
 
@@ -48,19 +56,18 @@ const puppeteer = require("puppeteer");
     page.setDefaultTimeout(90000);
     await page.goto(url, { waitUntil: "networkidle2" });
     await page.waitForSelector("iframe");
-    await new Promise(r => setTimeout(r, 15000)); // Wait for Power BI to load
+    await new Promise(r => setTimeout(r, 15000));
 
     const frame = page.frames().find(f => f.url().includes("powerbi.com"));
     if (!frame) throw new Error("Power BI iframe not found");
 
-    // Get all text and split into lines
     const rawText = await frame.evaluate(() => document.body.innerText);
     const lines = rawText
       .split("\n")
       .map(l => clean(l))
       .filter(l => l && !isJunkLine(l));
 
-    // Save debug output
+    // Save debug
     fs.writeFileSync("debug_lines.txt", lines.join("\n"));
     fs.writeFileSync(
       "debug_lines_numbered.txt",
@@ -70,7 +77,7 @@ const puppeteer = require("puppeteer");
     console.log(`Total lines after filtering: ${lines.length}`);
 
     // ----------------------------------------------------------
-    // State and Category mappings
+    // Mappings
     // ----------------------------------------------------------
     const stateMap = {
       "National": "National",
@@ -81,14 +88,7 @@ const puppeteer = require("puppeteer");
       "Vic": "VIC",
       "VIC": "VIC",
       "WA": "WA",
-      "NT": "NT",
-      "New South Wales": "NSW",
-      "Queensland": "QLD",
-      "South Australia": "SA",
-      "Tasmania": "Tas",
-      "Victoria": "VIC",
-      "Western Australia": "WA",
-      "Northern Territory": "NT"
+      "NT": "NT"
     };
 
     const categories = [
@@ -136,23 +136,14 @@ const puppeteer = require("puppeteer");
       return stateKeys.includes(label) || categories.includes(label);
     }
 
-    // ----------------------------------------------------------
-    // Parse metrics following a category
-    // ----------------------------------------------------------
     function parseMetrics(startIndex) {
       const metrics = {};
       let cursor = 0;
       
       for (let i = startIndex + 1; i < lines.length; i++) {
         const value = lines[i];
-        
-        // Stop if we hit another category or state
         if (isStopLine(value)) break;
-        
-        // Skip junk
         if (isJunkLine(value)) continue;
-        
-        // Stop if we've collected all metrics
         if (cursor >= metricKeys.length) break;
         
         metrics[metricKeys[cursor]] = value;
@@ -163,7 +154,7 @@ const puppeteer = require("puppeteer");
     }
 
     // ----------------------------------------------------------
-    // Parse the lines
+    // Parse - FIXED STATE GROUPING
     // ----------------------------------------------------------
     const output = {
       updated_at: new Date().toISOString(),
@@ -171,50 +162,50 @@ const puppeteer = require("puppeteer");
       states: []
     };
 
+    // Use a MAP to group by state properly
+    const stateMap_Data = new Map();
     let currentState = "National";
-    let stateBucket = null;
 
     for (let i = 0; i < lines.length; i++) {
       const label = extractLabel(lines[i]);
 
-      // Check if this is a state header
+      // Check for state header
       if (stateKeys.includes(label)) {
-        // Save previous state bucket if exists
-        if (stateBucket && currentState !== "National") {
-          output.states.push(stateBucket);
-        }
-
-        // Set new current state
         currentState = stateMap[label];
         
-        // Create new bucket for non-National states
-        stateBucket = currentState === "National"
-          ? null
-          : { state: currentState, categories: [] };
+        // Initialize state bucket if it doesn't exist
+        if (currentState !== "National" && !stateMap_Data.has(currentState)) {
+          stateMap_Data.set(currentState, {
+            state: currentState,
+            categories: []
+          });
+        }
         
         console.log(`Found state: ${currentState}`);
         continue;
       }
 
-      // Check if this is a category
+      // Check for category
       if (categories.includes(label)) {
         const metrics = parseMetrics(i);
-        const payload = { category: label, ...metrics };
+        const payload = {
+          stock_category: getStockCategory(label),
+          category: label,
+          ...metrics
+        };
 
         if (currentState === "National") {
           output.national.push(payload);
-        } else if (stateBucket) {
-          stateBucket.categories.push(payload);
+        } else if (stateMap_Data.has(currentState)) {
+          stateMap_Data.get(currentState).categories.push(payload);
         }
         
-        console.log(`  Added category: ${label} to ${currentState}`);
+        console.log(`  ${currentState}: ${label}`);
       }
     }
 
-    // Don't forget the last state bucket
-    if (stateBucket && currentState !== "National") {
-      output.states.push(stateBucket);
-    }
+    // Convert state map to array
+    output.states = Array.from(stateMap_Data.values());
 
     // ----------------------------------------------------------
     // Save output
@@ -224,7 +215,7 @@ const puppeteer = require("puppeteer");
     console.log("\n✓ Scrape complete");
     console.log(`  National rows: ${output.national.length}`);
     output.states.forEach(s =>
-      console.log(`  ${s.state}: ${s.categories.length}`)
+      console.log(`  ${s.state}: ${s.categories.length} categories`)
     );
     console.log(`\nOutput saved to: ${outputFile}`);
 

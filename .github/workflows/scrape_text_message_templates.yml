@@ -19,10 +19,17 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
       - name: Run text message template scraper
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
         run: node script/scrape_text_message_templates.js
 
-      - name: Commit updated template JSON
+      - name: Commit output
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

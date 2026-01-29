@@ -4,242 +4,75 @@
       "index": 0,
       "class": "visual customPadding allow-deferred-rendering visual-slicer",
       "label": null,
-      "text": "Stock Category(Not yet applied)\n        All"
+      "text": ""
     },
     {
       "index": 1,
       "class": "slicer-container",
       "label": null,
-      "text": "Stock Category(Not yet applied)\n        All"
+      "text": ""
     },
     {
       "index": 2,
       "class": "slicer-header-wrapper",
       "label": null,
-      "text": "Stock Category(Not yet applied)\n        "
+      "text": ""
     },
     {
       "index": 3,
-      "class": "slicer-header",
+      "class": "slicer-content-wrapper",
       "label": null,
-      "text": "Stock Category(Not yet applied)\n        "
+      "text": ""
     },
     {
       "index": 4,
-      "class": "slicer-header-title",
+      "class": "slicerContainer",
       "label": null,
-      "text": "Stock Category(Not yet applied)\n        "
+      "text": ""
     },
     {
       "index": 5,
-      "class": "slicer-header-clear enable-hover",
-      "label": "Clear selections",
+      "class": "slicerBody",
+      "label": null,
       "text": ""
     },
     {
       "index": 6,
-      "class": "slicer-header-text",
-      "label": "Stock Category",
-      "text": "Stock Category"
+      "class": "visual customPadding allow-deferred-rendering visual-slicer",
+      "label": null,
+      "text": ""
     },
     {
       "index": 7,
-      "class": "slicer-header-pending-text",
+      "class": "slicer-container",
       "label": null,
-      "text": "(Not yet applied)"
+      "text": ""
     },
     {
       "index": 8,
-      "class": {},
+      "class": "slicer-header-wrapper",
       "label": null,
-      "text": "\n        "
+      "text": ""
     },
     {
       "index": 9,
-      "class": {},
+      "class": "slicer-content-wrapper",
       "label": null,
       "text": ""
     },
     {
       "index": 10,
-      "class": "slicer-header-spacer",
+      "class": "slicerContainer",
       "label": null,
       "text": ""
     },
     {
       "index": 11,
-      "class": "slicer-content-wrapper",
-      "label": null,
-      "text": "All"
-    },
-    {
-      "index": 12,
-      "class": "slicer-dropdown-menu",
-      "label": "Stock Category",
-      "text": "All"
-    },
-    {
-      "index": 13,
-      "class": "slicer-restatement",
-      "label": null,
-      "text": "All"
-    },
-    {
-      "index": 14,
-      "class": "visual customPadding allow-deferred-rendering visual-slicer",
-      "label": null,
-      "text": "State(Not yet applied)\n        All"
-    },
-    {
-      "index": 15,
-      "class": "slicer-container",
-      "label": null,
-      "text": "State(Not yet applied)\n        All"
-    },
-    {
-      "index": 16,
-      "class": "slicer-header-wrapper",
-      "label": null,
-      "text": "State(Not yet applied)\n        "
-    },
-    {
-      "index": 17,
-      "class": "slicer-header",
-      "label": null,
-      "text": "State(Not yet applied)\n        "
-    },
-    {
-      "index": 18,
-      "class": "slicer-header-title",
-      "label": null,
-      "text": "State(Not yet applied)\n        "
-    },
-    {
-      "index": 19,
-      "class": "slicer-header-clear enable-hover",
-      "label": "Clear selections",
-      "text": ""
-    },
-    {
-      "index": 20,
-      "class": "slicer-header-text",
-      "label": "State",
-      "text": "State"
-    },
-    {
-      "index": 21,
-      "class": "slicer-header-pending-text",
-      "label": null,
-      "text": "(Not yet applied)"
-    },
-    {
-      "index": 22,
-      "class": {},
-      "label": null,
-      "text": "\n        "
-    },
-    {
-      "index": 23,
-      "class": {},
-      "label": null,
-      "text": ""
-    },
-    {
-      "index": 24,
-      "class": "slicer-header-spacer",
-      "label": null,
-      "text": ""
-    },
-    {
-      "index": 25,
-      "class": "slicer-content-wrapper",
-      "label": null,
-      "text": "All"
-    },
-    {
-      "index": 26,
-      "class": "slicer-dropdown-menu",
-      "label": "State",
-      "text": "All"
-    },
-    {
-      "index": 27,
-      "class": "slicer-restatement",
-      "label": null,
-      "text": "All"
-    },
-    {
-      "index": 28,
-      "class": "slicer-dropdown-popup visual themeableElement",
-      "label": null,
-      "text": ""
-    },
-    {
-      "index": 29,
-      "class": "slicer-dropdown-content",
-      "label": null,
-      "text": ""
-    },
-    {
-      "index": 30,
-      "class": "slicerContainer",
-      "label": null,
-      "text": ""
-    },
-    {
-      "index": 31,
       "class": "slicerBody",
-      "label": null,
-      "text": ""
-    },
-    {
-      "index": 32,
-      "class": "slicer-dropdown-loader",
-      "label": null,
-      "text": ""
-    },
-    {
-      "index": 33,
-      "class": "slicer-dropdown-popup visual themeableElement",
-      "label": null,
-      "text": ""
-    },
-    {
-      "index": 34,
-      "class": "slicer-dropdown-content",
-      "label": null,
-      "text": ""
-    },
-    {
-      "index": 35,
-      "class": "slicerContainer",
-      "label": null,
-      "text": ""
-    },
-    {
-      "index": 36,
-      "class": "slicerBody",
-      "label": null,
-      "text": ""
-    },
-    {
-      "index": 37,
-      "class": "slicer-dropdown-loader",
       "label": null,
       "text": ""
     }
   ],
   "filters": [],
-  "clearButtons": [
-    {
-      "index": 0,
-      "text": "",
-      "label": "Clear selections"
-    },
-    {
-      "index": 1,
-      "text": "",
-      "label": "Clear selections"
-    }
-  ]
+  "clearButtons": []
 }

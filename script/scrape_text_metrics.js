@@ -1,6 +1,6 @@
 // ============================================================
 // scrape_text_metrics.js
-// INCREMENTAL EXTRACTION - capture text WHILE scrolling
+// CLEAR FILTERS - Show ALL states data
 // ============================================================
 
 const fs = require("fs");
@@ -10,9 +10,6 @@ const puppeteer = require("puppeteer");
   const url = "https://mcmanusm.github.io/cattle-text/cattle-text-table.html";
   const outputFile = "text-metrics.json";
 
-  // ----------------------------------------------------------
-  // Helpers
-  // ----------------------------------------------------------
   function clean(text) {
     return text
       .normalize("NFKD")
@@ -39,7 +36,6 @@ const puppeteer = require("puppeteer");
     );
   }
 
-  // Determine stock category from category name
   function getStockCategory(categoryName) {
     if (categoryName.startsWith("Steers")) return "Steers";
     if (categoryName.startsWith("Heifers")) return "Heifers";
@@ -62,136 +58,105 @@ const puppeteer = require("puppeteer");
     if (!frame) throw new Error("Power BI iframe not found");
 
     // ----------------------------------------------------------
-    // INCREMENTAL EXTRACTION WHILE SCROLLING
+    // FIND AND CLEAR ALL FILTERS/SLICERS
     // ----------------------------------------------------------
-    console.log("Starting incremental extraction...\n");
-    
-    const allTextSnapshots = await frame.evaluate(async () => {
-      const snapshots = [];
-      
-      // Find scrollable elements
-      const scrollableElements = [];
-      const selectors = ['.bodyCells', '.pivotTable', '[class*="scroll"]'];
-      
-      for (const selector of selectors) {
-        const els = document.querySelectorAll(selector);
-        els.forEach(el => {
-          const style = window.getComputedStyle(el);
-          if ((style.overflow === 'auto' || style.overflow === 'scroll' ||
-               style.overflowY === 'auto' || style.overflowY === 'scroll') &&
-              !scrollableElements.includes(el)) {
-            scrollableElements.push(el);
-          }
-        });
-      }
+    console.log("Looking for Power BI filters and slicers...\n");
 
-      // If none found, walk up from first row
-      const firstRow = document.querySelector('div.row');
-      if (scrollableElements.length === 0 && firstRow) {
-        let parent = firstRow.parentElement;
-        let depth = 0;
-        while (parent && depth < 10) {
-          const style = window.getComputedStyle(parent);
-          if (style.overflow === 'auto' || style.overflow === 'scroll' ||
-              style.overflowY === 'auto' || style.overflowY === 'scroll') {
-            scrollableElements.push(parent);
-            break;
-          }
-          parent = parent.parentElement;
-          depth++;
-        }
-      }
+    const filterInfo = await frame.evaluate(async () => {
+      const results = {
+        slicers: [],
+        filters: [],
+        clearButtons: []
+      };
 
-      const scrollEl = scrollableElements[0] || document.body;
-      console.log(`Using scrollable element: ${scrollEl.className}`);
+      // Find all slicers
+      const slicers = document.querySelectorAll('[class*="slicer"], [aria-label*="Slicer"], [role="listbox"]');
+      results.slicers = Array.from(slicers).map((s, i) => ({
+        index: i,
+        class: s.className,
+        label: s.getAttribute('aria-label'),
+        text: s.textContent.substring(0, 100)
+      }));
 
-      // CAPTURE TEXT AT EACH SCROLL POSITION
-      let scrollPosition = 0;
-      const scrollStep = 300;
-      const maxScrolls = 50;
-      let stableCount = 0;
-      let lastRowCount = 0;
+      // Find filter pane or filter buttons
+      const filterElements = document.querySelectorAll('[aria-label*="Filter"], [title*="Filter"], [class*="filter"]');
+      results.filters = Array.from(filterElements).map((f, i) => ({
+        index: i,
+        tag: f.tagName,
+        label: f.getAttribute('aria-label'),
+        title: f.getAttribute('title')
+      }));
 
-      for (let i = 0; i < maxScrolls; i++) {
-        // Get current visible text
-        const currentText = document.body.innerText;
-        snapshots.push({
-          scroll: i,
-          position: scrollPosition,
-          text: currentText
-        });
+      // Find "Clear" or "Reset" buttons
+      const allButtons = document.querySelectorAll('button, [role="button"]');
+      const clearButtons = Array.from(allButtons).filter(btn =>
+        btn.textContent.toLowerCase().includes('clear') ||
+        btn.textContent.toLowerCase().includes('reset') ||
+        btn.getAttribute('aria-label')?.toLowerCase().includes('clear')
+      );
 
-        // Count rows
-        const currentRowCount = document.querySelectorAll('div.row').length;
-        
-        if (currentRowCount === lastRowCount) {
-          stableCount++;
-          if (stableCount >= 4) {
-            console.log(`Stable at ${i} scrolls, ${currentRowCount} rows`);
-            break;
-          }
-        } else {
-          stableCount = 0;
-          console.log(`Scroll ${i}: ${currentRowCount} rows visible`);
-        }
-        
-        lastRowCount = currentRowCount;
+      results.clearButtons = clearButtons.map((btn, i) => ({
+        index: i,
+        text: btn.textContent,
+        label: btn.getAttribute('aria-label')
+      }));
 
-        // Scroll down
-        scrollEl.scrollTop = scrollPosition + scrollStep;
-        scrollPosition += scrollStep;
-        
-        // Wait for render
+      // Try clicking any clear buttons
+      for (const btn of clearButtons) {
+        console.log(`Clicking clear button: ${btn.textContent}`);
+        btn.click();
         await new Promise(r => setTimeout(r, 1500));
       }
 
-      console.log(`Captured ${snapshots.length} text snapshots`);
-      return snapshots;
+      // Try clicking "Select All" in any slicers
+      const selectAllButtons = Array.from(allButtons).filter(btn =>
+        btn.textContent.toLowerCase().includes('select all') ||
+        btn.getAttribute('aria-label')?.toLowerCase().includes('select all')
+      );
+
+      for (const btn of selectAllButtons) {
+        console.log(`Clicking select all: ${btn.textContent}`);
+        btn.click();
+        await new Promise(r => setTimeout(r, 1500));
+      }
+
+      return results;
     });
 
-    console.log(`\n✓ Captured ${allTextSnapshots.length} text snapshots\n`);
-
-    // ----------------------------------------------------------
-    // MERGE ALL TEXT SNAPSHOTS
-    // ----------------------------------------------------------
-    console.log("Merging text from all scroll positions...\n");
-
-    // Combine all unique lines from all snapshots
-    const allLinesSet = new Set();
+    console.log("Filter search results:");
+    console.log(`  Slicers found: ${filterInfo.slicers.length}`);
+    console.log(`  Filters found: ${filterInfo.filters.length}`);
+    console.log(`  Clear buttons found: ${filterInfo.clearButtons.length}`);
     
-    for (const snapshot of allTextSnapshots) {
-      const lines = snapshot.text
-        .split("\n")
-        .map(l => clean(l))
-        .filter(l => l && !isJunkLine(l));
-      
-      lines.forEach(line => allLinesSet.add(line));
+    if (filterInfo.clearButtons.length > 0) {
+      console.log("\nClear buttons:");
+      filterInfo.clearButtons.forEach(btn => console.log(`  - ${btn.text} (${btn.label})`));
     }
 
-    const lines = Array.from(allLinesSet);
+    fs.writeFileSync("debug_filters.json", JSON.stringify(filterInfo, null, 2));
 
-    // Save debug
+    // Wait for any filter changes to apply
+    await new Promise(r => setTimeout(r, 5000));
+
+    // ----------------------------------------------------------
+    // NOW EXTRACT DATA
+    // ----------------------------------------------------------
+    console.log("\nExtracting data after clearing filters...\n");
+
+    const rawText = await frame.evaluate(() => document.body.innerText);
+    const lines = rawText
+      .split("\n")
+      .map(l => clean(l))
+      .filter(l => l && !isJunkLine(l));
+
     fs.writeFileSync("debug_lines.txt", lines.join("\n"));
     fs.writeFileSync(
       "debug_lines_numbered.txt",
       lines.map((l, i) => `${i}: ${l}`).join("\n")
     );
 
-    // Also save all snapshots for debugging
-    fs.writeFileSync(
-      "debug_snapshots.json",
-      JSON.stringify(allTextSnapshots.map(s => ({
-        scroll: s.scroll,
-        position: s.position,
-        lineCount: s.text.split("\n").length
-      })), null, 2)
-    );
+    console.log(`Total lines after filtering: ${lines.length}\n`);
 
-    console.log(`Total unique lines: ${lines.length}\n`);
-
-    // ----------------------------------------------------------
-    // Mappings
-    // ----------------------------------------------------------
     const stateMap = {
       "National": "National",
       "NSW": "NSW",
@@ -266,27 +231,21 @@ const puppeteer = require("puppeteer");
       return metrics;
     }
 
-    // ----------------------------------------------------------
-    // Parse data
-    // ----------------------------------------------------------
     const output = {
       updated_at: new Date().toISOString(),
       national: [],
       states: []
     };
 
-    // Use a MAP to group by state properly
     const stateMap_Data = new Map();
     let currentState = "National";
 
     for (let i = 0; i < lines.length; i++) {
       const label = extractLabel(lines[i]);
 
-      // Check for state header
       if (stateKeys.includes(label)) {
         currentState = stateMap[label];
         
-        // Only initialize if doesn't exist yet
         if (currentState !== "National" && !stateMap_Data.has(currentState)) {
           stateMap_Data.set(currentState, {
             state: currentState,
@@ -297,7 +256,6 @@ const puppeteer = require("puppeteer");
         continue;
       }
 
-      // Check for category
       if (categories.includes(label)) {
         const metrics = parseMetrics(i);
         const payload = {
@@ -316,12 +274,8 @@ const puppeteer = require("puppeteer");
       }
     }
 
-    // Convert state map to array
     output.states = Array.from(stateMap_Data.values());
 
-    // ----------------------------------------------------------
-    // Save output
-    // ----------------------------------------------------------
     fs.writeFileSync(outputFile, JSON.stringify(output, null, 2));
 
     console.log("\n✓ Scrape complete");

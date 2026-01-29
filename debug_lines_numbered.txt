@@ -12,504 +12,556 @@
 11: When opening on a mobile, place phone in landscape and zoom in on tables
 12: Use filters at top of page to decrease amount of categories shown
 13: Friday Cattle State Averages - 23 January 2026
-14: Scroll up
-15: Scroll down
-16: Scroll left
-17: Scroll right
-18: National
-19: Offered
-20: Weight Range
-21: Avg Weight
-22: $/Head Range
-23: Avg
-24: Change
-25: c/kg Range
-26: Avg
-27: Change
-28: Clearance
-29: Steers
-30: Steers 0-200kg
-31: 122
-32: 106 - 239kg
-33: 170kg
-34: $950 - $1,070
-35: $962
-36: -142
-37: Additional Conditional Formatting
-38: 588 - 600c
-39: 599c
-40: 25
-41: Additional Conditional Formatting
-42: 100%
-43: Steers 200.1-280kg
-44: 1,192
-45: 143 - 351kg
-46: 244kg
-47: $990 - $1,545
-48: $1,266
-49: -70
-50: Additional Conditional Formatting
-51: 397 - 589c
-52: 529c
-53: -9
-54: Additional Conditional Formatting
-55: 92%
-56: Steers 280.1-330kg
-57: 1,008
-58: 212 - 2,855kg
-59: 307kg
-60: $1,250 - $1,790
-61: $1,557
-62: -69
-63: Additional Conditional Formatting
-64: 407 - 628c
-65: 507c
-66: -33
-67: Additional Conditional Formatting
-68: 69%
-69: Steers 330.1-400kg
-70: 2,270
-71: 108 - 511kg
-72: 359kg
-73: $1,510 - $2,030
-74: $1,820
-75: -24
-76: Additional Conditional Formatting
-77: 430 - 596c
-78: 514c
-79: 4
-80: Additional Conditional Formatting
-81: 56%
-82: Steers 400kg +
-83: 1,521
-84: 326 - 561kg
-85: 438kg
-86: $2,020 - $2,360
-87: $2,177
-88: -89
-89: Additional Conditional Formatting
-90: 430 - 551c
-91: 505c
-92: -1
-93: Additional Conditional Formatting
-94: 44%
-95: Heifers
-96: Heifers 0-200kg
-97: 297
-98: 100 - 272kg
-99: 183kg
-100: $510 - $920
-101: $858
-102: 40
-103: Additional Conditional Formatting
-104: 297 - 461c
-105: 447c
-106: 13
-107: Additional Conditional Formatting
-108: 58%
-109: Heifers 200.1-280kg
-110: 1,145
-111: 149 - 348kg
-112: 253kg
-113: $795 - $1,240
-114: $1,104
-115: -125
-116: Additional Conditional Formatting
-117: 368 - 519c
-118: 442c
-119: -33
-120: Additional Conditional Formatting
-121: 72%
-122: Heifers 280.1-330kg
-123: 1,039
-124: 238 - 403kg
-125: 311kg
-126: $1,210 - $1,640
-127: $1,334
-128: -6
-129: Additional Conditional Formatting
-130: 391 - 543c
-131: 429c
-132: -10
-133: Additional Conditional Formatting
-134: 74%
-135: Heifers 330.1-400kg
-136: 1,053
-137: 276 - 503kg
-138: 366kg
-139: $1,350 - $1,890
-140: $1,618
-141: -66
-142: Additional Conditional Formatting
-143: 403 - 507c
-144: 438c
-145: -19
-146: Additional Conditional Formatting
-147: 54%
-148: Heifers 400kg +
-149: 512
-150: 309 - 536kg
-151: 433kg
-152: $1,800 - $2,180
-153: $1,902
-154: -14
-155: Additional Conditional Formatting
-156: 425 - 451c
-157: 441c
-158: -5
-159: Additional Conditional Formatting
-160: 94%
-161: Breeding Stock
-162: NSM Cows
-163: 1
-164: 264 - 264kg
-165: 264kg
-166: $640 - $640
-167: $640
+14: Row Selection
+15: Category
+16: Category (CC)
+17: Offered
+18: Weight Range
+19: Avg Weight
+20: $/Head Range
+21: Avg
+22: Change
+23: c/kg Range
+24: Avg
+25: Change
+26: Clearance
+27: Select Row
+28: Steers
+29: Steers 0-200kg
+30: 122
+31: 106 - 239kg
+32: 170kg
+33: $950 - $1,070
+34: $962
+35: -142
+36: 588 - 600c
+37: 599c
+38: 25
+39: 100%
+40: Select Row
+41: Steers
+42: Steers 200.1-280kg
+43: 1,192
+44: 143 - 351kg
+45: 244kg
+46: $990 - $1,545
+47: $1,266
+48: -70
+49: 397 - 589c
+50: 529c
+51: -9
+52: 92%
+53: Select Row
+54: Steers
+55: Steers 280.1-330kg
+56: 1,008
+57: 212 - 2,855kg
+58: 307kg
+59: $1,250 - $1,790
+60: $1,557
+61: -69
+62: 407 - 628c
+63: 507c
+64: -33
+65: 69%
+66: Select Row
+67: Steers
+68: Steers 330.1-400kg
+69: 2,270
+70: 108 - 511kg
+71: 359kg
+72: $1,510 - $2,030
+73: $1,820
+74: -24
+75: 430 - 596c
+76: 514c
+77: 4
+78: 56%
+79: Select Row
+80: Steers
+81: Steers 400kg +
+82: 1,521
+83: 326 - 561kg
+84: 438kg
+85: $2,020 - $2,360
+86: $2,177
+87: -89
+88: 430 - 551c
+89: 505c
+90: -1
+91: 44%
+92: Select Row
+93: Heifers
+94: Heifers 0-200kg
+95: 297
+96: 100 - 272kg
+97: 183kg
+98: $510 - $920
+99: $858
+100: 40
+101: 297 - 461c
+102: 447c
+103: 13
+104: 58%
+105: Select Row
+106: Heifers
+107: Heifers 200.1-280kg
+108: 1,145
+109: 149 - 348kg
+110: 253kg
+111: $795 - $1,240
+112: $1,104
+113: -125
+114: 368 - 519c
+115: 442c
+116: -33
+117: 72%
+118: Select Row
+119: Heifers
+120: Heifers 280.1-330kg
+121: 1,039
+122: 238 - 403kg
+123: 311kg
+124: $1,210 - $1,640
+125: $1,334
+126: -6
+127: 391 - 543c
+128: 429c
+129: -10
+130: 74%
+131: Select Row
+132: Heifers
+133: Heifers 330.1-400kg
+134: 1,053
+135: 276 - 503kg
+136: 366kg
+137: $1,350 - $1,890
+138: $1,618
+139: -66
+140: 403 - 507c
+141: 438c
+142: -19
+143: 54%
+144: Select Row
+145: Heifers
+146: Heifers 400kg +
+147: 512
+148: 309 - 536kg
+149: 433kg
+150: $1,800 - $2,180
+151: $1,902
+152: -14
+153: 425 - 451c
+154: 441c
+155: -5
+156: 94%
+157: Select Row
+158: Breeding Stock
+159: NSM Cows
+160: 1
+161: 264 - 264kg
+162: 264kg
+163: $640 - $640
+164: $640
+165: -
+166: 242 - 242c
+167: 242c
 168: -
-169: 242 - 242c
-170: 242c
-171: -
-172: 100%
-173: SM Heifers
-174: 243
-175: 224 - 713kg
-176: 515kg
-177: $2,100 - $3,020
-178: $2,481
-179: -162
-180: Additional Conditional Formatting
-181: 408 - 564c
-182: 471c
-183: 3
-184: Additional Conditional Formatting
-185: 70%
-186: SM Cows
-187: 254
-188: 378 - 908kg
-189: 566kg
-190: $1,650 - $3,240
-191: $2,180
-192: -596
-193: Additional Conditional Formatting
-194: 352 - 489c
-195: 397c
-196: -51
-197: Additional Conditional Formatting
-198: 59%
-199: PTIC Heifers
-200: 1,736
-201: 281 - 728kg
-202: 467kg
-203: $1,880 - $3,210
-204: $2,270
-205: -284
-206: Additional Conditional Formatting
-207: 324 - 559c
-208: 464c
-209: -28
-210: Additional Conditional Formatting
-211: 30%
-212: PTIC Cows
-213: 887
-214: 367 - 860kg
-215: 608kg
-216: $1,800 - $3,360
-217: $2,248
-218: -162
-219: Additional Conditional Formatting
-220: 319 - 526c
-221: 399c
-222: -8
-223: Additional Conditional Formatting
-224: 57%
-225: NSM Heifers & Calves
-226: 202
-227: 247 - 679kg
-228: 413kg
-229: $1,300 - $3,400
-230: $2,575
-231: -25
-232: Additional Conditional Formatting
-233: 526 - 613c
-234: 598c
-235: 35
-236: Additional Conditional Formatting
-237: 60%
-238: NSM Cows & Calves
-239: 223
-240: 297 - 705kg
-241: 469kg
-242: $2,200 - $3,320
-243: $2,513
-244: 7
-245: Additional Conditional Formatting
-246: 458 - 623c
-247: 540c
-248: 79
-249: Additional Conditional Formatting
-250: 85%
-251: Friday Cattle National Averages - 23 January 2026
-252: Scroll up
-253: Scroll down
-254: Scroll left
-255: Scroll right
-256: State
-257: Offered
-258: Weight Range
-259: Avg Weight
-260: $/Head Range
-261: Avg
-262: Change
-263: c/kg Range
-264: Avg
-265: Change
-266: Clearance
-267: NSW
-268: Steers 0-200kg
-269: 122
-270: 106 - 239kg
-271: 170kg
-272: $950 - $1,070
-273: $962
-274: -142
-275: Additional Conditional Formatting
-276: 588 - 600c
-277: 599c
-278: 25
-279: Additional Conditional Formatting
-280: 100%
-281: Steers 200.1-280kg
-282: 834
-283: 143 - 351kg
-284: 239kg
-285: $990 - $1,545
-286: $1,266
-287: -83
-288: Additional Conditional Formatting
-289: 397 - 589c
-290: 539c
-291: 1
-292: Additional Conditional Formatting
-293: 94%
-294: Steers 280.1-330kg
-295: 512
-296: 228 - 416kg
-297: 308kg
-298: $1,380 - $1,720
-299: $1,563
-300: -45
-301: Additional Conditional Formatting
-302: 458 - 536c
-303: 505c
-304: -27
-305: Additional Conditional Formatting
-306: 96%
-307: Steers 330.1-400kg
-308: 910
-309: 108 - 511kg
-310: 364kg
-311: $1,540 - $1,970
-312: $1,801
-313: -34
-314: Additional Conditional Formatting
-315: 430 - 596c
-316: 511c
-317: -3
-318: Additional Conditional Formatting
-319: 58%
-320: Steers 400kg +
-321: 696
-322: 326 - 561kg
-323: 430kg
-324: $2,050 - $2,200
-325: $2,081
-326: -134
-327: Additional Conditional Formatting
-328: 430 - 500c
-329: 493c
-330: -12
-331: Additional Conditional Formatting
-332: 28%
-333: Heifers 0-200kg
-334: 297
-335: 100 - 272kg
-336: 183kg
-337: $510 - $920
-338: $858
-339: 228
-340: Additional Conditional Formatting
-341: 297 - 461c
-342: 447c
-343: 85
-344: Additional Conditional Formatting
-345: 58%
-346: Heifers 200.1-280kg
-347: 349
-348: 149 - 339kg
-349: 237kg
-350: $795 - $1,100
-351: $1,037
-352: -96
-353: Additional Conditional Formatting
-354: 368 - 519c
-355: 466c
-356: 15
-357: Additional Conditional Formatting
-358: 78%
-359: Heifers 280.1-330kg
-360: 506
-361: 238 - 403kg
-362: 310kg
-363: $1,210 - $1,460
-364: $1,326
-365: -9
-366: Additional Conditional Formatting
-367: 391 - 456c
-368: 421c
-369: -14
-370: Additional Conditional Formatting
-371: 60%
-372: Heifers 330.1-400kg
-373: 813
-374: 289 - 503kg
-375: 368kg
-376: $1,530 - $1,770
-377: $1,648
-378: -56
-379: Additional Conditional Formatting
-380: 413 - 471c
-381: 435c
-382: -22
-383: Additional Conditional Formatting
-384: 47%
-385: Heifers 400kg +
-386: 382
-387: 309 - 516kg
-388: 419kg
-389: $1,800 - $1,900
-390: $1,866
-391: -26
-392: Additional Conditional Formatting
-393: 425 - 451c
-394: 441c
-395: -10
-396: Additional Conditional Formatting
-397: 92%
-398: NSM Cows
-399: 1
-400: 264 - 264kg
-401: 264kg
-402: $640 - $640
-403: $640
-404: -
-405: 242 - 242c
-406: 242c
-407: -
-408: 100%
-409: SM Heifers
-410: 100
-411: 224 - 544kg
-412: 409kg
-413: $2,100 - $2,240
-414: $2,135
-415: -
-416: Additional Conditional Formatting
-417: 432 - 485c
-418: 445c
-419: -
-420: 64%
-421: SM Cows
-422: 177
-423: 378 - 908kg
-424: 547kg
-425: $1,650 - $1,650
-426: $1,650
-427: -
-428: Additional Conditional Formatting
-429: 352 - 352c
-430: 352c
-431: -
-432: 56%
-433: PTIC Heifers
-434: 1,189
-435: 281 - 693kg
-436: 420kg
-437: $1,950 - $2,360
-438: $2,037
-439: 53
-440: Additional Conditional Formatting
-441: 445 - 477c
-442: 460c
-443: 5
-444: Additional Conditional Formatting
-445: 17%
-446: PTIC Cows
-447: 617
-448: 367 - 856kg
-449: 558kg
-450: $1,800 - $2,000
-451: $1,882
-452: -102
-453: Additional Conditional Formatting
-454: 319 - 394c
-455: 370c
-456: -4
-457: Additional Conditional Formatting
-458: 47%
-459: NSM Heifers & Calves
-460: 135
-461: 247 - 532kg
-462: 371kg
-463: $1,300 - $2,450
-464: $2,422
-465: -178
-466: Additional Conditional Formatting
-467: 526 - 613c
-468: 604c
-469: 41
-470: Additional Conditional Formatting
-471: 76%
-472: NSM Cows & Calves
-473: 95
-474: 338 - 705kg
-475: 471kg
-476: $2,300 - $2,620
-477: $2,367
-478: -143
-479: Additional Conditional Formatting
-480: 458 - 562c
+169: 100%
+170: Select Row
+171: Breeding Stock
+172: SM Heifers
+173: 243
+174: 224 - 713kg
+175: 515kg
+176: $2,100 - $3,020
+177: $2,481
+178: -162
+179: 408 - 564c
+180: 471c
+181: 3
+182: 70%
+183: Select Row
+184: Breeding Stock
+185: SM Cows
+186: 254
+187: 378 - 908kg
+188: 566kg
+189: $1,650 - $3,240
+190: $2,180
+191: -596
+192: 352 - 489c
+193: 397c
+194: -51
+195: 59%
+196: Select Row
+197: Breeding Stock
+198: PTIC Heifers
+199: 1,736
+200: 281 - 728kg
+201: 467kg
+202: $1,880 - $3,210
+203: $2,270
+204: -284
+205: 324 - 559c
+206: 464c
+207: -28
+208: 30%
+209: Select Row
+210: Breeding Stock
+211: PTIC Cows
+212: 887
+213: 367 - 860kg
+214: 608kg
+215: $1,800 - $3,360
+216: $2,248
+217: -162
+218: 319 - 526c
+219: 399c
+220: -8
+221: 57%
+222: Select Row
+223: Breeding Stock
+224: NSM Heifers & Calves
+225: 202
+226: 247 - 679kg
+227: 413kg
+228: $1,300 - $3,400
+229: $2,575
+230: -25
+231: 526 - 613c
+232: 598c
+233: 35
+234: 60%
+235: Select Row
+236: Breeding Stock
+237: NSM Cows & Calves
+238: 223
+239: 297 - 705kg
+240: 469kg
+241: $2,200 - $3,320
+242: $2,513
+243: 7
+244: 458 - 623c
+245: 540c
+246: 79
+247: 85%
+248: Select Row
+249: Breeding Stock
+250: SM Heifers & Calves
+251: 35
+252: 319 - 619kg
+253: 496kg
+254: $1,800 - $3,200
+255: $2,785
+256: -133
+257: 464 - 616c
+258: 557c
+259: -104
+260: 100%
+261: Select Row
+262: Breeding Stock
+263: SM Cows & Calves
+264: 709
+265: 298 - 760kg
+266: 484kg
+267: $1,900 - $3,060
+268: $2,393
+269: -199
+270: 443 - 587c
+271: 512c
+272: 11
+273: 70%
+274: Select Row
+275: Breeding Stock
+276: PTIC Cows & Calves
+277: 20
+278: 440 - 634kg
+279: 503kg
+280: $3,500 - $3,500
+281: $3,500
+282: -
+283: 672 - 672c
+284: 672c
+285: -
+286: 15%
+287: Friday Cattle National Averages - 23 January 2026
+288: Row Selection
+289: State
+290: Category
+291: Category (CC)
+292: Offered
+293: Weight Range
+294: Avg Weight
+295: $/Head Range
+296: Avg
+297: Change
+298: c/kg Range
+299: Avg
+300: Change
+301: Select Row
+302: NSW
+303: Steers
+304: Steers 0-200kg
+305: 122
+306: 106 - 239kg
+307: 170kg
+308: $950 - $1,070
+309: $962
+310: -142
+311: 588 - 600c
+312: 599c
+313: 25
+314: Select Row
+315: NSW
+316: Steers
+317: Steers 200.1-280kg
+318: 834
+319: 143 - 351kg
+320: 239kg
+321: $990 - $1,545
+322: $1,266
+323: -83
+324: 397 - 589c
+325: 539c
+326: 1
+327: Select Row
+328: NSW
+329: Steers
+330: Steers 280.1-330kg
+331: 512
+332: 228 - 416kg
+333: 308kg
+334: $1,380 - $1,720
+335: $1,563
+336: -45
+337: 458 - 536c
+338: 505c
+339: -27
+340: Select Row
+341: NSW
+342: Steers
+343: Steers 330.1-400kg
+344: 910
+345: 108 - 511kg
+346: 364kg
+347: $1,540 - $1,970
+348: $1,801
+349: -34
+350: 430 - 596c
+351: 511c
+352: -3
+353: Select Row
+354: NSW
+355: Steers
+356: Steers 400kg +
+357: 696
+358: 326 - 561kg
+359: 430kg
+360: $2,050 - $2,200
+361: $2,081
+362: -134
+363: 430 - 500c
+364: 493c
+365: -12
+366: Select Row
+367: NSW
+368: Heifers
+369: Heifers 0-200kg
+370: 297
+371: 100 - 272kg
+372: 183kg
+373: $510 - $920
+374: $858
+375: 228
+376: 297 - 461c
+377: 447c
+378: 85
+379: Select Row
+380: NSW
+381: Heifers
+382: Heifers 200.1-280kg
+383: 349
+384: 149 - 339kg
+385: 237kg
+386: $795 - $1,100
+387: $1,037
+388: -96
+389: 368 - 519c
+390: 466c
+391: 15
+392: Select Row
+393: NSW
+394: Heifers
+395: Heifers 280.1-330kg
+396: 506
+397: 238 - 403kg
+398: 310kg
+399: $1,210 - $1,460
+400: $1,326
+401: -9
+402: 391 - 456c
+403: 421c
+404: -14
+405: Select Row
+406: NSW
+407: Heifers
+408: Heifers 330.1-400kg
+409: 813
+410: 289 - 503kg
+411: 368kg
+412: $1,530 - $1,770
+413: $1,648
+414: -56
+415: 413 - 471c
+416: 435c
+417: -22
+418: Select Row
+419: NSW
+420: Heifers
+421: Heifers 400kg +
+422: 382
+423: 309 - 516kg
+424: 419kg
+425: $1,800 - $1,900
+426: $1,866
+427: -26
+428: 425 - 451c
+429: 441c
+430: -10
+431: Select Row
+432: NSW
+433: Breeding Stock
+434: NSM Cows
+435: 1
+436: 264 - 264kg
+437: 264kg
+438: $640 - $640
+439: $640
+440: -
+441: 242 - 242c
+442: 242c
+443: -
+444: Select Row
+445: NSW
+446: Breeding Stock
+447: SM Heifers
+448: 100
+449: 224 - 544kg
+450: 409kg
+451: $2,100 - $2,240
+452: $2,135
+453: -
+454: 432 - 485c
+455: 445c
+456: -
+457: Select Row
+458: NSW
+459: Breeding Stock
+460: SM Cows
+461: 177
+462: 378 - 908kg
+463: 547kg
+464: $1,650 - $1,650
+465: $1,650
+466: -
+467: 352 - 352c
+468: 352c
+469: -
+470: Select Row
+471: NSW
+472: Breeding Stock
+473: PTIC Heifers
+474: 1,189
+475: 281 - 693kg
+476: 420kg
+477: $1,950 - $2,360
+478: $2,037
+479: 53
+480: 445 - 477c
 481: 460c
-482: -1
-483: Additional Conditional Formatting
-484: 65%
-485: SM Cows & Calves
-486: 532
-487: 332 - 760kg
-488: 505kg
-489: $2,100 - $3,060
-490: $2,400
-491: -238
-492: Additional Conditional Formatting
-493: 450 - 552c
-494: 515c
-495: 33
-496: Additional Conditional Formatting
-497: 66%
-498: PTIC Cows & Calves
-499: 6
-500: 466 - 541kg
-501: 506kg
-502: $3,500 - $3,500
-503: $3,500
-504: -
-505: 672 - 672c
-506: 672c
-507: -
-508: 50%
-509: -
-510: +
-511: 94%
-512: Microsoft Power BI
-513: 1of2
-514: Report Zoomed To 94%
+482: 5
+483: Select Row
+484: NSW
+485: Breeding Stock
+486: PTIC Cows
+487: 617
+488: 367 - 856kg
+489: 558kg
+490: $1,800 - $2,000
+491: $1,882
+492: -102
+493: 319 - 394c
+494: 370c
+495: -4
+496: Select Row
+497: NSW
+498: Breeding Stock
+499: NSM Heifers & Calves
+500: 135
+501: 247 - 532kg
+502: 371kg
+503: $1,300 - $2,450
+504: $2,422
+505: -178
+506: 526 - 613c
+507: 604c
+508: 41
+509: Select Row
+510: NSW
+511: Breeding Stock
+512: NSM Cows & Calves
+513: 95
+514: 338 - 705kg
+515: 471kg
+516: $2,300 - $2,620
+517: $2,367
+518: -143
+519: 458 - 562c
+520: 460c
+521: -1
+522: Select Row
+523: NSW
+524: Breeding Stock
+525: SM Cows & Calves
+526: 532
+527: 332 - 760kg
+528: 505kg
+529: $2,100 - $3,060
+530: $2,400
+531: -238
+532: 450 - 552c
+533: 515c
+534: 33
+535: Select Row
+536: NSW
+537: Breeding Stock
+538: PTIC Cows & Calves
+539: 6
+540: 466 - 541kg
+541: 506kg
+542: $3,500 - $3,500
+543: $3,500
+544: -
+545: 672 - 672c
+546: 672c
+547: -
+548: Select Row
+549: QLD
+550: Steers
+551: Steers 200.1-280kg
+552: 344
+553: 163 - 346kg
+554: 256kg
+555: $1,200 - $1,380
+556: $1,268
+557: 9
+558: 487 - 566c
+559: 503c
+560: -74
+561: -
+562: +
+563: 94%
+564: Microsoft Power BI
+565: 1of2
+566: Report Zoomed To 94%

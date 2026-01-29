@@ -1,7 +1,8 @@
 // ============================================================
-// scrape_text_message_template.js
+// scrape_text_message_templates.js
 // Scrapes "Text Message Template" page (Power BI page 2)
-// Mirrors working cattle text scraper structure
+// Mirrors working cattle text metrics scraper structure
+// SAFE for GitHub Actions (uses full puppeteer)
 // ============================================================
 
 const fs = require("fs");
@@ -49,32 +50,55 @@ const puppeteer = require("puppeteer");
     const page = await browser.newPage();
     page.setDefaultTimeout(90000);
 
-    console.log("→ Navigating to Power BI page...");
+    console.log("→ Navigating...");
     await page.goto(url, { waitUntil: "networkidle2" });
+
     await page.waitForSelector("iframe");
     await new Promise(r => setTimeout(r, 15000));
 
     const frame = page.frames().find(f => f.url().includes("powerbi.com"));
     if (!frame) throw new Error("Power BI iframe not found");
 
-    // ----------------------------------------------------------
-    // Switch to PAGE 2 (Text Message Template)
-    // ----------------------------------------------------------
-
     console.log("→ Switching to Text Message Template page...");
 
-    await frame.evaluate(() => {
-      const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
-      const target = tabs.find(t =>
-        t.textContent.toLowerCase().includes("text message")
+    // ----------------------------------------------------------
+    // SWITCH TO PAGE 2 (Text Message Template)
+    // ----------------------------------------------------------
+
+    await frame.evaluate(async () => {
+      const buttons = Array.from(document.querySelectorAll('[role="tab"], button'));
+      const page2 = buttons.find(b =>
+        b.textContent?.toLowerCase().includes("text message template")
       );
-      if (target) target.click();
+
+      if (page2) {
+        page2.click();
+      }
     });
 
     await new Promise(r => setTimeout(r, 8000));
 
     // ----------------------------------------------------------
-    // Extract text
+    // SCROLL TABLE TO LOAD ALL ROWS
+    // ----------------------------------------------------------
+
+    for (let i = 0; i < 15; i++) {
+      await frame.evaluate(step => {
+        const grids = document.querySelectorAll('div[role="grid"], div[class*="scroll"]');
+        grids.forEach(el => {
+          if (el.scrollHeight > el.clientHeight) {
+            el.scrollTop = (el.scrollHeight / 15) * step;
+          }
+        });
+      }, i);
+
+      await new Promise(r => setTimeout(r, 800));
+    }
+
+    await new Promise(r => setTimeout(r, 3000));
+
+    // ----------------------------------------------------------
+    // EXTRACT TEXT
     // ----------------------------------------------------------
 
     const rawText = await frame.evaluate(() => document.body.innerText);
@@ -82,57 +106,65 @@ const puppeteer = require("puppeteer");
     const lines = rawText
       .split("\n")
       .map(l => clean(l))
-      .filter(l => !isJunkLine(l));
+      .filter(l => l && !isJunkLine(l));
 
     fs.writeFileSync(
-      "debug_message_template_lines.txt",
+      "debug_text_message_lines.txt",
       lines.map((l, i) => `${i}: ${l}`).join("\n")
     );
 
-    console.log(`→ Lines captured: ${lines.length}`);
+    console.log(`→ Lines extracted: ${lines.length}`);
 
     // ----------------------------------------------------------
-    // Parse rows (3-column repeating pattern)
+    // PARSE TABLE ROWS
+    // Expected layout:
+    // Price Stock Category
+    // $/Head Template
+    // c/kg Template
     // ----------------------------------------------------------
 
-    const templates = [];
+    const results = [];
+    let i = 0;
 
-    for (let i = 0; i < lines.length - 2; i++) {
-      const stock = lines[i];
-      const head = lines[i + 1];
-      const ckg = lines[i + 2];
+    while (i < lines.length - 2) {
+      const stockCategory = lines[i];
+      const headTemplate = lines[i + 1];
+      const ckgTemplate = lines[i + 2];
 
-      // Heuristic: templates always look like "$" and "c"
-      if (
-        head.includes("$") &&
-        ckg.toLowerCase().includes("c")
-      ) {
-        templates.push({
-          price_stock_category: stock,
-          text_head: head,
-          text_c_kg: ckg
+      // Heuristic: templates always contain $
+      if (headTemplate.includes("$") && ckgTemplate.includes("c")) {
+        results.push({
+          price_stock_category: stockCategory,
+          text_template_head: headTemplate,
+          text_template_ckg: ckgTemplate
         });
 
-        i += 2; // move to next row
+        i += 3;
+      } else {
+        i++;
       }
     }
 
+    // ----------------------------------------------------------
+    // WRITE OUTPUT
+    // ----------------------------------------------------------
+
     const output = {
       updated_at: new Date().toISOString(),
-      templates
+      templates: results
     };
 
     fs.writeFileSync(outputFile, JSON.stringify(output, null, 2));
 
-    console.log("\n✓ Text message templates scraped");
-    console.log(`  Templates found: ${templates.length}`);
+    console.log("\n✓ Text Message Templates scraped successfully");
+    console.log(`  Rows captured: ${results.length}`);
     console.log(`  Output: ${outputFile}`);
 
     await browser.close();
     process.exit(0);
 
   } catch (err) {
-    console.error("✗ Template scrape failed:", err);
+    console.error("❌ Scraper failed:", err);
     await browser.close();
     process.exit(1);
   }

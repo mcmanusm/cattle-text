@@ -1,6 +1,6 @@
 // ============================================================
-// scrape_text_metrics.js
-// Power BI TABLE (ARIA grid) scraper – FINAL VERSION
+// scrape_text_metrics_table.js
+// POWER BI TABLE SAFE SCRAPER (ARIA-COLINDEX BASED)
 // ============================================================
 
 const fs = require("fs");
@@ -19,126 +19,135 @@ const puppeteer = require("puppeteer");
     const page = await browser.newPage();
     page.setDefaultTimeout(90000);
 
+    console.log("→ Loading page…");
     await page.goto(url, { waitUntil: "networkidle2" });
+
     await page.waitForSelector("iframe");
-    await new Promise(r => setTimeout(r, 8000));
+    await page.waitForTimeout(15000);
 
     const frame = page.frames().find(f => f.url().includes("powerbi.com"));
     if (!frame) throw new Error("Power BI iframe not found");
 
-    // ----------------------------------------------------------
-    // Extract rows via ARIA grid
-    // ----------------------------------------------------------
+    console.log("→ Scrolling tables…");
+
+    // Scroll all Power BI table containers
+    for (let i = 0; i < 15; i++) {
+      await frame.evaluate(step => {
+        document.querySelectorAll(
+          'div[role="grid"], div[class*="scroll"], div.visualContainer'
+        ).forEach(el => {
+          if (el.scrollHeight > el.clientHeight) {
+            el.scrollTop = (el.scrollHeight / 15) * step;
+          }
+        });
+      }, i);
+      await page.waitForTimeout(700);
+    }
+
+    console.log("→ Extracting rows…");
 
     const rows = await frame.evaluate(() => {
-      const result = [];
+      const output = [];
 
       document.querySelectorAll('div[role="row"]').forEach(row => {
-        const cells = Array.from(
-          row.querySelectorAll('div[role="gridcell"]')
-        ).map(cell => {
-          // Remove hidden conditional formatting text
-          const hidden = cell.querySelector(".visually-hidden");
-          if (hidden) return null;
+        const cells = row.querySelectorAll('div[role="gridcell"]');
+        if (!cells.length) return;
 
-          return cell.innerText.replace(/\s+/g, " ").trim();
+        const record = {};
+
+        cells.forEach(cell => {
+          const idx = cell.getAttribute("aria-colindex");
+          let text = cell.innerText.replace(/\s+/g, " ").trim();
+
+          if (
+            !text ||
+            text === "Additional Conditional Formatting" ||
+            text.includes("Press Enter") ||
+            text.includes("Scroll")
+          ) {
+            return;
+          }
+
+          record[idx] = text;
         });
 
-        if (cells.filter(Boolean).length > 0) {
-          result.push(cells);
+        if (Object.keys(record).length > 2) {
+          output.push(record);
         }
       });
 
-      return result;
+      return output;
     });
 
     // ----------------------------------------------------------
-    // Output structure
+    // DEBUG (optional but useful)
     // ----------------------------------------------------------
+    fs.writeFileSync(
+      "debug_rows.json",
+      JSON.stringify(rows, null, 2)
+    );
 
-    const output = {
-      updated_at: new Date().toISOString(),
-      national: [],
-      states: []
+    console.log(`→ Rows captured: ${rows.length}`);
+
+    // ----------------------------------------------------------
+    // COLUMN MAP (Power BI TABLE)
+    // ----------------------------------------------------------
+    const COL = {
+      LOCATION: "1",       // National / NSW / VIC etc (blank = National)
+      STOCK_GROUP: "2",    // Steers / Heifers / Breeding Stock
+      CATEGORY: "3",       // Category (CC)
+      OFFERED: "4",
+      WEIGHT_RANGE: "5",
+      AVG_WEIGHT: "6",
+      DOLLAR_RANGE: "7",
+      AVG_DOLLAR: "8",
+      DOLLAR_CHANGE: "9",
+      CKG_RANGE: "10",
+      AVG_CKG: "11",
+      CKG_CHANGE: "12",
+      CLEARANCE: "13"
     };
 
-    const stateBuckets = {};
-
-    const STATES = ["NSW", "QLD", "VIC", "SA", "Tas", "WA", "NT"];
-
     // ----------------------------------------------------------
-    // Parse rows
+    // NORMALISE INTO FINAL JSON
     // ----------------------------------------------------------
+    const output = {
+      updated_at: new Date().toISOString(),
+      records: []
+    };
 
-    rows.forEach(cells => {
-      // NATIONAL TABLE (no state column)
-      if (!STATES.includes(cells[0])) {
-        // Expected layout:
-        // [CategoryGroup, Category, Offered, WeightRange, AvgWeight, $Range, Avg$, Change$, ckgRange, AvgCkg, Change, Clearance]
+    let lastLocation = "National";
 
-        if (cells.length < 10) return;
+    rows.forEach(r => {
+      const location = r[COL.LOCATION] || lastLocation;
+      lastLocation = location;
 
-        output.national.push({
-          category: cells[1],
-          offered: cells[2],
-          weight_range: cells[3],
-          avg_weight: cells[4],
-          dollar_head_range: cells[5],
-          avg_dollar_head: cells[6],
-          dollar_change: cells[7],
-          c_kg_range: cells[8],
-          avg_c_kg: cells[9],
-          c_kg_change: cells[10] || null,
-          clearance: cells[11] || null
-        });
+      const record = {
+        location,
+        stock_category: r[COL.STOCK_GROUP] || null,
+        category: r[COL.CATEGORY] || null,
+        offered: r[COL.OFFERED] || null,
+        weight_range: r[COL.WEIGHT_RANGE] || null,
+        avg_weight: r[COL.AVG_WEIGHT] || null,
+        dollar_head_range: r[COL.DOLLAR_RANGE] || null,
+        avg_dollar_head: r[COL.AVG_DOLLAR] || null,
+        dollar_change: r[COL.DOLLAR_CHANGE] || null,
+        c_kg_range: r[COL.CKG_RANGE] || null,
+        avg_c_kg: r[COL.AVG_CKG] || null,
+        c_kg_change: r[COL.CKG_CHANGE] || null,
+        clearance: r[COL.CLEARANCE] || null
+      };
 
-        return;
-      }
+      // Skip junk rows
+      if (!record.category || !record.stock_category) return;
 
-      // STATE TABLE
-      const state = cells[0];
-
-      if (!stateBuckets[state]) {
-        stateBuckets[state] = {
-          state,
-          categories: []
-        };
-      }
-
-      // Expected layout:
-      // [State, CategoryGroup, Category, Offered, WeightRange, AvgWeight, $Range, Avg$, Change$, ckgRange, AvgCkg, Change, Clearance]
-
-      if (cells.length < 11) return;
-
-      stateBuckets[state].categories.push({
-        category: cells[2],
-        offered: cells[3],
-        weight_range: cells[4],
-        avg_weight: cells[5],
-        dollar_head_range: cells[6],
-        avg_dollar_head: cells[7],
-        dollar_change: cells[8],
-        c_kg_range: cells[9],
-        avg_c_kg: cells[10],
-        c_kg_change: cells[11] || null,
-        clearance: cells[12] || null
-      });
-    });
-
-    // Push populated states
-    Object.values(stateBuckets).forEach(bucket => {
-      if (bucket.categories.length > 0) {
-        output.states.push(bucket);
-      }
+      output.records.push(record);
     });
 
     fs.writeFileSync(outputFile, JSON.stringify(output, null, 2));
 
     console.log("✓ Scrape complete");
-    console.log(`  National rows: ${output.national.length}`);
-    output.states.forEach(s =>
-      console.log(`  ${s.state}: ${s.categories.length}`)
-    );
+    console.log(`✓ Records written: ${output.records.length}`);
 
     await browser.close();
 

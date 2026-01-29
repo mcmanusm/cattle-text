@@ -2,6 +2,7 @@
 // scrape_text_metrics.js
 // Power BI Cattle Market Weekly Averages
 // National + State → Category → Metrics
+// UPDATED: All categories and all states
 // ============================================================
 
 const fs = require("fs");
@@ -70,7 +71,7 @@ const puppeteer = require("puppeteer");
     console.log(`→ Lines extracted: ${lines.length}`);
 
     // ----------------------------------------------------------
-    // Definitions
+    // Definitions - UPDATED with all categories
     // ----------------------------------------------------------
 
     const stateMap = {
@@ -93,6 +94,7 @@ const puppeteer = require("puppeteer");
 
     const stateKeys = Object.keys(stateMap);
 
+    // UPDATED: Added all missing categories including SM Heifers & Calves and PTIC Heifers & Calves
     const categories = [
       "Steers 0-200kg",
       "Steers 200.1-280kg",
@@ -113,6 +115,7 @@ const puppeteer = require("puppeteer");
       "NSM Cows & Calves",
       "SM Heifers & Calves",
       "SM Cows & Calves",
+      "PTIC Heifers & Calves",
       "PTIC Cows & Calves",
       "Mixed Sexes"
     ];
@@ -136,7 +139,7 @@ const puppeteer = require("puppeteer");
     }
 
     // ----------------------------------------------------------
-    // METRIC PARSER (FIXED)
+    // METRIC PARSER
     // ----------------------------------------------------------
 
     function parseMetrics(startIndex) {
@@ -158,7 +161,7 @@ const puppeteer = require("puppeteer");
     }
 
     // ----------------------------------------------------------
-    // Main Parse Loop
+    // Main Parse Loop - IMPROVED
     // ----------------------------------------------------------
 
     const output = {
@@ -176,8 +179,10 @@ const puppeteer = require("puppeteer");
 
       // ---------- STATE ----------
       if (stateKeys.includes(label)) {
+        // Save previous state bucket before starting new one
         if (stateBucket && currentState !== "National") {
           output.states.push(stateBucket);
+          console.log(`✓ Saved ${currentState}: ${stateBucket.categories.length} categories`);
         }
 
         currentState = stateMap[label];
@@ -211,9 +216,10 @@ const puppeteer = require("puppeteer");
       }
     }
 
-    // Push final state bucket
+    // Push final state bucket (important for last state)
     if (stateBucket && currentState !== "National") {
       output.states.push(stateBucket);
+      console.log(`✓ Saved ${currentState}: ${stateBucket.categories.length} categories`);
     }
 
     // ----------------------------------------------------------
@@ -222,16 +228,23 @@ const puppeteer = require("puppeteer");
 
     fs.writeFileSync(outputFile, JSON.stringify(output, null, 2));
 
-    console.log("✓ Metrics captured successfully");
+    console.log("\n✓ Metrics captured successfully");
     console.log(`  National categories: ${output.national.length}`);
+    console.log(`  States found: ${output.states.length}`);
+    
+    output.states.forEach(state => {
+      console.log(`    - ${state.state}: ${state.categories.length} categories`);
+    });
+    
     console.log(
-      `  State categories: ${output.states.reduce((s, x) => s + x.categories.length, 0)}`
+      `  Total state categories: ${output.states.reduce((s, x) => s + x.categories.length, 0)}`
     );
 
     await browser.close();
 
   } catch (err) {
     console.error("❌ ERROR:", err.message);
+    console.error(err.stack);
     await browser.close();
     process.exit(1);
   }

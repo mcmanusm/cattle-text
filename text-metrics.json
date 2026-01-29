@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-01-28T10:55:16.706Z",
+  "updated_at": "2026-01-29T01:19:46.991Z",
   "national": [
     {
       "category": "Steers 0-200kg",
@@ -33,12 +33,12 @@
       "weight_range": "212 - 2,855kg",
       "avg_weight": "307kg",
       "dollar_head_range": "$1,250 - $1,790",
-      "avg_dollar_head": "$1,555",
-      "dollar_change": "-70",
+      "avg_dollar_head": "$1,557",
+      "dollar_change": "-69",
       "c_kg_range": "407 - 628c",
       "avg_c_kg": "507c",
-      "c_kg_change": "-32",
-      "clearance": "66%"
+      "c_kg_change": "-33",
+      "clearance": "69%"
     },
     {
       "category": "Steers 330.1-400kg",

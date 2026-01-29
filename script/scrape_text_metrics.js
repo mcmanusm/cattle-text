@@ -1,6 +1,6 @@
 // ============================================================
 // scrape_text_metrics.js
-// WITH AUTO-SCROLLING that dynamically finds all rows
+// AGGRESSIVE MULTI-METHOD SCROLLING for Power BI
 // ============================================================
 
 const fs = require("fs");
@@ -62,109 +62,144 @@ const puppeteer = require("puppeteer");
     if (!frame) throw new Error("Power BI iframe not found");
 
     // ----------------------------------------------------------
-    // SCROLL TO LOAD ALL VIRTUALIZED ROWS - ROBUST VERSION
+    // AGGRESSIVE SCROLLING - TRY EVERYTHING
     // ----------------------------------------------------------
-    console.log("Starting auto-scroll to load all table data...");
+    console.log("Starting aggressive scroll to load ALL table rows...\n");
     
     const scrollResult = await frame.evaluate(async () => {
-      // Find all div.row elements
-      const getAllRows = () => {
-        return Array.from(document.querySelectorAll('div.row'));
+      const results = {
+        methods: [],
+        initialRows: 0,
+        finalRows: 0
       };
 
-      // Find the scrollable container (parent of the rows)
-      let scrollableElement = null;
-      const rows = getAllRows();
+      // Count initial rows
+      const getAllRows = () => Array.from(document.querySelectorAll('div.row'));
+      results.initialRows = getAllRows().length;
+      console.log(`Initial rows: ${results.initialRows}`);
+
+      // METHOD 1: Find ALL possible scrollable elements
+      const scrollableElements = [];
       
-      if (rows.length > 0) {
-        // Walk up the DOM to find scrollable parent
-        let parent = rows[0].parentElement;
-        while (parent) {
-          const overflow = window.getComputedStyle(parent).overflow;
-          const overflowY = window.getComputedStyle(parent).overflowY;
-          
-          if (overflow === 'auto' || overflow === 'scroll' || 
-              overflowY === 'auto' || overflowY === 'scroll') {
-            scrollableElement = parent;
-            console.log('Found scrollable parent:', parent.className);
-            break;
+      // Try specific selectors
+      const selectors = [
+        '.bodyCells',
+        '.pivotTable',
+        '[class*="scroll"]',
+        '[class*="container"]',
+        '[class*="viewport"]',
+        '[class*="content"]'
+      ];
+
+      for (const selector of selectors) {
+        const els = document.querySelectorAll(selector);
+        els.forEach(el => {
+          const style = window.getComputedStyle(el);
+          if (style.overflow === 'auto' || style.overflow === 'scroll' ||
+              style.overflowY === 'auto' || style.overflowY === 'scroll') {
+            if (!scrollableElements.includes(el)) {
+              scrollableElements.push(el);
+              console.log(`Found scrollable: ${selector}`);
+            }
+          }
+        });
+      }
+
+      // Walk up from first row to find scrollable parents
+      const firstRow = document.querySelector('div.row');
+      if (firstRow) {
+        let parent = firstRow.parentElement;
+        let depth = 0;
+        while (parent && depth < 10) {
+          const style = window.getComputedStyle(parent);
+          if (style.overflow === 'auto' || style.overflow === 'scroll' ||
+              style.overflowY === 'auto' || style.overflowY === 'scroll') {
+            if (!scrollableElements.includes(parent)) {
+              scrollableElements.push(parent);
+              console.log(`Found scrollable parent at depth ${depth}`);
+            }
           }
           parent = parent.parentElement;
+          depth++;
         }
       }
 
-      if (!scrollableElement) {
-        // Fallback to common Power BI selectors
-        scrollableElement = document.querySelector('.bodyCells') 
-          || document.querySelector('[class*="scroll"]')
-          || document.querySelector('.pivotTable')
-          || document.body;
-        console.log('Using fallback scrollable element');
-      }
+      console.log(`Found ${scrollableElements.length} scrollable elements`);
 
-      const scrollStep = 300; // Smaller steps for precision
-      const scrollDelay = 2000; // Wait 2s after each scroll for rendering
-      let lastRowCount = 0;
-      let stableCount = 0;
-      let scrollAttempts = 0;
-      const maxScrollAttempts = 100; // Increased for larger tables
-
-      while (scrollAttempts < maxScrollAttempts) {
-        // Get current row count
-        const currentRows = getAllRows();
-        const currentRowCount = currentRows.length;
+      // METHOD 2: Scroll EACH scrollable element
+      for (let i = 0; i < scrollableElements.length; i++) {
+        const el = scrollableElements[i];
+        console.log(`\nScrolling element ${i + 1}/${scrollableElements.length}...`);
         
-        console.log(`Scroll ${scrollAttempts}: ${currentRowCount} rows found`);
+        let scrollAttempts = 0;
+        let lastRows = getAllRows().length;
+        let stableCount = 0;
 
-        // Check if we've found all rows
-        if (currentRowCount === lastRowCount) {
-          stableCount++;
-          // If row count stable for 4 consecutive scrolls, we're done
-          if (stableCount >= 4) {
-            console.log(`✓ All rows loaded: ${currentRowCount} total rows`);
-            return { success: true, totalRows: currentRowCount, scrolls: scrollAttempts };
+        while (scrollAttempts < 30 && stableCount < 3) {
+          // Scroll by pixel amount
+          el.scrollTop = el.scrollTop + 400;
+          await new Promise(r => setTimeout(r, 1000));
+
+          // Check if we got new rows
+          const currentRows = getAllRows().length;
+          if (currentRows > lastRows) {
+            console.log(`  Rows increased: ${lastRows} -> ${currentRows}`);
+            lastRows = currentRows;
+            stableCount = 0;
+          } else {
+            stableCount++;
           }
-        } else {
-          stableCount = 0;
-        }
-        
-        lastRowCount = currentRowCount;
 
-        // Scroll down by step
-        scrollableElement.scrollTop = scrollableElement.scrollTop + scrollStep;
-        
-        // Wait for new content to render
-        await new Promise(resolve => setTimeout(resolve, scrollDelay));
-        
-        scrollAttempts++;
+          scrollAttempts++;
+        }
+
+        results.methods.push({
+          element: i,
+          scrolls: scrollAttempts,
+          rows: getAllRows().length
+        });
       }
 
-      return { 
-        success: false, 
-        totalRows: lastRowCount, 
-        scrolls: scrollAttempts,
-        message: "Max scroll attempts reached" 
-      };
+      // METHOD 3: Dispatch wheel events to ALL scrollable elements
+      console.log(`\nDispatching wheel events...`);
+      for (const el of scrollableElements) {
+        for (let i = 0; i < 50; i++) {
+          el.dispatchEvent(new WheelEvent('wheel', {
+            deltaY: 200,
+            bubbles: true,
+            cancelable: true
+          }));
+          await new Promise(r => setTimeout(r, 200));
+        }
+      }
+
+      await new Promise(r => setTimeout(r, 2000));
+
+      // METHOD 4: Try clicking rows to force rendering
+      console.log(`\nClicking rows to force rendering...`);
+      const allRows = getAllRows();
+      for (let i = 0; i < Math.min(allRows.length, 10); i++) {
+        allRows[i].click();
+        await new Promise(r => setTimeout(r, 500));
+      }
+
+      // Scroll all elements back to top
+      console.log(`\nScrolling back to top...`);
+      for (const el of scrollableElements) {
+        el.scrollTop = 0;
+      }
+
+      await new Promise(r => setTimeout(r, 2000));
+
+      results.finalRows = getAllRows().length;
+      return results;
     });
 
     console.log(`\n✓ Scroll complete!`);
-    console.log(`  Total rows found: ${scrollResult.totalRows}`);
-    console.log(`  Scrolls performed: ${scrollResult.scrolls}`);
-    
-    if (!scrollResult.success) {
-      console.log(`  Warning: ${scrollResult.message}`);
-    }
+    console.log(`  Initial rows: ${scrollResult.initialRows}`);
+    console.log(`  Final rows: ${scrollResult.finalRows}`);
+    console.log(`  Methods tried: ${scrollResult.methods.length}`);
 
-    // Scroll back to top and wait for stability
-    await frame.evaluate(() => {
-      const scrollableElement = document.querySelector('.bodyCells') 
-        || document.querySelector('[class*="scroll"]')
-        || document.querySelector('.pivotTable')
-        || document.body;
-      scrollableElement.scrollTop = 0;
-    });
-    
-    console.log("\n✓ Scrolled back to top, waiting for stability...");
     await new Promise(r => setTimeout(r, 3000));
 
     // ----------------------------------------------------------

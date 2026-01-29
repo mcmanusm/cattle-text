@@ -1,20 +1,15 @@
 // ============================================================
 // scrape_text_message_templates.js
-// Scrapes "Text Message Template" page (Power BI page 2)
-// Mirrors working cattle text metrics scraper structure
-// SAFE for GitHub Actions (uses full puppeteer)
+// Scrapes "Text Message Template" (Power BI Page 2)
+// GitHub Actions SAFE (explicit Chrome path)
 // ============================================================
 
 const fs = require("fs");
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
 
 (async () => {
   const url = "https://mcmanusm.github.io/cattle-text/cattle-text-table.html";
   const outputFile = "text-message-templates.json";
-
-  // ----------------------------------------------------------
-  // Helpers (MATCH metrics scraper)
-  // ----------------------------------------------------------
 
   function clean(text) {
     return text
@@ -38,11 +33,12 @@ const puppeteer = require("puppeteer");
   }
 
   // ----------------------------------------------------------
-  // Launch browser
+  // Launch browser (Chrome path injected by workflow)
   // ----------------------------------------------------------
 
   const browser = await puppeteer.launch({
     headless: "new",
+    executablePath: process.env.CHROME_PATH,
     args: ["--no-sandbox", "--disable-setuid-sandbox"]
   });
 
@@ -61,25 +57,18 @@ const puppeteer = require("puppeteer");
 
     console.log("→ Switching to Text Message Template page...");
 
-    // ----------------------------------------------------------
-    // SWITCH TO PAGE 2 (Text Message Template)
-    // ----------------------------------------------------------
-
-    await frame.evaluate(async () => {
-      const buttons = Array.from(document.querySelectorAll('[role="tab"], button'));
-      const page2 = buttons.find(b =>
-        b.textContent?.toLowerCase().includes("text message template")
+    await frame.evaluate(() => {
+      const tabs = Array.from(document.querySelectorAll('[role="tab"], button'));
+      const target = tabs.find(t =>
+        t.textContent?.toLowerCase().includes("text message template")
       );
-
-      if (page2) {
-        page2.click();
-      }
+      if (target) target.click();
     });
 
     await new Promise(r => setTimeout(r, 8000));
 
     // ----------------------------------------------------------
-    // SCROLL TABLE TO LOAD ALL ROWS
+    // Scroll table
     // ----------------------------------------------------------
 
     for (let i = 0; i < 15; i++) {
@@ -91,14 +80,13 @@ const puppeteer = require("puppeteer");
           }
         });
       }, i);
-
       await new Promise(r => setTimeout(r, 800));
     }
 
     await new Promise(r => setTimeout(r, 3000));
 
     // ----------------------------------------------------------
-    // EXTRACT TEXT
+    // Extract text
     // ----------------------------------------------------------
 
     const rawText = await frame.evaluate(() => document.body.innerText);
@@ -116,50 +104,42 @@ const puppeteer = require("puppeteer");
     console.log(`→ Lines extracted: ${lines.length}`);
 
     // ----------------------------------------------------------
-    // PARSE TABLE ROWS
-    // Expected layout:
-    // Price Stock Category
-    // $/Head Template
-    // c/kg Template
+    // Parse rows (3-column table)
     // ----------------------------------------------------------
 
     const results = [];
     let i = 0;
 
     while (i < lines.length - 2) {
-      const stockCategory = lines[i];
-      const headTemplate = lines[i + 1];
-      const ckgTemplate = lines[i + 2];
+      const category = lines[i];
+      const head = lines[i + 1];
+      const ckg = lines[i + 2];
 
-      // Heuristic: templates always contain $
-      if (headTemplate.includes("$") && ckgTemplate.includes("c")) {
+      if (head.includes("$") && ckg.includes("c")) {
         results.push({
-          price_stock_category: stockCategory,
-          text_template_head: headTemplate,
-          text_template_ckg: ckgTemplate
+          price_stock_category: category,
+          text_template_head: head,
+          text_template_ckg: ckg
         });
-
         i += 3;
       } else {
         i++;
       }
     }
 
-    // ----------------------------------------------------------
-    // WRITE OUTPUT
-    // ----------------------------------------------------------
+    fs.writeFileSync(
+      outputFile,
+      JSON.stringify(
+        {
+          updated_at: new Date().toISOString(),
+          templates: results
+        },
+        null,
+        2
+      )
+    );
 
-    const output = {
-      updated_at: new Date().toISOString(),
-      templates: results
-    };
-
-    fs.writeFileSync(outputFile, JSON.stringify(output, null, 2));
-
-    console.log("\n✓ Text Message Templates scraped successfully");
-    console.log(`  Rows captured: ${results.length}`);
-    console.log(`  Output: ${outputFile}`);
-
+    console.log(`✓ Templates captured: ${results.length}`);
     await browser.close();
     process.exit(0);
 

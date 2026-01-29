@@ -1,6 +1,7 @@
 // ============================================================
-// scrape_text_message_templates.js
-// Scrapes Power BI "Text Message Template" page (Page 2)
+// scrape_text_message_template.js
+// Scrapes "Text Message Template" page (Power BI page 2)
+// Mirrors working cattle text scraper structure
 // ============================================================
 
 const fs = require("fs");
@@ -11,8 +12,9 @@ const puppeteer = require("puppeteer");
   const outputFile = "text-message-templates.json";
 
   // ----------------------------------------------------------
-  // Helpers
+  // Helpers (MATCH metrics scraper)
   // ----------------------------------------------------------
+
   function clean(text) {
     return text
       .normalize("NFKD")
@@ -21,9 +23,23 @@ const puppeteer = require("puppeteer");
       .trim();
   }
 
+  function isJunkLine(line) {
+    return (
+      !line ||
+      line === "Select Row" ||
+      line.includes("Scroll") ||
+      line.includes("Press Enter") ||
+      line.includes("Additional Conditional Formatting") ||
+      line.includes("Applied filters") ||
+      line.includes("Species is Cattle") ||
+      line.includes("Date ")
+    );
+  }
+
   // ----------------------------------------------------------
   // Launch browser
   // ----------------------------------------------------------
+
   const browser = await puppeteer.launch({
     headless: "new",
     args: ["--no-sandbox", "--disable-setuid-sandbox"]
@@ -33,93 +49,90 @@ const puppeteer = require("puppeteer");
     const page = await browser.newPage();
     page.setDefaultTimeout(90000);
 
-    console.log("→ Navigating to Power BI embed...");
+    console.log("→ Navigating to Power BI page...");
     await page.goto(url, { waitUntil: "networkidle2" });
-
     await page.waitForSelector("iframe");
-    await new Promise(r => setTimeout(r, 12000));
+    await new Promise(r => setTimeout(r, 15000));
 
     const frame = page.frames().find(f => f.url().includes("powerbi.com"));
     if (!frame) throw new Error("Power BI iframe not found");
 
-    console.log("→ Switching to page: Text Message Template");
+    // ----------------------------------------------------------
+    // Switch to PAGE 2 (Text Message Template)
+    // ----------------------------------------------------------
 
-    // ----------------------------------------------------------
-    // Switch to Page 2 (Text Message Template)
-    // ----------------------------------------------------------
+    console.log("→ Switching to Text Message Template page...");
+
     await frame.evaluate(() => {
-      const pageButtons = Array.from(
-        document.querySelectorAll('[role="tab"], button')
+      const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+      const target = tabs.find(t =>
+        t.textContent.toLowerCase().includes("text message")
       );
-
-      const target = pageButtons.find(el =>
-        el.innerText?.includes("Text Message Template")
-      );
-
-      if (target) {
-        target.click();
-      }
+      if (target) target.click();
     });
 
     await new Promise(r => setTimeout(r, 8000));
 
     // ----------------------------------------------------------
-    // Extract table rows
+    // Extract text
     // ----------------------------------------------------------
-    console.log("→ Extracting table rows...");
 
-    const rows = await frame.evaluate(() => {
-      const data = [];
+    const rawText = await frame.evaluate(() => document.body.innerText);
 
-      const rowEls = Array.from(document.querySelectorAll('div[role="row"]'));
+    const lines = rawText
+      .split("\n")
+      .map(l => clean(l))
+      .filter(l => !isJunkLine(l));
 
-      rowEls.forEach(row => {
-        const cells = Array.from(
-          row.querySelectorAll('div[role="gridcell"]')
-        );
+    fs.writeFileSync(
+      "debug_message_template_lines.txt",
+      lines.map((l, i) => `${i}: ${l}`).join("\n")
+    );
 
-        if (cells.length < 3) return;
+    console.log(`→ Lines captured: ${lines.length}`);
 
-        const rowData = cells.map(c => c.innerText.trim());
+    // ----------------------------------------------------------
+    // Parse rows (3-column repeating pattern)
+    // ----------------------------------------------------------
 
-        // Skip header row
-        if (rowData[0] === "Price Stock Category") return;
+    const templates = [];
 
-        data.push({
-          price_stock_category: rowData[0] || null,
-          per_head: rowData[1] || null,
-          per_ckg: rowData[2] || null
+    for (let i = 0; i < lines.length - 2; i++) {
+      const stock = lines[i];
+      const head = lines[i + 1];
+      const ckg = lines[i + 2];
+
+      // Heuristic: templates always look like "$" and "c"
+      if (
+        head.includes("$") &&
+        ckg.toLowerCase().includes("c")
+      ) {
+        templates.push({
+          price_stock_category: stock,
+          text_head: head,
+          text_c_kg: ckg
         });
-      });
 
-      return data;
-    });
+        i += 2; // move to next row
+      }
+    }
 
-    const cleanedRows = rows
-      .map(r => ({
-        price_stock_category: clean(r.price_stock_category),
-        per_head: clean(r.per_head),
-        per_ckg: clean(r.per_ckg)
-      }))
-      .filter(r => r.price_stock_category);
-
-    // ----------------------------------------------------------
-    // Write output
-    // ----------------------------------------------------------
     const output = {
       updated_at: new Date().toISOString(),
-      templates: cleanedRows
+      templates
     };
 
     fs.writeFileSync(outputFile, JSON.stringify(output, null, 2));
 
-    console.log("✓ Text Message Templates captured");
-    console.log(`  Rows: ${cleanedRows.length}`);
+    console.log("\n✓ Text message templates scraped");
+    console.log(`  Templates found: ${templates.length}`);
+    console.log(`  Output: ${outputFile}`);
 
     await browser.close();
+    process.exit(0);
+
   } catch (err) {
-    console.error("❌ ERROR:", err.message);
-    console.error(err.stack);
+    console.error("✗ Template scrape failed:", err);
     await browser.close();
     process.exit(1);
   }

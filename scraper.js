@@ -1,6 +1,6 @@
 // ============================================================
 // scrape_text_metrics.js
-// AGGRESSIVE MULTI-METHOD SCROLLING for Power BI
+// INCREMENTAL EXTRACTION - capture text WHILE scrolling
 // ============================================================
 
 const fs = require("fs");
@@ -62,156 +62,113 @@ const puppeteer = require("puppeteer");
     if (!frame) throw new Error("Power BI iframe not found");
 
     // ----------------------------------------------------------
-    // AGGRESSIVE SCROLLING - TRY EVERYTHING
+    // INCREMENTAL EXTRACTION WHILE SCROLLING
     // ----------------------------------------------------------
-    console.log("Starting aggressive scroll to load ALL table rows...\n");
+    console.log("Starting incremental extraction...\n");
     
-    const scrollResult = await frame.evaluate(async () => {
-      const results = {
-        methods: [],
-        initialRows: 0,
-        finalRows: 0
-      };
-
-      // Count initial rows
-      const getAllRows = () => Array.from(document.querySelectorAll('div.row'));
-      results.initialRows = getAllRows().length;
-      console.log(`Initial rows: ${results.initialRows}`);
-
-      // METHOD 1: Find ALL possible scrollable elements
-      const scrollableElements = [];
+    const allTextSnapshots = await frame.evaluate(async () => {
+      const snapshots = [];
       
-      // Try specific selectors
-      const selectors = [
-        '.bodyCells',
-        '.pivotTable',
-        '[class*="scroll"]',
-        '[class*="container"]',
-        '[class*="viewport"]',
-        '[class*="content"]'
-      ];
-
+      // Find scrollable elements
+      const scrollableElements = [];
+      const selectors = ['.bodyCells', '.pivotTable', '[class*="scroll"]'];
+      
       for (const selector of selectors) {
         const els = document.querySelectorAll(selector);
         els.forEach(el => {
           const style = window.getComputedStyle(el);
-          if (style.overflow === 'auto' || style.overflow === 'scroll' ||
-              style.overflowY === 'auto' || style.overflowY === 'scroll') {
-            if (!scrollableElements.includes(el)) {
-              scrollableElements.push(el);
-              console.log(`Found scrollable: ${selector}`);
-            }
+          if ((style.overflow === 'auto' || style.overflow === 'scroll' ||
+               style.overflowY === 'auto' || style.overflowY === 'scroll') &&
+              !scrollableElements.includes(el)) {
+            scrollableElements.push(el);
           }
         });
       }
 
-      // Walk up from first row to find scrollable parents
+      // If none found, walk up from first row
       const firstRow = document.querySelector('div.row');
-      if (firstRow) {
+      if (scrollableElements.length === 0 && firstRow) {
         let parent = firstRow.parentElement;
         let depth = 0;
         while (parent && depth < 10) {
           const style = window.getComputedStyle(parent);
           if (style.overflow === 'auto' || style.overflow === 'scroll' ||
               style.overflowY === 'auto' || style.overflowY === 'scroll') {
-            if (!scrollableElements.includes(parent)) {
-              scrollableElements.push(parent);
-              console.log(`Found scrollable parent at depth ${depth}`);
-            }
+            scrollableElements.push(parent);
+            break;
           }
           parent = parent.parentElement;
           depth++;
         }
       }
 
-      console.log(`Found ${scrollableElements.length} scrollable elements`);
+      const scrollEl = scrollableElements[0] || document.body;
+      console.log(`Using scrollable element: ${scrollEl.className}`);
 
-      // METHOD 2: Scroll EACH scrollable element
-      for (let i = 0; i < scrollableElements.length; i++) {
-        const el = scrollableElements[i];
-        console.log(`\nScrolling element ${i + 1}/${scrollableElements.length}...`);
-        
-        let scrollAttempts = 0;
-        let lastRows = getAllRows().length;
-        let stableCount = 0;
+      // CAPTURE TEXT AT EACH SCROLL POSITION
+      let scrollPosition = 0;
+      const scrollStep = 300;
+      const maxScrolls = 50;
+      let stableCount = 0;
+      let lastRowCount = 0;
 
-        while (scrollAttempts < 30 && stableCount < 3) {
-          // Scroll by pixel amount
-          el.scrollTop = el.scrollTop + 400;
-          await new Promise(r => setTimeout(r, 1000));
-
-          // Check if we got new rows
-          const currentRows = getAllRows().length;
-          if (currentRows > lastRows) {
-            console.log(`  Rows increased: ${lastRows} -> ${currentRows}`);
-            lastRows = currentRows;
-            stableCount = 0;
-          } else {
-            stableCount++;
-          }
-
-          scrollAttempts++;
-        }
-
-        results.methods.push({
-          element: i,
-          scrolls: scrollAttempts,
-          rows: getAllRows().length
+      for (let i = 0; i < maxScrolls; i++) {
+        // Get current visible text
+        const currentText = document.body.innerText;
+        snapshots.push({
+          scroll: i,
+          position: scrollPosition,
+          text: currentText
         });
-      }
 
-      // METHOD 3: Dispatch wheel events to ALL scrollable elements
-      console.log(`\nDispatching wheel events...`);
-      for (const el of scrollableElements) {
-        for (let i = 0; i < 50; i++) {
-          el.dispatchEvent(new WheelEvent('wheel', {
-            deltaY: 200,
-            bubbles: true,
-            cancelable: true
-          }));
-          await new Promise(r => setTimeout(r, 200));
+        // Count rows
+        const currentRowCount = document.querySelectorAll('div.row').length;
+        
+        if (currentRowCount === lastRowCount) {
+          stableCount++;
+          if (stableCount >= 4) {
+            console.log(`Stable at ${i} scrolls, ${currentRowCount} rows`);
+            break;
+          }
+        } else {
+          stableCount = 0;
+          console.log(`Scroll ${i}: ${currentRowCount} rows visible`);
         }
+        
+        lastRowCount = currentRowCount;
+
+        // Scroll down
+        scrollEl.scrollTop = scrollPosition + scrollStep;
+        scrollPosition += scrollStep;
+        
+        // Wait for render
+        await new Promise(r => setTimeout(r, 1500));
       }
 
-      await new Promise(r => setTimeout(r, 2000));
-
-      // METHOD 4: Try clicking rows to force rendering
-      console.log(`\nClicking rows to force rendering...`);
-      const allRows = getAllRows();
-      for (let i = 0; i < Math.min(allRows.length, 10); i++) {
-        allRows[i].click();
-        await new Promise(r => setTimeout(r, 500));
-      }
-
-      // Scroll all elements back to top
-      console.log(`\nScrolling back to top...`);
-      for (const el of scrollableElements) {
-        el.scrollTop = 0;
-      }
-
-      await new Promise(r => setTimeout(r, 2000));
-
-      results.finalRows = getAllRows().length;
-      return results;
+      console.log(`Captured ${snapshots.length} text snapshots`);
+      return snapshots;
     });
 
-    console.log(`\n✓ Scroll complete!`);
-    console.log(`  Initial rows: ${scrollResult.initialRows}`);
-    console.log(`  Final rows: ${scrollResult.finalRows}`);
-    console.log(`  Methods tried: ${scrollResult.methods.length}`);
-
-    await new Promise(r => setTimeout(r, 3000));
+    console.log(`\n✓ Captured ${allTextSnapshots.length} text snapshots\n`);
 
     // ----------------------------------------------------------
-    // EXTRACT DATA
+    // MERGE ALL TEXT SNAPSHOTS
     // ----------------------------------------------------------
-    console.log("\n✓ Extracting data...\n");
+    console.log("Merging text from all scroll positions...\n");
 
-    const rawText = await frame.evaluate(() => document.body.innerText);
-    const lines = rawText
-      .split("\n")
-      .map(l => clean(l))
-      .filter(l => l && !isJunkLine(l));
+    // Combine all unique lines from all snapshots
+    const allLinesSet = new Set();
+    
+    for (const snapshot of allTextSnapshots) {
+      const lines = snapshot.text
+        .split("\n")
+        .map(l => clean(l))
+        .filter(l => l && !isJunkLine(l));
+      
+      lines.forEach(line => allLinesSet.add(line));
+    }
+
+    const lines = Array.from(allLinesSet);
 
     // Save debug
     fs.writeFileSync("debug_lines.txt", lines.join("\n"));
@@ -220,7 +177,17 @@ const puppeteer = require("puppeteer");
       lines.map((l, i) => `${i}: ${l}`).join("\n")
     );
 
-    console.log(`Total lines after filtering: ${lines.length}`);
+    // Also save all snapshots for debugging
+    fs.writeFileSync(
+      "debug_snapshots.json",
+      JSON.stringify(allTextSnapshots.map(s => ({
+        scroll: s.scroll,
+        position: s.position,
+        lineCount: s.text.split("\n").length
+      })), null, 2)
+    );
+
+    console.log(`Total unique lines: ${lines.length}\n`);
 
     // ----------------------------------------------------------
     // Mappings

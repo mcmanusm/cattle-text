@@ -1,207 +1,239 @@
-const puppeteer = require('puppeteer');
-const fs = require('fs');
+// ============================================================
+// scrape_text_metrics.js
+// Power BI TABLE scraper - Fixed for CI/CD + All States
+// ============================================================
 
-async function scrapeCattleDataWithScroll() {
+const fs = require("fs");
+const puppeteer = require("puppeteer");
+
+(async () => {
+  const url = "https://mcmanusm.github.io/cattle-text/cattle-text-table.html";
+  const outputFile = "text-metrics.json";
+
+  // ----------------------------------------------------------
+  // Helpers
+  // ----------------------------------------------------------
+  function clean(text) {
+    return text
+      .normalize("NFKD")
+      .replace(/[–—]/g, "-")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function extractLabel(line) {
+    return line.replace(/\s+\d+$/, "").trim();
+  }
+
+  function isJunkLine(line) {
+    return (
+      line === "Additional Conditional Formatting" ||
+      line.includes("Press Enter") ||
+      line.includes("Scroll") ||
+      line.includes("Applied filters") ||
+      line.includes("Species is Cattle") ||
+      line.includes("Average $/Head") ||
+      line.includes("Date ") ||
+      line.includes("AuctionClassification")
+    );
+  }
+
   const browser = await puppeteer.launch({
-    headless: false,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    headless: "new",  // ✅ Works in CI/CD
+    args: ["--no-sandbox", "--disable-setuid-sandbox"]
   });
 
   try {
     const page = await browser.newPage();
-    await page.setViewport({ width: 1920, height: 1080 });
-    
-    console.log('Loading page...');
-    await page.goto('YOUR_GITHUB_PAGE_URL', {
-      waitUntil: 'networkidle2',
-      timeout: 60000
-    });
+    page.setDefaultTimeout(90000);
+    await page.goto(url, { waitUntil: "networkidle2" });
+    await page.waitForSelector("iframe");
+    await new Promise(r => setTimeout(r, 15000)); // Wait for Power BI to load
 
-    await page.waitForTimeout(5000);
+    const frame = page.frames().find(f => f.url().includes("powerbi.com"));
+    if (!frame) throw new Error("Power BI iframe not found");
 
-    const frames = await page.frames();
-    const powerBIFrame = frames.find(frame => 
-      frame.url().includes('powerbi') || frame.name().includes('powerbi')
+    // Get all text and split into lines
+    const rawText = await frame.evaluate(() => document.body.innerText);
+    const lines = rawText
+      .split("\n")
+      .map(l => clean(l))
+      .filter(l => l && !isJunkLine(l));
+
+    // Save debug output
+    fs.writeFileSync("debug_lines.txt", lines.join("\n"));
+    fs.writeFileSync(
+      "debug_lines_numbered.txt",
+      lines.map((l, i) => `${i}: ${l}`).join("\n")
     );
 
-    if (!powerBIFrame) {
-      throw new Error('Power BI iframe not found');
+    console.log(`Total lines after filtering: ${lines.length}`);
+
+    // ----------------------------------------------------------
+    // State and Category mappings
+    // ----------------------------------------------------------
+    const stateMap = {
+      "National": "National",
+      "NSW": "NSW",
+      "QLD": "QLD",
+      "SA": "SA",
+      "Tas": "Tas",
+      "Vic": "VIC",
+      "VIC": "VIC",
+      "WA": "WA",
+      "NT": "NT",
+      "New South Wales": "NSW",
+      "Queensland": "QLD",
+      "South Australia": "SA",
+      "Tasmania": "Tas",
+      "Victoria": "VIC",
+      "Western Australia": "WA",
+      "Northern Territory": "NT"
+    };
+
+    const categories = [
+      "Steers 0-200kg",
+      "Steers 200.1-280kg",
+      "Steers 280.1-330kg",
+      "Steers 330.1-400kg",
+      "Steers 400kg +",
+      "Heifers 0-200kg",
+      "Heifers 200.1-280kg",
+      "Heifers 280.1-330kg",
+      "Heifers 330.1-400kg",
+      "Heifers 400kg +",
+      "NSM Cows",
+      "SM Heifers",
+      "SM Cows",
+      "PTIC Heifers",
+      "PTIC Cows",
+      "NSM Heifers & Calves",
+      "NSM Cows & Calves",
+      "SM Heifers & Calves",
+      "SM Cows & Calves",
+      "PTIC Heifers & Calves",
+      "PTIC Cows & Calves",
+      "Mixed Sexes"
+    ];
+
+    const metricKeys = [
+      "offered",
+      "weight_range",
+      "avg_weight",
+      "dollar_head_range",
+      "avg_dollar_head",
+      "dollar_change",
+      "c_kg_range",
+      "avg_c_kg",
+      "c_kg_change",
+      "clearance"
+    ];
+
+    const stateKeys = Object.keys(stateMap);
+
+    function isStopLine(line) {
+      const label = extractLabel(line);
+      return stateKeys.includes(label) || categories.includes(label);
     }
 
-    console.log('Waiting for tables to load...');
-    await powerBIFrame.waitForSelector('[role="grid"]', { timeout: 30000 });
-    await page.waitForTimeout(3000);
-
-    // Function to scroll and collect all data
-    const scrollAndCollect = async () => {
-      return await powerBIFrame.evaluate(async () => {
-        // Find scrollable containers
-        const scrollableContainers = document.querySelectorAll('.scrollable-cells-viewport, .scrollRegion');
+    // ----------------------------------------------------------
+    // Parse metrics following a category
+    // ----------------------------------------------------------
+    function parseMetrics(startIndex) {
+      const metrics = {};
+      let cursor = 0;
+      
+      for (let i = startIndex + 1; i < lines.length; i++) {
+        const value = lines[i];
         
-        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+        // Stop if we hit another category or state
+        if (isStopLine(value)) break;
         
-        // Collect all unique rows
-        const collectedRows = new Map();
-        let previousSize = 0;
-        let unchangedCount = 0;
+        // Skip junk
+        if (isJunkLine(value)) continue;
+        
+        // Stop if we've collected all metrics
+        if (cursor >= metricKeys.length) break;
+        
+        metrics[metricKeys[cursor]] = value;
+        cursor++;
+      }
+      
+      return metrics;
+    }
 
-        // Function to collect visible rows
-        const collectVisibleRows = () => {
-          const rows = document.querySelectorAll('[role="row"]');
-          
-          rows.forEach((row) => {
-            const cells = row.querySelectorAll('[role="gridcell"]');
-            if (cells.length === 0) return;
-            
-            const cellTexts = Array.from(cells).map(c => c.textContent.trim());
-            const rowKey = cellTexts.join('|'); // Create unique key
-            
-            if (!collectedRows.has(rowKey)) {
-              collectedRows.set(rowKey, cellTexts);
-            }
-          });
-        };
+    // ----------------------------------------------------------
+    // Parse the lines
+    // ----------------------------------------------------------
+    const output = {
+      updated_at: new Date().toISOString(),
+      national: [],
+      states: []
+    };
 
-        // Initial collection
-        collectVisibleRows();
+    let currentState = "National";
+    let stateBucket = null;
 
-        // Scroll through each container
-        for (const container of scrollableContainers) {
-          let scrollPosition = 0;
-          const maxScroll = container.scrollHeight;
-          const scrollStep = 100;
+    for (let i = 0; i < lines.length; i++) {
+      const label = extractLabel(lines[i]);
 
-          while (scrollPosition < maxScroll) {
-            container.scrollTop = scrollPosition;
-            await sleep(200); // Wait for new rows to render
-            collectVisibleRows();
-            
-            scrollPosition += scrollStep;
-            
-            // Check if we're still finding new rows
-            if (collectedRows.size === previousSize) {
-              unchangedCount++;
-              if (unchangedCount > 5) break; // No new rows for 5 scrolls
-            } else {
-              unchangedCount = 0;
-              previousSize = collectedRows.size;
-            }
-          }
+      // Check if this is a state header
+      if (stateKeys.includes(label)) {
+        // Save previous state bucket if exists
+        if (stateBucket && currentState !== "National") {
+          output.states.push(stateBucket);
         }
 
-        console.log(`Collected ${collectedRows.size} unique rows`);
-        return Array.from(collectedRows.values());
-      });
-    };
-
-    console.log('Scrolling and collecting data...');
-    const allRows = await scrollAndCollect();
-    console.log(`Total unique rows collected: ${allRows.length}`);
-
-    // Process the collected rows
-    const data = {
-      stateAverages: [],
-      nationalAverages: []
-    };
-
-    allRows.forEach((cells, idx) => {
-      if (cells.length === 0) return;
-      
-      const firstCell = cells[0];
-      const isStateRow = /^(NSW|QLD|VIC|SA|Tas|WA|NT)$/i.test(firstCell);
-      
-      if (isStateRow) {
-        // National averages row (has State column)
-        data.nationalAverages.push({
-          State: cells[0] || '',
-          Category: cells[1] || '',
-          CategoryCC: cells[2] || '',
-          Offered: cells[3] || '',
-          WeightRange: cells[4] || '',
-          AvgWeight: cells[5] || '',
-          HeadRange: cells[6] || '',
-          Avg: cells[7] || '',
-          Change: cells[8] || '',
-          CkgRange: cells[9] || '',
-          AvgCkg: cells[10] || '',
-          ChangeCkg: cells[11] || '',
-          Clearance: cells[12] || ''
-        });
-      } else if (/steers|heifers|breeding/i.test(firstCell)) {
-        // State averages row (no State column)
-        data.stateAverages.push({
-          Category: cells[0] || '',
-          CategoryCC: cells[1] || '',
-          Offered: cells[2] || '',
-          WeightRange: cells[3] || '',
-          AvgWeight: cells[4] || '',
-          HeadRange: cells[5] || '',
-          Avg: cells[6] || '',
-          Change: cells[7] || '',
-          CkgRange: cells[8] || '',
-          AvgCkg: cells[9] || '',
-          ChangeCkg: cells[10] || '',
-          Clearance: cells[11] || ''
-        });
+        // Set new current state
+        currentState = stateMap[label];
+        
+        // Create new bucket for non-National states
+        stateBucket = currentState === "National"
+          ? null
+          : { state: currentState, categories: [] };
+        
+        console.log(`Found state: ${currentState}`);
+        continue;
       }
-    });
 
-    // Group national data by state
-    const stateData = {};
-    data.nationalAverages.forEach(row => {
-      const state = row.State;
-      if (!stateData[state]) {
-        stateData[state] = [];
+      // Check if this is a category
+      if (categories.includes(label)) {
+        const metrics = parseMetrics(i);
+        const payload = { category: label, ...metrics };
+
+        if (currentState === "National") {
+          output.national.push(payload);
+        } else if (stateBucket) {
+          stateBucket.categories.push(payload);
+        }
+        
+        console.log(`  Added category: ${label} to ${currentState}`);
       }
-      stateData[state].push(row);
-    });
+    }
 
-    const finalData = {
-      extractedDate: new Date().toISOString(),
-      stateAverages: data.stateAverages,
-      nationalAveragesByState: stateData,
-      allStates: Object.keys(stateData).sort(),
-      summary: {
-        totalStateAverageRows: data.stateAverages.length,
-        totalNationalAverageRows: data.nationalAverages.length,
-        statesFound: Object.keys(stateData).sort(),
-        rowsPerState: Object.entries(stateData).map(([state, rows]) => ({
-          state,
-          count: rows.length
-        }))
-      }
-    };
+    // Don't forget the last state bucket
+    if (stateBucket && currentState !== "National") {
+      output.states.push(stateBucket);
+    }
 
-    const filename = `cattle_data_scroll_${new Date().toISOString().split('T')[0]}.json`;
-    fs.writeFileSync(filename, JSON.stringify(finalData, null, 2));
-    
-    console.log('\n=== EXTRACTION COMPLETE ===');
-    console.log(`State averages: ${finalData.summary.totalStateAverageRows} rows`);
-    console.log(`National averages: ${finalData.summary.totalNationalAverageRows} rows`);
-    console.log(`States found: ${finalData.summary.statesFound.join(', ')}`);
-    console.log('\nRows per state:');
-    finalData.summary.rowsPerState.forEach(({ state, count }) => {
-      console.log(`  ${state}: ${count} rows`);
-    });
-    console.log(`\nData saved to: ${filename}`);
+    // ----------------------------------------------------------
+    // Save output
+    // ----------------------------------------------------------
+    fs.writeFileSync(outputFile, JSON.stringify(output, null, 2));
 
-    return finalData;
+    console.log("\n✓ Scrape complete");
+    console.log(`  National rows: ${output.national.length}`);
+    output.states.forEach(s =>
+      console.log(`  ${s.state}: ${s.categories.length}`)
+    );
+    console.log(`\nOutput saved to: ${outputFile}`);
+
+    await browser.close();
+    process.exit(0);
 
   } catch (error) {
-    console.error('Error:', error);
-    throw error;
-  } finally {
+    console.error("✗ Scraping failed:", error);
     await browser.close();
-  }
-}
-
-// Run the scraper
-scrapeCattleDataWithScroll()
-  .then(data => {
-    console.log('\n✓ Scraping completed successfully');
-    process.exit(0);
-  })
-  .catch(error => {
-    console.error('\n✗ Scraping failed:', error);
     process.exit(1);
-  });
+  }
+})();

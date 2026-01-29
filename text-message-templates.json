@@ -1,0 +1,45 @@
+{
+  "updated_at": "2026-01-29T05:47:32.961Z",
+  "templates": [
+    {
+      "price_stock_category": "Price Stock Category",
+      "text_template_head": "Text Message Template $/Head (Cattle)",
+      "text_template_ckg": "Text Message Template c/kg (Cattle)"
+    },
+    {
+      "price_stock_category": "Cows with Calves at Foot",
+      "text_template_head": "C & CAF $2,468",
+      "text_template_ckg": "C & CAF 533c"
+    },
+    {
+      "price_stock_category": "PTIC Cows",
+      "text_template_head": "PTIC Cow $2,248",
+      "text_template_ckg": "PTIC Cow 399c"
+    },
+    {
+      "price_stock_category": "PTIC Heifers",
+      "text_template_head": "PTIC Hfr $2,270",
+      "text_template_ckg": "PTIC Hfr 464c"
+    },
+    {
+      "price_stock_category": "Weaner Heifers",
+      "text_template_head": "Wnr Hfr $1,140",
+      "text_template_ckg": "Wnr Hfr 449c"
+    },
+    {
+      "price_stock_category": "Weaner Steers",
+      "text_template_head": "Wnr Str $1,504",
+      "text_template_ckg": "Wnr Str 532c"
+    },
+    {
+      "price_stock_category": "Yearling & Grown Heifers",
+      "text_template_head": "Ylg/Grown Hfr $1,537",
+      "text_template_ckg": "Ylg/Grown Hfr 432c"
+    },
+    {
+      "price_stock_category": "Yearling & Grown Steers",
+      "text_template_head": "Ylg/Grown Str $1,803",
+      "text_template_ckg": "Ylg/Grown Str 503c"
+    }
+  ]
+}

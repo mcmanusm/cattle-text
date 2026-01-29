@@ -1,159 +1,207 @@
-// ============================================================
-// scrape_text_metrics_table.js
-// POWER BI TABLE SAFE SCRAPER (ARIA-COLINDEX BASED)
-// ============================================================
+const puppeteer = require('puppeteer');
+const fs = require('fs');
 
-const fs = require("fs");
-const puppeteer = require("puppeteer");
-
-(async () => {
-  const url = "https://mcmanusm.github.io/cattle-text/cattle-text-table.html";
-  const outputFile = "text-metrics.json";
-
+async function scrapeCattleDataWithScroll() {
   const browser = await puppeteer.launch({
-    headless: "new",
-    args: ["--no-sandbox", "--disable-setuid-sandbox"]
+    headless: false,
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
 
   try {
     const page = await browser.newPage();
-    page.setDefaultTimeout(90000);
-
-    console.log("→ Loading page…");
-    await page.goto(url, { waitUntil: "networkidle2" });
-
-    await page.waitForSelector("iframe");
-    await page.waitForTimeout(15000);
-
-    const frame = page.frames().find(f => f.url().includes("powerbi.com"));
-    if (!frame) throw new Error("Power BI iframe not found");
-
-    console.log("→ Scrolling tables…");
-
-    // Scroll all Power BI table containers
-    for (let i = 0; i < 15; i++) {
-      await frame.evaluate(step => {
-        document.querySelectorAll(
-          'div[role="grid"], div[class*="scroll"], div.visualContainer'
-        ).forEach(el => {
-          if (el.scrollHeight > el.clientHeight) {
-            el.scrollTop = (el.scrollHeight / 15) * step;
-          }
-        });
-      }, i);
-      await page.waitForTimeout(700);
-    }
-
-    console.log("→ Extracting rows…");
-
-    const rows = await frame.evaluate(() => {
-      const output = [];
-
-      document.querySelectorAll('div[role="row"]').forEach(row => {
-        const cells = row.querySelectorAll('div[role="gridcell"]');
-        if (!cells.length) return;
-
-        const record = {};
-
-        cells.forEach(cell => {
-          const idx = cell.getAttribute("aria-colindex");
-          let text = cell.innerText.replace(/\s+/g, " ").trim();
-
-          if (
-            !text ||
-            text === "Additional Conditional Formatting" ||
-            text.includes("Press Enter") ||
-            text.includes("Scroll")
-          ) {
-            return;
-          }
-
-          record[idx] = text;
-        });
-
-        if (Object.keys(record).length > 2) {
-          output.push(record);
-        }
-      });
-
-      return output;
+    await page.setViewport({ width: 1920, height: 1080 });
+    
+    console.log('Loading page...');
+    await page.goto('YOUR_GITHUB_PAGE_URL', {
+      waitUntil: 'networkidle2',
+      timeout: 60000
     });
 
-    // ----------------------------------------------------------
-    // DEBUG (optional but useful)
-    // ----------------------------------------------------------
-    fs.writeFileSync(
-      "debug_rows.json",
-      JSON.stringify(rows, null, 2)
+    await page.waitForTimeout(5000);
+
+    const frames = await page.frames();
+    const powerBIFrame = frames.find(frame => 
+      frame.url().includes('powerbi') || frame.name().includes('powerbi')
     );
 
-    console.log(`→ Rows captured: ${rows.length}`);
+    if (!powerBIFrame) {
+      throw new Error('Power BI iframe not found');
+    }
 
-    // ----------------------------------------------------------
-    // COLUMN MAP (Power BI TABLE)
-    // ----------------------------------------------------------
-    const COL = {
-      LOCATION: "1",       // National / NSW / VIC etc (blank = National)
-      STOCK_GROUP: "2",    // Steers / Heifers / Breeding Stock
-      CATEGORY: "3",       // Category (CC)
-      OFFERED: "4",
-      WEIGHT_RANGE: "5",
-      AVG_WEIGHT: "6",
-      DOLLAR_RANGE: "7",
-      AVG_DOLLAR: "8",
-      DOLLAR_CHANGE: "9",
-      CKG_RANGE: "10",
-      AVG_CKG: "11",
-      CKG_CHANGE: "12",
-      CLEARANCE: "13"
+    console.log('Waiting for tables to load...');
+    await powerBIFrame.waitForSelector('[role="grid"]', { timeout: 30000 });
+    await page.waitForTimeout(3000);
+
+    // Function to scroll and collect all data
+    const scrollAndCollect = async () => {
+      return await powerBIFrame.evaluate(async () => {
+        // Find scrollable containers
+        const scrollableContainers = document.querySelectorAll('.scrollable-cells-viewport, .scrollRegion');
+        
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+        
+        // Collect all unique rows
+        const collectedRows = new Map();
+        let previousSize = 0;
+        let unchangedCount = 0;
+
+        // Function to collect visible rows
+        const collectVisibleRows = () => {
+          const rows = document.querySelectorAll('[role="row"]');
+          
+          rows.forEach((row) => {
+            const cells = row.querySelectorAll('[role="gridcell"]');
+            if (cells.length === 0) return;
+            
+            const cellTexts = Array.from(cells).map(c => c.textContent.trim());
+            const rowKey = cellTexts.join('|'); // Create unique key
+            
+            if (!collectedRows.has(rowKey)) {
+              collectedRows.set(rowKey, cellTexts);
+            }
+          });
+        };
+
+        // Initial collection
+        collectVisibleRows();
+
+        // Scroll through each container
+        for (const container of scrollableContainers) {
+          let scrollPosition = 0;
+          const maxScroll = container.scrollHeight;
+          const scrollStep = 100;
+
+          while (scrollPosition < maxScroll) {
+            container.scrollTop = scrollPosition;
+            await sleep(200); // Wait for new rows to render
+            collectVisibleRows();
+            
+            scrollPosition += scrollStep;
+            
+            // Check if we're still finding new rows
+            if (collectedRows.size === previousSize) {
+              unchangedCount++;
+              if (unchangedCount > 5) break; // No new rows for 5 scrolls
+            } else {
+              unchangedCount = 0;
+              previousSize = collectedRows.size;
+            }
+          }
+        }
+
+        console.log(`Collected ${collectedRows.size} unique rows`);
+        return Array.from(collectedRows.values());
+      });
     };
 
-    // ----------------------------------------------------------
-    // NORMALISE INTO FINAL JSON
-    // ----------------------------------------------------------
-    const output = {
-      updated_at: new Date().toISOString(),
-      records: []
+    console.log('Scrolling and collecting data...');
+    const allRows = await scrollAndCollect();
+    console.log(`Total unique rows collected: ${allRows.length}`);
+
+    // Process the collected rows
+    const data = {
+      stateAverages: [],
+      nationalAverages: []
     };
 
-    let lastLocation = "National";
-
-    rows.forEach(r => {
-      const location = r[COL.LOCATION] || lastLocation;
-      lastLocation = location;
-
-      const record = {
-        location,
-        stock_category: r[COL.STOCK_GROUP] || null,
-        category: r[COL.CATEGORY] || null,
-        offered: r[COL.OFFERED] || null,
-        weight_range: r[COL.WEIGHT_RANGE] || null,
-        avg_weight: r[COL.AVG_WEIGHT] || null,
-        dollar_head_range: r[COL.DOLLAR_RANGE] || null,
-        avg_dollar_head: r[COL.AVG_DOLLAR] || null,
-        dollar_change: r[COL.DOLLAR_CHANGE] || null,
-        c_kg_range: r[COL.CKG_RANGE] || null,
-        avg_c_kg: r[COL.AVG_CKG] || null,
-        c_kg_change: r[COL.CKG_CHANGE] || null,
-        clearance: r[COL.CLEARANCE] || null
-      };
-
-      // Skip junk rows
-      if (!record.category || !record.stock_category) return;
-
-      output.records.push(record);
+    allRows.forEach((cells, idx) => {
+      if (cells.length === 0) return;
+      
+      const firstCell = cells[0];
+      const isStateRow = /^(NSW|QLD|VIC|SA|Tas|WA|NT)$/i.test(firstCell);
+      
+      if (isStateRow) {
+        // National averages row (has State column)
+        data.nationalAverages.push({
+          State: cells[0] || '',
+          Category: cells[1] || '',
+          CategoryCC: cells[2] || '',
+          Offered: cells[3] || '',
+          WeightRange: cells[4] || '',
+          AvgWeight: cells[5] || '',
+          HeadRange: cells[6] || '',
+          Avg: cells[7] || '',
+          Change: cells[8] || '',
+          CkgRange: cells[9] || '',
+          AvgCkg: cells[10] || '',
+          ChangeCkg: cells[11] || '',
+          Clearance: cells[12] || ''
+        });
+      } else if (/steers|heifers|breeding/i.test(firstCell)) {
+        // State averages row (no State column)
+        data.stateAverages.push({
+          Category: cells[0] || '',
+          CategoryCC: cells[1] || '',
+          Offered: cells[2] || '',
+          WeightRange: cells[3] || '',
+          AvgWeight: cells[4] || '',
+          HeadRange: cells[5] || '',
+          Avg: cells[6] || '',
+          Change: cells[7] || '',
+          CkgRange: cells[8] || '',
+          AvgCkg: cells[9] || '',
+          ChangeCkg: cells[10] || '',
+          Clearance: cells[11] || ''
+        });
+      }
     });
 
-    fs.writeFileSync(outputFile, JSON.stringify(output, null, 2));
+    // Group national data by state
+    const stateData = {};
+    data.nationalAverages.forEach(row => {
+      const state = row.State;
+      if (!stateData[state]) {
+        stateData[state] = [];
+      }
+      stateData[state].push(row);
+    });
 
-    console.log("✓ Scrape complete");
-    console.log(`✓ Records written: ${output.records.length}`);
+    const finalData = {
+      extractedDate: new Date().toISOString(),
+      stateAverages: data.stateAverages,
+      nationalAveragesByState: stateData,
+      allStates: Object.keys(stateData).sort(),
+      summary: {
+        totalStateAverageRows: data.stateAverages.length,
+        totalNationalAverageRows: data.nationalAverages.length,
+        statesFound: Object.keys(stateData).sort(),
+        rowsPerState: Object.entries(stateData).map(([state, rows]) => ({
+          state,
+          count: rows.length
+        }))
+      }
+    };
 
+    const filename = `cattle_data_scroll_${new Date().toISOString().split('T')[0]}.json`;
+    fs.writeFileSync(filename, JSON.stringify(finalData, null, 2));
+    
+    console.log('\n=== EXTRACTION COMPLETE ===');
+    console.log(`State averages: ${finalData.summary.totalStateAverageRows} rows`);
+    console.log(`National averages: ${finalData.summary.totalNationalAverageRows} rows`);
+    console.log(`States found: ${finalData.summary.statesFound.join(', ')}`);
+    console.log('\nRows per state:');
+    finalData.summary.rowsPerState.forEach(({ state, count }) => {
+      console.log(`  ${state}: ${count} rows`);
+    });
+    console.log(`\nData saved to: ${filename}`);
+
+    return finalData;
+
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  } finally {
     await browser.close();
-
-  } catch (err) {
-    console.error("❌ ERROR:", err);
-    await browser.close();
-    process.exit(1);
   }
-})();
+}
+
+// Run the scraper
+scrapeCattleDataWithScroll()
+  .then(data => {
+    console.log('\n✓ Scraping completed successfully');
+    process.exit(0);
+  })
+  .catch(error => {
+    console.error('\n✗ Scraping failed:', error);
+    process.exit(1);
+  });

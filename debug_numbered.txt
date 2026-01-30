@@ -1,0 +1,56 @@
+0: Show keyboard shortcuts
+1: Show screen reader tips
+2: Skip to main content
+3: Power BI Report
+4: Stock Category
+5: All
+6: State
+7: All
+8: APLUS Cattle Market Weekly Averages
+9: To scroll down, click on scroll bar and drag down
+10: Key: Change = Change on Last Week
+11: When opening on a mobile, place phone in landscape and zoom in on tables
+12: Use filters at top of page to decrease amount of categories shown
+13: Friday Cattle State Averages - 30 January 2026
+14: Scroll up
+15: Scroll down
+16: Scroll left
+17: Scroll right
+18: Row Selection
+19: Category
+20: Category (CC)
+21: Offered
+22: Weight Range
+23: Avg Weight
+24: $/Head Range
+25: Avg
+26: Change
+27: c/kg Range
+28: Avg
+29: Change
+30: Clearance
+31: Friday Cattle National Averages - 30 January 2026
+32: Scroll up
+33: Scroll down
+34: Scroll left
+35: Scroll right
+36: Row Selection
+37: State
+38: Category
+39: Category (CC)
+40: Offered
+41: Weight Range
+42: Avg Weight
+43: $/Head Range
+44: Avg
+45: Change
+46: c/kg Range
+47: Avg
+48: Change
+49: Clearance
+50: -
+51: +
+52: 94%
+53: Microsoft Power BI
+54: 1of2
+55: Report Zoomed To 94%

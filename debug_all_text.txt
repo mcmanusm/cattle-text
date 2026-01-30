@@ -1,0 +1,61 @@
+Show keyboard shortcuts
+Show screen reader tips
+Skip to main content
+Power BI Report
+Stock Category
+All
+State
+All
+APLUS Cattle Market Weekly Averages
+
+To scroll down, click on scroll bar and drag down
+
+Key: Change = Change on Last Week
+
+When opening on a mobile, place phone in landscape and zoom in on tables
+
+Use filters at top of page to decrease amount of categories shown 
+
+Friday Cattle State Averages - 30 January 2026
+Scroll up
+Scroll down
+Scroll left
+Scroll right
+Row Selection
+Category
+Category (CC)
+Offered
+Weight Range
+Avg Weight
+$/Head Range
+Avg
+Change
+c/kg Range
+Avg
+Change
+Clearance
+Friday Cattle National Averages - 30 January 2026
+Scroll up
+Scroll down
+Scroll left
+Scroll right
+Row Selection
+State
+Category
+Category (CC)
+Offered
+Weight Range
+Avg Weight
+$/Head Range
+Avg
+Change
+c/kg Range
+Avg
+Change
+Clearance
+-
++
+94%
+Microsoft Power BI
+1of2
+Report Zoomed To 94%

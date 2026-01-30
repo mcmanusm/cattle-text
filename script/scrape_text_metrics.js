@@ -1,7 +1,6 @@
 // ============================================================
-// scrape_national_table.js
-// Extract ONLY National data from Power BI table
-// Based on your original working script
+// scrape_text_metrics.js
+// FIXED: Handles repeating state headers (state appears before EACH category)
 // ============================================================
 
 const fs = require("fs");
@@ -9,7 +8,43 @@ const puppeteer = require("puppeteer");
 
 (async () => {
   const url = "https://mcmanusm.github.io/cattle-text/cattle-text-table.html";
-  const outputFile = "national-cattle-prices.json";
+  const outputFile = "text-metrics.json";
+
+  // ----------------------------------------------------------
+  // Helpers
+  // ----------------------------------------------------------
+  function clean(text) {
+    return text
+      .normalize("NFKD")
+      .replace(/[–—]/g, "-")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function extractLabel(line) {
+    return line.replace(/\s+\d+$/, "").trim();
+  }
+
+  function isJunkLine(line) {
+    return (
+      line === "Additional Conditional Formatting" ||
+      line.includes("Press Enter") ||
+      line.includes("Scroll") ||
+      line.includes("Applied filters") ||
+      line.includes("Species is Cattle") ||
+      line.includes("Average $/Head") ||
+      line.includes("Date ") ||
+      line.includes("AuctionClassification") ||
+      line === "Select Row"
+    );
+  }
+
+  // Determine stock category from category name
+  function getStockCategory(categoryName) {
+    if (categoryName.startsWith("Steers")) return "Steers";
+    if (categoryName.startsWith("Heifers")) return "Heifers";
+    return "Breeding Stock";
+  }
 
   const browser = await puppeteer.launch({
     headless: "new",
@@ -18,177 +53,172 @@ const puppeteer = require("puppeteer");
 
   try {
     const page = await browser.newPage();
-    await page.setViewport({ width: 1920, height: 1080 });
-    
-    console.log("Loading page...");
-    await page.goto(url, {
-      waitUntil: "networkidle2",
-      timeout: 60000
-    });
+    page.setDefaultTimeout(90000);
+    await page.goto(url, { waitUntil: "networkidle2" });
+    await page.waitForSelector("iframe");
+    await new Promise(r => setTimeout(r, 15000));
 
-    console.log("Waiting for Power BI iframe...");
-    await page.waitForSelector("iframe", { timeout: 30000 });
-    await new Promise(r => setTimeout(r, 5000));
+    const frame = page.frames().find(f => f.url().includes("powerbi.com"));
+    if (!frame) throw new Error("Power BI iframe not found");
 
-    const frames = await page.frames();
-    const powerBIFrame = frames.find(f => 
-      f.url().includes("powerbi") || f.name().includes("powerbi")
-    );
+    const rawText = await frame.evaluate(() => document.body.innerText);
+    const lines = rawText
+      .split("\n")
+      .map(l => clean(l))
+      .filter(l => l && !isJunkLine(l));
 
-    if (!powerBIFrame) {
-      throw new Error("Power BI iframe not found");
-    }
-
-    console.log("✓ Power BI iframe found");
-    console.log("Waiting for table to load...");
-    
-    await powerBIFrame.waitForSelector('[role="grid"]', { timeout: 30000 });
-    await new Promise(r => setTimeout(r, 3000));
-
-    console.log("Scrolling and collecting data...\n");
-
-    // Scroll and collect all table rows
-    const allRows = await powerBIFrame.evaluate(async () => {
-      const scrollableContainers = document.querySelectorAll(
-        ".scrollable-cells-viewport, .scrollRegion, [role='grid']"
-      );
-      
-      const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-      const collectedRows = new Map();
-      let previousSize = 0;
-      let unchangedCount = 0;
-
-      // Function to collect visible rows
-      const collectVisibleRows = () => {
-        const rows = document.querySelectorAll('[role="row"]');
-        
-        rows.forEach((row) => {
-          const cells = row.querySelectorAll('[role="gridcell"], [role="columnheader"]');
-          if (cells.length === 0) return;
-          
-          const cellTexts = Array.from(cells).map(c => c.textContent.trim());
-          const rowKey = cellTexts.join("|");
-          
-          if (!collectedRows.has(rowKey) && cellTexts.some(c => c.length > 0)) {
-            collectedRows.set(rowKey, cellTexts);
-          }
-        });
-      };
-
-      // Initial collection
-      collectVisibleRows();
-
-      // Scroll through each container
-      for (const container of scrollableContainers) {
-        let scrollPosition = 0;
-        const maxScroll = container.scrollHeight;
-        const scrollStep = 100;
-
-        while (scrollPosition < maxScroll) {
-          container.scrollTop = scrollPosition;
-          await sleep(200);
-          collectVisibleRows();
-          
-          scrollPosition += scrollStep;
-          
-          if (collectedRows.size === previousSize) {
-            unchangedCount++;
-            if (unchangedCount > 5) break;
-          } else {
-            unchangedCount = 0;
-            previousSize = collectedRows.size;
-          }
-        }
-      }
-
-      console.log(`Collected ${collectedRows.size} unique rows`);
-      return Array.from(collectedRows.values());
-    });
-
-    console.log(`Total unique rows collected: ${allRows.length}\n`);
-
-    // Save raw rows for debugging
+    // Save debug
+    fs.writeFileSync("debug_lines.txt", lines.join("\n"));
     fs.writeFileSync(
-      "debug_raw_rows.json",
-      JSON.stringify(allRows, null, 2)
+      "debug_lines_numbered.txt",
+      lines.map((l, i) => `${i}: ${l}`).join("\n")
     );
 
-    // Process rows - looking for National data only
-    const nationalData = [];
-    const stateHeaders = ["NSW", "QLD", "VIC", "SA", "Tas", "WA", "NT"];
-    
-    let inNationalSection = true;
+    console.log(`Total lines after filtering: ${lines.length}`);
 
-    for (const cells of allRows) {
-      if (cells.length === 0) continue;
-      
-      const firstCell = cells[0];
-      
-      // Check if we hit a state header (means we're leaving National section)
-      if (stateHeaders.includes(firstCell)) {
-        console.log(`Stopped at state: ${firstCell}`);
-        inNationalSection = false;
-        break;
-      }
-
-      // Skip if not in National section
-      if (!inNationalSection) continue;
-
-      // Look for category rows (Steers, Heifers, breeding stock)
-      const isCategoryRow = /steers|heifers|nsm|sm|ptic|mixed/i.test(firstCell);
-      
-      if (isCategoryRow && cells.length >= 10) {
-        // This is a data row - extract it
-        const category = cells[0] || "";
-        
-        // Determine stock category
-        let stockCategory = "Breeding Stock";
-        if (category.toLowerCase().includes("steers")) {
-          stockCategory = "Steers";
-        } else if (category.toLowerCase().includes("heifers") && 
-                   !category.toLowerCase().includes("ptic") && 
-                   !category.toLowerCase().includes("sm") && 
-                   !category.toLowerCase().includes("nsm")) {
-          stockCategory = "Heifers";
-        }
-
-        const row = {
-          stock_category: stockCategory,
-          category: category,
-          offered: cells[2] || cells[1] || "",
-          weight_range: cells[3] || cells[2] || "",
-          avg_weight: cells[4] || cells[3] || "",
-          dollar_head_range: cells[5] || cells[4] || "",
-          avg_dollar_head: cells[6] || cells[5] || "",
-          dollar_change: cells[7] || cells[6] || "",
-          c_kg_range: cells[8] || cells[7] || "",
-          avg_c_kg: cells[9] || cells[8] || "",
-          c_kg_change: cells[10] || cells[9] || "",
-          clearance: cells[11] || cells[10] || ""
-        };
-
-        nationalData.push(row);
-        console.log(`✓ National: ${category}`);
-      }
-    }
-
-    // Create output
-    const output = {
-      updated_at: new Date().toISOString(),
-      market: "National",
-      categories: nationalData
+    // ----------------------------------------------------------
+    // Mappings
+    // ----------------------------------------------------------
+    const stateMap = {
+      "National": "National",
+      "NSW": "NSW",
+      "QLD": "QLD",
+      "SA": "SA",
+      "Tas": "Tas",
+      "Vic": "VIC",
+      "VIC": "VIC",
+      "WA": "WA",
+      "NT": "NT"
     };
 
+    const categories = [
+      "Steers 0-200kg",
+      "Steers 200.1-280kg",
+      "Steers 280.1-330kg",
+      "Steers 330.1-400kg",
+      "Steers 400kg +",
+      "Heifers 0-200kg",
+      "Heifers 200.1-280kg",
+      "Heifers 280.1-330kg",
+      "Heifers 330.1-400kg",
+      "Heifers 400kg +",
+      "NSM Cows",
+      "SM Heifers",
+      "SM Cows",
+      "PTIC Heifers",
+      "PTIC Cows",
+      "NSM Heifers & Calves",
+      "NSM Cows & Calves",
+      "SM Heifers & Calves",
+      "SM Cows & Calves",
+      "PTIC Heifers & Calves",
+      "PTIC Cows & Calves",
+      "Mixed Sexes"
+    ];
+
+    const metricKeys = [
+      "offered",
+      "weight_range",
+      "avg_weight",
+      "dollar_head_range",
+      "avg_dollar_head",
+      "dollar_change",
+      "c_kg_range",
+      "avg_c_kg",
+      "c_kg_change",
+      "clearance"
+    ];
+
+    const stateKeys = Object.keys(stateMap);
+
+    function isStopLine(line) {
+      const label = extractLabel(line);
+      return stateKeys.includes(label) || categories.includes(label);
+    }
+
+    function parseMetrics(startIndex) {
+      const metrics = {};
+      let cursor = 0;
+      
+      for (let i = startIndex + 1; i < lines.length; i++) {
+        const value = lines[i];
+        if (isStopLine(value)) break;
+        if (isJunkLine(value)) continue;
+        if (cursor >= metricKeys.length) break;
+        
+        metrics[metricKeys[cursor]] = value;
+        cursor++;
+      }
+      
+      return metrics;
+    }
+
+    // ----------------------------------------------------------
+    // Parse - FIXED: Don't reinitialize state bucket
+    // ----------------------------------------------------------
+    const output = {
+      updated_at: new Date().toISOString(),
+      national: [],
+      states: []
+    };
+
+    // Use a MAP to group by state properly
+    const stateMap_Data = new Map();
+    let currentState = "National";
+
+    for (let i = 0; i < lines.length; i++) {
+      const label = extractLabel(lines[i]);
+
+      // Check for state header
+      if (stateKeys.includes(label)) {
+        currentState = stateMap[label];
+        
+        // ✅ FIXED: Only initialize if doesn't exist yet
+        if (currentState !== "National" && !stateMap_Data.has(currentState)) {
+          stateMap_Data.set(currentState, {
+            state: currentState,
+            categories: []
+          });
+          console.log(`Initialized state: ${currentState}`);
+        }
+        
+        // Don't log every time, just set current state
+        continue;
+      }
+
+      // Check for category
+      if (categories.includes(label)) {
+        const metrics = parseMetrics(i);
+        const payload = {
+          stock_category: getStockCategory(label),
+          category: label,
+          ...metrics
+        };
+
+        if (currentState === "National") {
+          output.national.push(payload);
+          console.log(`  National: ${label}`);
+        } else if (stateMap_Data.has(currentState)) {
+          stateMap_Data.get(currentState).categories.push(payload);
+          console.log(`  ${currentState}: ${label}`);
+        }
+      }
+    }
+
+    // Convert state map to array
+    output.states = Array.from(stateMap_Data.values());
+
+    // ----------------------------------------------------------
+    // Save output
+    // ----------------------------------------------------------
     fs.writeFileSync(outputFile, JSON.stringify(output, null, 2));
 
     console.log("\n✓ Scrape complete");
-    console.log(`  Categories captured: ${nationalData.length}`);
+    console.log(`  National rows: ${output.national.length}`);
+    output.states.forEach(s =>
+      console.log(`  ${s.state}: ${s.categories.length} categories`)
+    );
     console.log(`\nOutput saved to: ${outputFile}`);
-
-    if (nationalData.length === 0) {
-      console.warn("\n⚠ Warning: No national data found!");
-      console.warn("Check debug_raw_rows.json to see what was extracted.");
-    }
 
     await browser.close();
     process.exit(0);

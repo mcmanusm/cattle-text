@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-02-01T10:53:38.325Z",
+  "updated_at": "2026-02-02T11:12:29.848Z",
   "national": [
     {
       "stock_category": "Steers",
@@ -23,7 +23,7 @@
       "avg_weight": "250kg",
       "dollar_head_range": "$1,150 - $1,468",
       "avg_dollar_head": "$1,300",
-      "dollar_change": "35",
+      "dollar_change": "34",
       "c_kg_range": "497 - 590c",
       "avg_c_kg": "540c",
       "c_kg_change": "12",
@@ -37,10 +37,10 @@
       "avg_weight": "308kg",
       "dollar_head_range": "$1,300 - $1,710",
       "avg_dollar_head": "$1,494",
-      "dollar_change": "-61",
+      "dollar_change": "-63",
       "c_kg_range": "429 - 555c",
       "avg_c_kg": "488c",
-      "c_kg_change": "-18",
+      "c_kg_change": "-19",
       "clearance": "45%"
     },
     {
@@ -51,10 +51,10 @@
       "avg_weight": "364kg",
       "dollar_head_range": "$1,600 - $1,930",
       "avg_dollar_head": "$1,747",
-      "dollar_change": "-70",
+      "dollar_change": "-74",
       "c_kg_range": "458 - 552c",
       "avg_c_kg": "489c",
-      "c_kg_change": "-24",
+      "c_kg_change": "-25",
       "clearance": "39%"
     },
     {
@@ -93,10 +93,10 @@
       "avg_weight": "302kg",
       "dollar_head_range": "$1,140 - $1,465",
       "avg_dollar_head": "$1,283",
-      "dollar_change": "-48",
+      "dollar_change": "-51",
       "c_kg_range": "390 - 483c",
       "avg_c_kg": "428c",
-      "c_kg_change": "0",
+      "c_kg_change": "-1",
       "clearance": "60%"
     },
     {
@@ -121,10 +121,10 @@
       "avg_weight": "439kg",
       "dollar_head_range": "$1,800 - $2,180",
       "avg_dollar_head": "$1,857",
-      "dollar_change": "-54",
+      "dollar_change": "-45",
       "c_kg_range": "428 - 450c",
       "avg_c_kg": "437c",
-      "c_kg_change": "-2",
+      "c_kg_change": "-4",
       "clearance": "92%"
     },
     {
@@ -261,10 +261,10 @@
       "avg_weight": "133kg",
       "dollar_head_range": "$460 - $760",
       "avg_dollar_head": "$693",
-      "dollar_change": "-664",
+      "dollar_change": "-607",
       "c_kg_range": "472 - 504c",
       "avg_c_kg": "480c",
-      "c_kg_change": "76",
+      "c_kg_change": "80",
       "clearance": "100%"
     }
   ],

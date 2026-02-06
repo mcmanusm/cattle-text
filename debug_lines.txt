@@ -241,6 +241,260 @@ $2,483
 441c
 -36
 100%
+Friday Cattle National Averages - 06 February 2026
+Row Selection
+State
+Category
+Category (CC)
+Offered
+Weight Range
+Avg Weight
+$/Head Range
+Avg
+Change
+c/kg Range
+Avg
+Change
+ACT
+Steers
+Steers 200.1-280kg
+74
+152 - 292kg
+222kg
+$1,250 - $1,250
+$1,250
+-
+563 - 563c
+563c
+-
+NSW
+Steers
+Steers 0-200kg
+92
+112 - 190kg
+158kg
+$1,000 - $1,000
+$1,000
+-
+581 - 581c
+581c
+-
+NSW
+Steers
+Steers 200.1-280kg
+1,021
+155 - 376kg
+240kg
+$1,115 - $1,480
+$1,281
+24
+477 - 592c
+546c
+6
+NSW
+Steers
+Steers 280.1-330kg
+517
+230 - 412kg
+295kg
+$1,190 - $1,670
+$1,539
+44
+380 - 593c
+528c
+37
+NSW
+Steers
+Steers 330.1-400kg
+466
+282 - 453kg
+356kg
+$1,540 - $1,960
+$1,770
+34
+433 - 522c
+490c
+4
+NSW
+Steers
+Steers 400kg +
+204
+341 - 501kg
+422kg
+$1,960 - $2,260
+$2,144
+157
+480 - 500c
+493c
+17
+NSW
+Heifers
+Heifers 0-200kg
+321
+105 - 277kg
+182kg
+$750 - $980
+$830
+14
+408 - 509c
+471c
+-65
+NSW
+Heifers
+Heifers 200.1-280kg
+464
+165 - 391kg
+244kg
+$900 - $1,140
+$1,047
+-71
+393 - 461c
+435c
+6
+NSW
+Heifers
+Heifers 280.1-330kg
+558
+235 - 401kg
+305kg
+$1,190 - $1,380
+$1,295
+47
+363 - 441c
+428c
+7
+NSW
+Heifers
+Heifers 330.1-400kg
+1,098
+243 - 471kg
+363kg
+$1,445 - $1,880
+$1,574
+-2
+381 - 484c
+437c
+3
+NSW
+Heifers
+Heifers 400kg +
+256
+312 - 513kg
+419kg
+$1,800 - $1,860
+$1,848
+48
+442 - 443c
+442c
+14
+NSW
+Breeding Stock
+SM Heifers
+237
+344 - 668kg
+487kg
+$1,900 - $2,010
+$1,937
+-83
+359 - 422c
+384c
+-55
+NSW
+Breeding Stock
+PTIC Heifers
+894
+287 - 604kg
+435kg
+$1,550 - $2,000
+$1,671
+-533
+341 - 445c
+404c
+-54
+NSW
+Breeding Stock
+PTIC Cows
+537
+375 - 793kg
+589kg
+$1,830 - $2,450
+$2,174
+160
+345 - 399c
+377c
+4
+NSW
+Breeding Stock
+SM Cows & Calves
+53
+441 - 666kg
+546kg
+$2,000 - $2,300
+$2,153
+-295
+379 - 413c
+397c
+-83
+NSW
+Breeding Stock
+PTIC Cows & Calves
+62
+340 - 766kg
+516kg
+$2,220 - $2,540
+$2,483
+523
+426 - 510c
+441c
+-36
+QLD
+Steers
+Steers 200.1-280kg
+317
+198 - 390kg
+260kg
+$1,190 - $1,490
+$1,320
+-68
+476 - 573c
+512c
+-32
+QLD
+Steers
+Steers 280.1-330kg
+445
+202 - 389kg
+308kg
+$1,540 - $1,710
+$1,658
+206
+522 - 534c
+529c
+38
+QLD
+Steers
+Steers 330.1-400kg
+42
+300 - 429kg
+352kg
+$1,480 - $1,680
+$1,560
+-207
+398 - 495c
+437c
+-48
+QLD
+Heifers
+Heifers 200.1-280kg
+473
+203 - 344kg
+263kg
+$960 - $1,180
+$1,054
+50
+361 - 433c
+404c
+-20
 -
 +
 94%

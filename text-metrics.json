@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-02-16T11:12:16.632Z",
+  "updated_at": "2026-02-17T11:12:42.733Z",
   "national": [
     {
       "stock_category": "Steers",
@@ -22,12 +22,12 @@
       "weight_range": "146 - 338kg",
       "avg_weight": "244kg",
       "dollar_head_range": "$950 - $1,650",
-      "avg_dollar_head": "$1,326",
-      "dollar_change": "37",
+      "avg_dollar_head": "$1,321",
+      "dollar_change": "33",
       "c_kg_range": "401 - 619c",
-      "avg_c_kg": "562c",
-      "c_kg_change": "28",
-      "clearance": "78%"
+      "avg_c_kg": "559c",
+      "c_kg_change": "25",
+      "clearance": "80%"
     },
     {
       "stock_category": "Steers",
@@ -36,12 +36,12 @@
       "weight_range": "208 - 401kg",
       "avg_weight": "305kg",
       "dollar_head_range": "$1,290 - $1,770",
-      "avg_dollar_head": "$1,559",
-      "dollar_change": "12",
+      "avg_dollar_head": "$1,551",
+      "dollar_change": "4",
       "c_kg_range": "458 - 572c",
-      "avg_c_kg": "524c",
-      "c_kg_change": "16",
-      "clearance": "77%"
+      "avg_c_kg": "521c",
+      "c_kg_change": "12",
+      "clearance": "82%"
     },
     {
       "stock_category": "Steers",
@@ -64,12 +64,12 @@
       "weight_range": "344 - 570kg",
       "avg_weight": "431kg",
       "dollar_head_range": "$1,730 - $2,310",
-      "avg_dollar_head": "$2,088",
-      "dollar_change": "-19",
+      "avg_dollar_head": "$2,090",
+      "dollar_change": "-18",
       "c_kg_range": "405 - 521c",
-      "avg_c_kg": "478c",
-      "c_kg_change": "-12",
-      "clearance": "72%"
+      "avg_c_kg": "477c",
+      "c_kg_change": "-13",
+      "clearance": "79%"
     },
     {
       "stock_category": "Heifers",
@@ -77,13 +77,13 @@
       "offered": "199",
       "weight_range": "102 - 253kg",
       "avg_weight": "174kg",
-      "dollar_head_range": "$695 - $840",
-      "avg_dollar_head": "$788",
-      "dollar_change": "-40",
-      "c_kg_range": "438 - 494c",
-      "avg_c_kg": "458c",
-      "c_kg_change": "-10",
-      "clearance": "88%"
+      "dollar_head_range": "$575 - $860",
+      "avg_dollar_head": "$792",
+      "dollar_change": "-36",
+      "c_kg_range": "350 - 494c",
+      "avg_c_kg": "454c",
+      "c_kg_change": "-14",
+      "clearance": "100%"
     },
     {
       "stock_category": "Heifers",
@@ -92,12 +92,12 @@
       "weight_range": "155 - 351kg",
       "avg_weight": "250kg",
       "dollar_head_range": "$860 - $1,300",
-      "avg_dollar_head": "$1,155",
-      "dollar_change": "99",
+      "avg_dollar_head": "$1,154",
+      "dollar_change": "98",
       "c_kg_range": "393 - 505c",
-      "avg_c_kg": "463c",
-      "c_kg_change": "38",
-      "clearance": "64%"
+      "avg_c_kg": "460c",
+      "c_kg_change": "36",
+      "clearance": "68%"
     },
     {
       "stock_category": "Heifers",
@@ -106,12 +106,12 @@
       "weight_range": "240 - 387kg",
       "avg_weight": "307kg",
       "dollar_head_range": "$1,180 - $1,480",
-      "avg_dollar_head": "$1,315",
-      "dollar_change": "22",
+      "avg_dollar_head": "$1,306",
+      "dollar_change": "13",
       "c_kg_range": "392 - 456c",
-      "avg_c_kg": "426c",
-      "c_kg_change": "-1",
-      "clearance": "57%"
+      "avg_c_kg": "424c",
+      "c_kg_change": "-4",
+      "clearance": "63%"
     },
     {
       "stock_category": "Heifers",
@@ -120,12 +120,12 @@
       "weight_range": "295 - 486kg",
       "avg_weight": "362kg",
       "dollar_head_range": "$1,370 - $1,750",
-      "avg_dollar_head": "$1,524",
-      "dollar_change": "-23",
+      "avg_dollar_head": "$1,535",
+      "dollar_change": "-12",
       "c_kg_range": "383 - 462c",
-      "avg_c_kg": "424c",
-      "c_kg_change": "-4",
-      "clearance": "55%"
+      "avg_c_kg": "422c",
+      "c_kg_change": "-6",
+      "clearance": "75%"
     },
     {
       "stock_category": "Heifers",
@@ -147,13 +147,13 @@
       "offered": "178",
       "weight_range": "249 - 591kg",
       "avg_weight": "423kg",
-      "dollar_head_range": "$1,950 - $2,520",
-      "avg_dollar_head": "$2,199",
-      "dollar_change": "279",
-      "c_kg_range": "436 - 505c",
-      "avg_c_kg": "466c",
-      "c_kg_change": "82",
-      "clearance": "53%"
+      "dollar_head_range": "$1,250 - $2,520",
+      "avg_dollar_head": "$2,062",
+      "dollar_change": "142",
+      "c_kg_range": "386 - 505c",
+      "avg_c_kg": "457c",
+      "c_kg_change": "73",
+      "clearance": "98%"
     },
     {
       "stock_category": "Breeding Stock",
@@ -189,13 +189,13 @@
       "offered": "539",
       "weight_range": "325 - 808kg",
       "avg_weight": "550kg",
-      "dollar_head_range": "$1,300 - $2,360",
-      "avg_dollar_head": "$1,683",
-      "dollar_change": "-599",
+      "dollar_head_range": "$1,300 - $2,400",
+      "avg_dollar_head": "$1,714",
+      "dollar_change": "-567",
       "c_kg_range": "297 - 487c",
-      "avg_c_kg": "362c",
-      "c_kg_change": "-26",
-      "clearance": "65%"
+      "avg_c_kg": "359c",
+      "c_kg_change": "-29",
+      "clearance": "73%"
     },
     {
       "stock_category": "Breeding Stock",
@@ -218,12 +218,12 @@
       "weight_range": "421 - 778kg",
       "avg_weight": "585kg",
       "dollar_head_range": "$2,110 - $2,800",
-      "avg_dollar_head": "$2,370",
-      "dollar_change": "-131",
+      "avg_dollar_head": "$2,476",
+      "dollar_change": "-25",
       "c_kg_range": "392 - 442c",
-      "avg_c_kg": "416c",
-      "c_kg_change": "-102",
-      "clearance": "62%"
+      "avg_c_kg": "414c",
+      "c_kg_change": "-104",
+      "clearance": "82%"
     },
     {
       "stock_category": "Breeding Stock",
@@ -231,13 +231,13 @@
       "offered": "51",
       "weight_range": "321 - 564kg",
       "avg_weight": "436kg",
-      "dollar_head_range": "$2,100 - $2,300",
-      "avg_dollar_head": "$2,244",
-      "dollar_change": "144",
-      "c_kg_range": "517 - 561c",
-      "avg_c_kg": "548c",
-      "c_kg_change": "40",
-      "clearance": "76%"
+      "dollar_head_range": "$2,100 - $2,500",
+      "avg_dollar_head": "$2,304",
+      "dollar_change": "204",
+      "c_kg_range": "509 - 561c",
+      "avg_c_kg": "539c",
+      "c_kg_change": "31",
+      "clearance": "100%"
     },
     {
       "stock_category": "Breeding Stock",
@@ -246,12 +246,12 @@
       "weight_range": "323 - 768kg",
       "avg_weight": "511kg",
       "dollar_head_range": "$1,320 - $3,850",
-      "avg_dollar_head": "$2,127",
-      "dollar_change": "18",
+      "avg_dollar_head": "$2,129",
+      "dollar_change": "21",
       "c_kg_range": "302 - 747c",
-      "avg_c_kg": "457c",
-      "c_kg_change": "18",
-      "clearance": "86%"
+      "avg_c_kg": "456c",
+      "c_kg_change": "16",
+      "clearance": "89%"
     },
     {
       "stock_category": "Breeding Stock",

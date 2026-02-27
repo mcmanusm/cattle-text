@@ -2,7 +2,269 @@ Show keyboard shortcuts
 Show screen reader tips
 Skip to main content
 Power BI Report
-Almost done...
+Stock Category
+All
+State
+All
+APLUS Cattle Market Weekly Averages
+To scroll down, click on scroll bar and drag down
+Key: Change = Change on Last Week
+When opening on a mobile, place phone in landscape and zoom in on tables
+Use filters at top of page to decrease amount of categories shown
+Friday Cattle State Averages - 27 February 2026
+Row Selection
+Category
+Category (CC)
+Offered
+Weight Range
+Avg Weight
+$/Head Range
+Avg
+Change
+c/kg Range
+Avg
+Change
+Clearance
+Steers
+Steers 0-200kg
+276
+104 - 257kg
+178kg
+$910 - $1,120
+$1,051
+-12
+521 - 649c
+598c
+6
+84%
+Steers
+Steers 200.1-280kg
+3,284
+155 - 353kg
+245kg
+$940 - $1,722
+$1,394
+36
+443 - 656c
+568c
+18
+89%
+Steers
+Steers 280.1-330kg
+2,678
+216 - 386kg
+304kg
+$1,210 - $1,908
+$1,657
+94
+401 - 594c
+538c
+13
+72%
+Steers
+Steers 330.1-400kg
+1,259
+272 - 448kg
+355kg
+$1,510 - $2,058
+$1,807
+-25
+445 - 544c
+514c
+11
+70%
+Steers
+Steers 400kg +
+668
+350 - 534kg
+425kg
+$1,700 - $2,427
+$2,160
+-126
+409 - 526c
+506c
+4
+80%
+Heifers
+Heifers 0-200kg
+132
+120 - 237kg
+177kg
+$700 - $968
+$833
+58
+401 - 495c
+469c
+56
+66%
+Heifers
+Heifers 200.1-280kg
+932
+149 - 346kg
+245kg
+$835 - $1,310
+$1,104
+-54
+368 - 561c
+458c
+13
+67%
+Heifers
+Heifers 280.1-330kg
+973
+223 - 398kg
+302kg
+$1,130 - $1,590
+$1,347
+124
+378 - 507c
+462c
+53
+80%
+Heifers
+Heifers 330.1-400kg
+759
+288 - 489kg
+364kg
+$1,470 - $1,700
+$1,619
+-27
+410 - 484c
+448c
+6
+93%
+Heifers
+Heifers 400kg +
+248
+325 - 572kg
+436kg
+$1,780 - $2,030
+$1,865
+-36
+425 - 461c
+450c
+9
+74%
+Breeding Stock
+SM Heifers
+426
+140 - 655kg
+370kg
+$1,875 - $1,875
+$1,875
+-
+465 - 465c
+465c
+-
+9%
+Breeding Stock
+SM Cows
+100
+395 - 941kg
+596kg
+$2,150 - $3,000
+$2,983
+789
+432 - 466c
+432c
+0
+49%
+Breeding Stock
+PTIC Heifers
+872
+299 - 613kg
+434kg
+$1,600 - $2,300
+$1,990
+-272
+381 - 523c
+467c
+-37
+33%
+Breeding Stock
+PTIC Cows
+972
+317 - 900kg
+519kg
+$1,640 - $2,700
+$2,278
+218
+345 - 589c
+475c
+62
+87%
+Breeding Stock
+NSM Heifers & Calves
+30
+375 - 503kg
+426kg
+$2,840 - $2,840
+$2,840
+-
+666 - 666c
+666c
+-
+100%
+Breeding Stock
+NSM Cows & Calves
+18
+447 - 787kg
+598kg
+$2,360 - $2,850
+$2,578
+85
+403 - 484c
+448c
+-51
+100%
+Breeding Stock
+SM Heifers & Calves
+41
+461 - 637kg
+555kg
+$3,825 - $3,825
+$3,825
+-
+689 - 689c
+689c
+-
+100%
+Breeding Stock
+SM Cows & Calves
+222
+321 - 633kg
+489kg
+$2,350 - $2,700
+$2,353
+-42
+427 - 548c
+544c
+-2
+66%
+Breeding Stock
+PTIC Cows & Calves
+81
+376 - 922kg
+617kg
+$2,000 - $3,930
+$3,251
+534
+492 - 589c
+536c
+54
+100%
+Other
+Mixed Sexes
+323
+152 - 319kg
+236kg
+$900 - $1,250
+$1,114
+97
+355 - 503c
+486c
+-59
+100%
 -
 +
 94%
